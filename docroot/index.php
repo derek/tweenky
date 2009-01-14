@@ -130,9 +130,7 @@
 								</div>
 
 							</form>
-							
-							<div align="center" style="color:red; font-size:12px;">Note: This version of Tweenky (0.3) is still a in development and I appreciate your <a href="mailto:feedback@tweenky.com">feedback</a> with any bugs or issues you may run into.  Thanks!</div>
-
+						
 						<? 
 						}
 					?>

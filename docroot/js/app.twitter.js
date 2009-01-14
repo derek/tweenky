@@ -182,7 +182,7 @@ function App_Twitter_API(application_data)
 	
 	this.reset_trends = function()
 	{
-		console.log("Trends reset");
+		log("Trends reset");
 		$.post(
 			"/proxy.php", 
 			{
@@ -436,11 +436,11 @@ function App_Twitter_API(application_data)
 			<div style="clear:both"></div> \
 		';
 		$("#query-detail .header").html(html);
-		//console.log($(this.tweets[timeline]).length);
+		//log($(this.tweets[timeline]).length);
 		for(var i in this.tweets[timeline])
 		{
 			tweet = this.tweets[timeline][i];
-		//	console.log(tweet.toSource());
+		//	log(tweet.toSource());
 			if (tweet)
 			{
 				if($('#tweetid-'+tweet.id).length < 1)
@@ -456,7 +456,7 @@ function App_Twitter_API(application_data)
 		that = this;
 		
 		document.title = "(0) "+ this.settings.title + ": " + timeline;
-		////console.log("Marking tweets as read for " + timeline);
+		////log("Marking tweets as read for " + timeline);
 		$("#app_"+this.application_key+"_count_"+timeline).hide();
 		$("#app_"+this.application_key+"_count_"+timeline+" span").html("0");
 		$('.tweet-unread').each(function(i){
@@ -471,7 +471,7 @@ function App_Twitter_API(application_data)
 	this.tweets_clear = function(timeline)
 	{
 		
-		////console.log("clearing tweets for " + timeline);
+		////log("clearing tweets for " + timeline);
 		$('.tweet-read').each(function(i){
 			that.tweets[timeline][$(this).attr('id')] = null;
 			$(this).remove();
@@ -565,7 +565,7 @@ function App_Twitter_API(application_data)
 				//search_url 	= "http://search.twitter.com/search.json";
 				that = this;
 				search_url 	= "http://search.twitter.com/search.json?q="+query.replace("#", "%23")+"&since_id="+this.since_id['search-'+query]+"&rpp=100&callback=?";
-				console.log("Searching - " + search_url);
+				log("Searching - " + search_url);
 				$.getJSON(search_url,
 				   function(call){
 						tweets = call.results;
