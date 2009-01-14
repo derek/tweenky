@@ -720,10 +720,10 @@
 	
 	function log(msg)
 	{
-		if (console.log)
+		/*if (console)
 		{
 			console.log(msg);
-		}
+		}*/
 	}
 	
 	
