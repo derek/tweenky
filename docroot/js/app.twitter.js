@@ -483,13 +483,12 @@ function App_Twitter_API(application_data)
 	
 	this.post_new_tweet = function(tweet)
 	{
-		var url = this.settings.api_url + '/statuses/update.json';
+		var url = this.settings.api_url + '/statuses/update.json?status='+escape(tweet);
 		$.post(
 			"/proxy.php", 
 			{
 				"url"	: url,
-				"ak"	: this.application_key,
-				"status": tweet
+				"ak"	: this.application_key
 			},
 			function(call){
 				$('#new-status').val('');
@@ -501,7 +500,7 @@ function App_Twitter_API(application_data)
 						steps	: 25,
 						duration: 90
 					});
-				
+					
 				external_url = Tweenky.applications[call.params.ak].get_external_url(call.response.user.screen_name, call.response.id)
 				
 				html = "<div class='small tweet'>You posted to <b>"+Tweenky.applications[call.params.ak].settings.title+"</b>. <span style='font-style: italic;'>\""+call.response.text+"\"</span> (<a href='"+external_url+"' target='_blank'>#"+call.response.id+"</a>)</div>";
