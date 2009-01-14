@@ -61,7 +61,6 @@ function App_Twitter_API(application_data)
 	{
 		delete(Tweenky.applications[this.application_key]);
 		$('#nav-'+this.application_key).remove();
-		$('#settings-'+this.application_key).remove();
 		Tweenky.applications.save();
 	}
 	
@@ -130,7 +129,7 @@ function App_Twitter_API(application_data)
 				html += '</li>';
 				html += '<li>';
 					html += '<div style="width:130px;float:left;">Password:</div>';
-					html += '<input type="password" id="settings-'+this.application_key+'-password" value="'+this.settings.password+'"  /> <span style="font-size:10px; color:red;font-style: italic;">Password is never stored beyond your session</span><br>';
+					html += '<input type="password" id="settings-'+this.application_key+'-password" value="'+this.settings.password+'"  /><br>';
 				html += '</li>';
 			html += '</ul>';
 		html += '</div>';
@@ -183,7 +182,7 @@ function App_Twitter_API(application_data)
 	
 	this.reset_trends = function()
 	{
-		log("Trends reset");
+		console.log("Trends reset");
 		$.post(
 			"/proxy.php", 
 			{
@@ -233,12 +232,14 @@ function App_Twitter_API(application_data)
 					<p class='tweet-text' style='display:none;'>"+item.text+"</p> \
 					<p class='tweet-tweet'><a href='"+user_link+"' target='_blank' class='tweet-author'>"+item.from_screen_name+"</a>: <span class='tweet-text'>" + this.tweet_wrap(item) +"</span></p> \
 					<div class='tweet-footer'> \
-						" + item.from_name + " said <a href='" + external_link + "' target='_blank' title='" + (item.created_at) + "' class='timestamp'>"+relative_time(item.created_at)+"</a> from "+ item.source +" on "+ this.settings.title + " ";
-		if (item.in_reply_to_status_id > 0)
-		{
-			html += " in reply to <a href='http://www.twitter.com/"+ item.in_reply_to_screen_name+"/status/"+item.in_reply_to_status_id+"' target='_blank'>"+ item.in_reply_to_screen_name+"</a>";
-		}		
-		html += " | <a onclick='create_status(\"@"+item.from_screen_name+" \", \""+item.service_id+"\", "+item.from_user_id+");'>Reply</a> | \
+						" + item.from_name + " said <a href='" + external_link + "' target='_blank' title='" + (item.created_at) + "' class='timestamp'>"+relative_time(item.created_at)+"</a> " + ((item.source != '') ? "from "+ item.source : "") +" on "+ this.settings.title + " ";
+						
+						if (item.in_reply_to_status_id > 0)
+						{
+							html += " in reply to <a href='http://www.twitter.com/"+ item.in_reply_to_screen_name+"/status/"+item.in_reply_to_status_id+"' target='_blank'>"+ item.in_reply_to_screen_name+"</a>";
+						}	
+							
+				html += " | <a onclick='create_status(\"@"+item.from_screen_name+" \", \""+item.service_id+"\", "+item.from_user_id+");'>Reply</a> | \
 						<a onclick='create_status(\"d "+item.from_screen_name+" \", \""+item.service_id+" \")'>Direct</a> | \
 						<a onclick='retweet(\""+item.id+"\")'>Retweet</a>\
 						</div>\
@@ -435,11 +436,11 @@ function App_Twitter_API(application_data)
 			<div style="clear:both"></div> \
 		';
 		$("#query-detail .header").html(html);
-		//log($(this.tweets[timeline]).length);
+		//console.log($(this.tweets[timeline]).length);
 		for(var i in this.tweets[timeline])
 		{
 			tweet = this.tweets[timeline][i];
-		//	log(tweet.toSource());
+		//	console.log(tweet.toSource());
 			if (tweet)
 			{
 				if($('#tweetid-'+tweet.id).length < 1)
@@ -455,7 +456,7 @@ function App_Twitter_API(application_data)
 		that = this;
 		
 		document.title = "(0) "+ this.settings.title + ": " + timeline;
-		////log("Marking tweets as read for " + timeline);
+		////console.log("Marking tweets as read for " + timeline);
 		$("#app_"+this.application_key+"_count_"+timeline).hide();
 		$("#app_"+this.application_key+"_count_"+timeline+" span").html("0");
 		$('.tweet-unread').each(function(i){
@@ -470,7 +471,7 @@ function App_Twitter_API(application_data)
 	this.tweets_clear = function(timeline)
 	{
 		
-		////log("clearing tweets for " + timeline);
+		////console.log("clearing tweets for " + timeline);
 		$('.tweet-read').each(function(i){
 			that.tweets[timeline][$(this).attr('id')] = null;
 			$(this).remove();
@@ -482,12 +483,13 @@ function App_Twitter_API(application_data)
 	
 	this.post_new_tweet = function(tweet)
 	{
-		var url = this.settings.api_url + '/statuses/update.json?status='+escape(tweet);
+		var url = this.settings.api_url + '/statuses/update.json';
 		$.post(
 			"/proxy.php", 
 			{
 				"url"	: url,
-				"ak"	: this.application_key
+				"ak"	: this.application_key,
+				"status": tweet
 			},
 			function(call){
 				$('#new-status').val('');
@@ -564,7 +566,7 @@ function App_Twitter_API(application_data)
 				//search_url 	= "http://search.twitter.com/search.json";
 				that = this;
 				search_url 	= "http://search.twitter.com/search.json?q="+query.replace("#", "%23")+"&since_id="+this.since_id['search-'+query]+"&rpp=100&callback=?";
-				log("Searching - " + search_url);
+				console.log("Searching - " + search_url);
 				$.getJSON(search_url,
 				   function(call){
 						tweets = call.results;
@@ -580,6 +582,7 @@ function App_Twitter_API(application_data)
 							tweet.from_profile_image_url 	= item.profile_image_url
 							tweet.to_user 					= item.to_user;
 							tweet.service 					= that.settings.title;
+							tweet.source 					= '';
 							
 						    values = item.created_at.split(" ");
 							tweet.created_at = Date.parse(values[2] + " " + values[1] + ", " + values[3] + " " + values[4]);
@@ -587,9 +590,9 @@ function App_Twitter_API(application_data)
 
 							$("#app_"+that.application_key+"_count_"+timeline).show();
 							
-							unread_count = parseInt($("#app_"+that.application_key+"_count_"+timeline+" span").html()) + 1;
-							$("#app_"+that.application_key+"_count_"+timeline+" span").html(unread_count);
-							document.title = "("+unread_count+") "+ Tweenky.applications[that.application_key].settings.title + ": " + timeline;
+							//unread_count = parseInt($("#app_"+that.application_key+"_count_"+timeline+" span").html()) + 1;
+							//$("#app_"+that.application_key+"_count_"+timeline+" span").html(unread_count);
+							document.title = Tweenky.applications[that.application_key].settings.title + ": " + timeline;
 
 							if (i==call.results.length-1)
 							{
