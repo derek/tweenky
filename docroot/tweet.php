@@ -197,7 +197,7 @@
 			</div>		
 			
 			<div id="footer">
-				<p>Tweenky.com &copy; 2008</p>
+				<p>Tweenky.com &copy; 2008-2009</p>
 			</div>
 
 		</div>

@@ -22,7 +22,7 @@
 		
 		if (isset($clean['status']))
 		{
-			$clean['status'] = (stripslashes($clean['status']));
+			$clean['status'] = urlencode(stripslashes(urldecode($clean['status'])));
 		}
 		
 		$url 	= $clean['url'];

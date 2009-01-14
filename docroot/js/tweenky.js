@@ -91,6 +91,7 @@
 			
 			restart		: function(){
 				i=0;
+				first_app_key = false;
 				for (application_key in Tweenky.applications)
 				{
 					if (typeof Tweenky.applications[application_key] == "object")
@@ -101,8 +102,9 @@
 						i++;
 					}
 				}
-
-				window.location.hash = "#ak="+first_app_key+"&timeline=friends";
+				
+				if (first_app_key)
+					window.location.hash = "#ak="+first_app_key+"&timeline=friends";
 			}
 		},
 		storage			: new Persist.Store('Tweenky')
@@ -268,7 +270,7 @@
 			application_key = blah[1];
 			key = blah[2];
 			value = $(this).val();
-			//console.log(application_key + ' ' + key + ' ' + value);
+			log(application_key + ' ' + key + ' ' + value);
 			if (application_key != undefined)
 			{
 				Tweenky.applications[application_key].settings[key] = value;
@@ -299,36 +301,43 @@
 		
 			html += '<li><hr style="border:solid 3px #FAD163" /></li>';
 			html += '<li><h3>Active Applications</h3></li>';
-				if (Tweenky.applications == undefined)
+			html += '<li><hr style="border:dotted 3px #FAD163" /></li>';
+			//log(Tweenky.applications.length);
+			var apps_installed = false;
+			for(application_key in Tweenky.applications)
+			{
+				if (application_key.length == 10)
 				{
-					html += '<li>*** You have no applications installed. ***</li>';
-				}
-				else
-				{
-					for(application_key in Tweenky.applications)
+					var apps_installed = true;
+					if (typeof Tweenky.applications[application_key] == "object")
 					{
-						if (typeof Tweenky.applications[application_key] == "object")
-						{
-							html += '<li><hr style="border:dotted 3px #FAD163" /></li>';
-							html += '<li>';
-								html += Tweenky.applications[application_key].get_settings_menu();
-							html += '</li>';
-						}
+						html += '<li id="settings-'+application_key+'">';
+							html += Tweenky.applications[application_key].get_settings_menu();
+						html += '</li>';
 					}
-
-					html += '<div align="center">';
-						html += '<input type="button" onclick="save_settings()" value="Save Settings" />';
-					html += '</div><br/>';
 				}
+			}
+			if (apps_installed == false)
+			{
+				html += '<li>You have no applications installed!  Below you\'ll find applications you can add for your session.  You can install one, or as many as you like, and your settings are remembered until you log-out.</li>';
+			}
+			else
+			{
+
+				html += '<div align="center">';
+					html += '<input type="button" onclick="save_settings()" value="Save Settings" />';
+				html += '</div><br/>';
+				
+			}
 				
 			html += '<li><hr style="border:solid 3px #FAD163" /></li>';
 			html += '<li><h3>Available Applications</h3></li>';
 			html += '<li><hr style="border:dotted 3px #FAD163" /></li>';
 			html += '<li>';
-				html += '<input type="button" onclick="application_install(1)" value="Install"> Twitter ';
+				html += '<input type="button" onclick="application_install(1)" value="Add"> Twitter ';
 			html += '</li>';
 			html += '<li>';
-				html += '<input type="button" onclick="application_install(2)" value="Install"> Laconi.ca ';
+				html += '<input type="button" onclick="application_install(2)" value="Add"> Laconi.ca / Identi.ca';
 			html += '</li>';
 		html += '</ul>';
 		html += "</form>";
@@ -379,6 +388,7 @@
 
 	function application_remove(application_key)
 	{
+		log("Removing application: " + application_key);
 		Tweenky.applications[application_key].uninstall();
 	}
 
@@ -706,6 +716,14 @@
 				window.location.hash = '';
 			}
 		);
+	}
+	
+	function log(msg)
+	{
+		if (console.log)
+		{
+			console.log(msg);
+		}
 	}
 	
 	

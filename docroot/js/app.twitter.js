@@ -61,6 +61,7 @@ function App_Twitter_API(application_data)
 	{
 		delete(Tweenky.applications[this.application_key]);
 		$('#nav-'+this.application_key).remove();
+		$('#settings-'+this.application_key).remove();
 		Tweenky.applications.save();
 	}
 	
@@ -91,6 +92,7 @@ function App_Twitter_API(application_data)
 					break;
 			}
 			
+
 			//document.title = "Tweenky: " + params.timeline + "(" + $('#app_'+this.application_key+'_count_'+params.timeline+' span').html() + ")";
 		}
 		else if (params.query)
@@ -128,7 +130,7 @@ function App_Twitter_API(application_data)
 				html += '</li>';
 				html += '<li>';
 					html += '<div style="width:130px;float:left;">Password:</div>';
-					html += '<input type="password" id="settings-'+this.application_key+'-password" value="'+this.settings.password+'"  /><br>';
+					html += '<input type="password" id="settings-'+this.application_key+'-password" value="'+this.settings.password+'"  /> <span style="font-size:10px; color:red;font-style: italic;">Password is never stored beyond your session</span><br>';
 				html += '</li>';
 			html += '</ul>';
 		html += '</div>';
@@ -181,7 +183,7 @@ function App_Twitter_API(application_data)
 	
 	this.reset_trends = function()
 	{
-		////console.log("Trends reset");
+		console.log("Trends reset");
 		$.post(
 			"/proxy.php", 
 			{
@@ -207,7 +209,8 @@ function App_Twitter_API(application_data)
 		external_url = this.get_external_url(item.from_screen_name, item.id);
 		//<div><img src='http://www.medicaredrugplans.com/img/reply_arrow.gif'><div id='reply-to-tweetid-"+item.id+"'></div></div> \
 		
-		internal_link = "#ak="+this.application_key+"&query=from:"+item.from_screen_name;
+		//internal_link = "#ak="+this.application_key+"&query=from:"+item.from_screen_name;
+		user_link = "http://www.twitter.com/"+item.from_screen_name;
 		
 		if (level == 0)
 		{
@@ -222,16 +225,20 @@ function App_Twitter_API(application_data)
 			<div class='tweet-"+item.unread+" tweet' style='clear:left; display:none' id='tweetid-"+item.id+"'> \
 				<div style='"+tweet_style+"'><div id='reply-to-tweetid-"+item.id+"'></div></div> \
 				<div> \
-					<a href='"+internal_link+"'> \
+					<a href='"+user_link+"' target='_blank'> \
 						<img class='tweet-image' src='" + item.from_profile_image_url + "' height='50' width='50'> \
 					</a> \
 				</div> \
 				<div class='tweet-body'> \
 					<p class='tweet-text' style='display:none;'>"+item.text+"</p> \
-					<p class='tweet-tweet'><a href='"+internal_link+"' class='tweet-author'>"+item.from_screen_name+"</a>: <span class='tweet-text'>" + this.tweet_wrap(item) +"</span></p> \
+					<p class='tweet-tweet'><a href='"+user_link+"' target='_blank' class='tweet-author'>"+item.from_screen_name+"</a>: <span class='tweet-text'>" + this.tweet_wrap(item) +"</span></p> \
 					<div class='tweet-footer'> \
-						" + item.from_name + " said <a href='" + external_link + "' target='_blank' title='" + (item.created_at) + "' class='timestamp'>"+relative_time(item.created_at)+"</a> from "+ item.source +" on "+ this.settings.title + " \
-						| <a onclick='create_status(\"@"+item.from_screen_name+" \", \""+item.service_id+"\", "+item.from_user_id+");'>Reply</a> | \
+						" + item.from_name + " said <a href='" + external_link + "' target='_blank' title='" + (item.created_at) + "' class='timestamp'>"+relative_time(item.created_at)+"</a> from "+ item.source +" on "+ this.settings.title + " ";
+		if (item.in_reply_to_status_id > 0)
+		{
+			html += " in reply to <a href='http://www.twitter.com/"+ item.in_reply_to_screen_name+"/status/"+item.in_reply_to_status_id+"' target='_blank'>"+ item.in_reply_to_screen_name+"</a>";
+		}		
+		html += " | <a onclick='create_status(\"@"+item.from_screen_name+" \", \""+item.service_id+"\", "+item.from_user_id+");'>Reply</a> | \
 						<a onclick='create_status(\"d "+item.from_screen_name+" \", \""+item.service_id+" \")'>Direct</a> | \
 						<a onclick='retweet(\""+item.id+"\")'>Retweet</a>\
 						</div>\
@@ -240,7 +247,7 @@ function App_Twitter_API(application_data)
 			</div> \
 		";
 		
-		if (item.in_reply_to_status_id > 0)
+		/*if (item.in_reply_to_status_id > 0)
 		{
 			$.ajax({
 				type	: "POST",
@@ -280,7 +287,7 @@ function App_Twitter_API(application_data)
 					}
 				}
 			})
-		}
+		}*/
 
 		return html;
 	}
@@ -315,7 +322,12 @@ function App_Twitter_API(application_data)
 				var url = this.settings.api_url + '/direct_messages.json';
 				break;
 		}
-
+		
+		//Get rid of the read tweets
+		$('.tweet-read').each(function(i){
+			that.tweets[timeline][$(this).attr('id')] = null;
+			$(this).remove();
+		});
 
 		$.ajax({
 			type	: "POST",
@@ -324,10 +336,12 @@ function App_Twitter_API(application_data)
 				"url"	: url,
 				"ak"	: this.application_key,
 				"count" : 20,
-				"since_id" : this.since_id[timeline]
+				"since_id" : this.since_id[timeline],
+				"timeline" : timeline
 			},
 			dataType: "json",
 			success	: function(call){
+					
 				if (call.response.error)
 					alert("[" + Tweenky.applications[call.params.ak].settings.title +"] " + call.response.error);
 				
@@ -351,6 +365,7 @@ function App_Twitter_API(application_data)
 							tweet.source 					= item.source;
 							tweet.in_reply_to_status_id 	= item.in_reply_to_status_id;
 							tweet.in_reply_to_user_id 		= item.in_reply_to_user_id;
+							tweet.in_reply_to_screen_name 		= item.in_reply_to_screen_name;
 							
 						    values = item.created_at.split(" ");
 						
@@ -358,8 +373,12 @@ function App_Twitter_API(application_data)
 
 
 							$("#app_"+Tweenky.applications[call.params.ak].application_key+"_count_"+timeline).show();
-
-							$("#app_"+call.params.ak+"_count_"+timeline+" span").html(parseInt($("#app_"+call.params.ak+"_count_"+timeline+" span").html()) + 1);
+							
+							unread_count = parseInt($("#app_"+call.params.ak+"_count_"+timeline+" span").html()) + 1;
+							$("#app_"+call.params.ak+"_count_"+timeline+" span").html(unread_count);
+							document.title = "("+unread_count+") "+ Tweenky.applications[call.params.ak].settings.title + ": " + timeline;
+							
+							$//("#app_"+call.params.ak+"_count_"+timeline+" span").html(parseInt($("#app_"+call.params.ak+"_count_"+timeline+" span").html()) + 1);
 
 							if (i==call.response.length-1)
 							{
@@ -370,11 +389,11 @@ function App_Twitter_API(application_data)
 
 							if (window.location.hash == "#ak="+call.params.ak+"&timeline="+timeline)
 							{
-
-								Tweenky.applications[call.params.ak].display(timeline);
+								Tweenky.applications[call.params.ak].show_tweet(tweet);
 							}
 						}
-					});		
+					});	
+					//Tweenky.applications[call.params.ak].display(call.params.timeline);	
 				}
 		}});
 	}
@@ -390,7 +409,7 @@ function App_Twitter_API(application_data)
 		$("#maincontainer").show();
 		parent.prepend(this.tweet_to_html(tweet, level));
 		
-		$("#tweetid-"+tweet.id).fadeIn();
+		$("#tweetid-"+tweet.id).slideDown('slow');
 		
 		
 		$('.tweet-image').tooltip({ 
@@ -411,8 +430,7 @@ function App_Twitter_API(application_data)
 		html = '\
 			<div style="float:left">'+this.settings.title + ' // ' + timeline + '</div> \
 			<div style="float:right"> \
-				<input type="button" onclick="Tweenky.applications[\''+this.application_key+'\'].tweets_mark_as_read(\''+timeline+'\')" value="Mark as Read"> \
-				<input type="button" onclick="Tweenky.applications[\''+this.application_key+'\'].tweets_clear(\''+timeline+'\')" value="Clear Read"> \
+				<input type="button" onclick="Tweenky.applications[\''+this.application_key+'\'].tweets_mark_as_read(\''+timeline+'\')" value="Mark all Read"> \
 			</div> \
 			<div style="clear:both"></div> \
 		';
@@ -429,12 +447,14 @@ function App_Twitter_API(application_data)
 					this.show_tweet(tweet);
 				}
 			}
-		}
+		}	
 	}
 	
 	this.tweets_mark_as_read = function(timeline)
 	{ 
 		that = this;
+		
+		document.title = "(0) "+ this.settings.title + ": " + timeline;
 		////console.log("Marking tweets as read for " + timeline);
 		$("#app_"+this.application_key+"_count_"+timeline).hide();
 		$("#app_"+this.application_key+"_count_"+timeline+" span").html("0");
@@ -449,6 +469,7 @@ function App_Twitter_API(application_data)
 	
 	this.tweets_clear = function(timeline)
 	{
+		
 		////console.log("clearing tweets for " + timeline);
 		$('.tweet-read').each(function(i){
 			that.tweets[timeline][$(this).attr('id')] = null;
@@ -461,13 +482,12 @@ function App_Twitter_API(application_data)
 	
 	this.post_new_tweet = function(tweet)
 	{
-		var url = this.settings.api_url + '/statuses/update.json';
+		var url = this.settings.api_url + '/statuses/update.json?status='+escape(tweet);
 		$.post(
 			"/proxy.php", 
 			{
 				"url"	: url,
-				"ak"	: this.application_key,
-				"status": tweet
+				"ak"	: this.application_key
 			},
 			function(call){
 				$('#new-status').val('');
@@ -491,16 +511,32 @@ function App_Twitter_API(application_data)
 	
 	this.get_external_url = function(username, tweet_id)
 	{
-	
-		switch(this.application_id)
+		if (tweet_id > 0)
 		{
-			case 1:
-				external_link = this.settings.api_url+"/"+username+"/statuses/" + tweet_id;
-				break;
+			switch(this.application_id)
+			{
+				case 1:
+					external_link = this.settings.api_url+"/"+username+"/statuses/" + tweet_id;
+					break;
 
-			case 2:
-				external_link = this.settings.api_url.replace("api", "notice/"+tweet_id);
-				break;
+				case 2:
+					external_link = this.settings.api_url.replace("api", "notice/"+tweet_id);
+					break;
+			}
+		}
+		else
+		{
+			switch(this.application_id)
+			{
+				case 1:
+					external_link = this.settings.api_url+"/"+username;
+					break;
+
+				case 2:
+					external_link = this.settings.api_url.replace("api", username);
+					break;
+			}
+			
 		}
 		
 		return external_link;
@@ -550,8 +586,10 @@ function App_Twitter_API(application_data)
 							timeline = 'search-'+query;
 
 							$("#app_"+that.application_key+"_count_"+timeline).show();
-
-							$("#app_"+that.application_key+"_count_"+timeline+" span").html(parseInt($("#app_"+that.application_key+"_count_"+timeline+" span").html()) + 1);
+							
+							unread_count = parseInt($("#app_"+that.application_key+"_count_"+timeline+" span").html()) + 1;
+							$("#app_"+that.application_key+"_count_"+timeline+" span").html(unread_count);
+							document.title = "("+unread_count+") "+ Tweenky.applications[that.application_key].settings.title + ": " + timeline;
 
 							if (i==call.results.length-1)
 							{
@@ -592,6 +630,7 @@ function App_Twitter_API(application_data)
 
 	this.reply_wrap = function(tweet) {
 	    var userRegex = /@([a-zA-Z0-9_]+)/gi;
+		//var tweetText = tweet.text.replace(userRegex,'<a class="query" href="http:www.twitter.com/$1">@$1</a>');
 		var tweetText = tweet.text.replace(userRegex,'<a class="query" href="#ak='+this.application_key+'&query=from:$1">@$1</a>');
 
 		return tweetText;
