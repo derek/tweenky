@@ -1,4 +1,5 @@
 
+	try { console.assert(1); } catch(e) { console = { log: function() {}, assert: function() {} } }
 	
 	//alert(window.navigator.language);
 	_next_tweet_color_scheme 	= 1;
@@ -20,14 +21,6 @@
 
 	Tweenky 			 = {
 		applications : {
-			/*asdasd		: {
-				application_id  : 1,
-				settings		: {
-					username	: "derek",
-					password	: "tw1tter007",
-					title		: "Twitter"
-				}
-			},*/
 			
 			install		: function(application_data){
 				if (!application_data.application_key)
@@ -720,10 +713,7 @@
 	
 	function log(msg)
 	{
-		/*if (console)
-		{
-			console.log(msg);
-		}*/
+		console.log(msg);
 	}
 	
 	

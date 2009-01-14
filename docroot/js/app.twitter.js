@@ -564,11 +564,22 @@ function App_Twitter_API(application_data)
 			case 1:
 				//search_url 	= "http://search.twitter.com/search.json";
 				that = this;
-				search_url 	= "http://search.twitter.com/search.json?q="+query.replace("#", "%23")+"&since_id="+this.since_id['search-'+query]+"&rpp=100&callback=?";
+				
+				
+				//search_url 	= "http://search.twitter.com/search.json?q="+query.replace("#", "%23")+"&since_id="+this.since_id['search-'+query]+"&rpp=100&callback=?";
+				search_url 	= "http://search.twitter.com/search.json?q="+escape(query) + "&since_id="+this.since_id['search-'+query]+"&rpp=50";
+				
 				log("Searching - " + search_url);
-				$.getJSON(search_url,
-				   function(call){
-						tweets = call.results;
+				$.ajax({
+					type	: "POST",
+					url		: "/proxy.php",
+					data	: {
+						"url"	: search_url,
+						"ak"	: this.application_key
+					},
+					dataType: "json",
+					success	: function(call){
+						tweets = call.response.results;
 						tweets.reverse();
 						$.each(tweets, function(i, item) {
 							tweet 							= new Object();
@@ -593,7 +604,7 @@ function App_Twitter_API(application_data)
 							//$("#app_"+that.application_key+"_count_"+timeline+" span").html(unread_count);
 							document.title = Tweenky.applications[that.application_key].settings.title + ": " + timeline;
 
-							if (i==call.results.length-1)
+							if (i==tweets.length-1)
 							{
 								that.since_id[timeline] = tweet.id;
 							}
@@ -605,9 +616,16 @@ function App_Twitter_API(application_data)
 								that.display(timeline);
 							}
 						});
+					}
+				});
+				
+				
+				/*$.getJSON(search_url,
+				   function(call){
+						
 				      }
 				   );
-				
+				*/
 				break;
 				
 				

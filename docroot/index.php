@@ -141,7 +141,7 @@
 			<div id="faq-box" style="width:400px; background-color:#ffffff; padding:10px 50px 20px 50px;" class="rounded" align="left">
 				<h2>What is Tweenky?</h2>
 					<p>A web-based micro-blogging ("tweet") client that currently supports Twitter and Identi.ca/Laconi.ca.</p>
-					<p>You can read about it on <a href="http://www.techcrunch.com/2008/07/24/tweenky-brings-gmails-good-looks-to-twitter/">TechCrunch</a></p>
+					<p>You can read more about it on <a href="http://www.techcrunch.com/2008/07/24/tweenky-brings-gmails-good-looks-to-twitter/">TechCrunch</a></p>
 				
 				<h2>What are some of the features?</h2>
 					<p>Glad you asked!</p>
