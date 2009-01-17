@@ -23,9 +23,9 @@
 		<script type="text/javascript" src="/js/jquery/fancybox/jquery.fancybox-1.0.0.js"></script>
 		<script type="text/javascript" src="/js/jquery/jfade.1.0.js"></script>
 		<script type="text/javascript" src="/js/persist-js-0.1.0/persist.js"></script>
-		<script type="text/javascript" src="/js/tweenky.js?68435483"></script>
-		<script type="text/javascript" src="/js/helpers.js?68435483"></script>
-		<script type="text/javascript" src="/js/app.twitter.js?68435483"></script>
+		<script type="text/javascript" src="/js/tweenky.js?<?= rand(1,100000) ?>"></script>
+		<script type="text/javascript" src="/js/helpers.js?<?= rand(1,100000) ?>"></script>
+		<script type="text/javascript" src="/js/app.twitter.js?<?= rand(1,100000) ?>"></script>
 		
 		
 	 	<link rel="stylesheet" type="text/css" href="/css/reset.css" />

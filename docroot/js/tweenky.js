@@ -721,6 +721,7 @@
 	
 	function decode_tinyurl(url)
 	{
+		$("a[@href="+url+"]").css("background-color", "yellow");
 		$.post(
 			"/action.php", 
 			{
@@ -729,7 +730,9 @@
 			},
 			function(response)
 			{
-				$("a[@href="+response.url+"]").html(response.decoded).attr("href", response.decoded).attr("onmouseover", '');
+				$("a[@href="+response.url+"]").fadeOut(function(){
+					$(this).html(response.decoded).css("background-color", "").fadeIn().attr("href", response.decoded).attr("onmouseover", '');
+				})
 				console.log(response.url + " => " + response.decoded);
 		  	}, "json"
 		);
