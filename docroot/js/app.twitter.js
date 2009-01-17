@@ -205,11 +205,8 @@ function App_Twitter_API(application_data)
 	
 	this.tweet_to_html = function(item, level)
 	{
-		external_url = this.get_external_url(item.from_screen_name, item.id);
-		//<div><img src='http://www.medicaredrugplans.com/img/reply_arrow.gif'><div id='reply-to-tweetid-"+item.id+"'></div></div> \
-		
-		//internal_link = "#ak="+this.application_key+"&query=from:"+item.from_screen_name;
-		user_link = "http://www.twitter.com/"+item.from_screen_name;
+		external_url 	= this.get_external_url(item.from_screen_name, item.id);
+		user_link 		= this.get_external_url(item.from_screen_name);
 		
 		if (level == 0)
 		{
@@ -224,24 +221,24 @@ function App_Twitter_API(application_data)
 			<div class='tweet-"+item.unread+" tweet' style='clear:left; display:none' id='tweetid-"+item.id+"'> \
 				<div style='"+tweet_style+"'><div id='reply-to-tweetid-"+item.id+"'></div></div> \
 				<div> \
-					<a href='"+user_link+"' target='_blank'> \
-						<img class='tweet-image' src='" + item.from_profile_image_url + "' height='50' width='50'> \
+					<a  class='tweet-image fancybox' href='"+user_link+"' target='_blank'> \
+						<img src='" + item.from_profile_image_url + "' height='50' width='50'> \
 					</a> \
 				</div> \
 				<div class='tweet-body'> \
 					<p class='tweet-text' style='display:none;'>"+item.text+"</p> \
-					<p class='tweet-tweet'><a href='"+user_link+"' target='_blank' class='tweet-author'>"+item.from_screen_name+"</a>: <span class='tweet-text'>" + this.tweet_wrap(item) +"</span></p> \
+					<p class='tweet-tweet'><a href='"+user_link+"' target='_blank' class='tweet-author fancybox'>"+item.from_screen_name+"</a>: <span class='tweet-text'>" + this.tweet_wrap(item) +"</span></p> \
 					<div class='tweet-footer'> \
-						" + item.from_name + " said <a href='" + external_link + "' target='_blank' title='" + (item.created_at) + "' class='timestamp'>"+relative_time(item.created_at)+"</a> " + ((item.source != '') ? "from "+ item.source : "") +" on "+ this.settings.title + " ";
+						" + item.from_name + " said <a href='" + external_url + "' target='_blank' title='" + (item.created_at) + "' class='timestamp'>"+relative_time(item.created_at)+"</a> " + ((item.source != '') ? "from "+ item.source : "") +" on "+ this.settings.title + " ";
 						
 						if (item.in_reply_to_status_id > 0)
 						{
 							html += " in reply to <a href='http://www.twitter.com/"+ item.in_reply_to_screen_name+"/status/"+item.in_reply_to_status_id+"' target='_blank'>"+ item.in_reply_to_screen_name+"</a>";
 						}	
 							
-				html += " | <a onclick='create_status(\"@"+item.from_screen_name+" \", \""+item.service_id+"\", "+item.from_user_id+");'>Reply</a> | \
-						<a onclick='create_status(\"d "+item.from_screen_name+" \", \""+item.service_id+" \")'>Direct</a> | \
-						<a onclick='retweet(\""+item.id+"\")'>Retweet</a>\
+				html += " | <span class='pseudolink' onclick='create_status(\"@"+item.from_screen_name+" \", \""+item.service_id+"\", "+item.from_user_id+");'>Reply</span> | \
+						<span class='pseudolink' onclick='create_status(\"d "+item.from_screen_name+" \", \""+item.service_id+" \")'>Direct</span> | \
+						<span class='pseudolink' onclick='retweet(\""+item.id+"\")'>Retweet</span>\
 						</div>\
 					</div> \
 				<div class='clear-fix'></div> \
@@ -413,7 +410,7 @@ function App_Twitter_API(application_data)
 		$("#tweetid-"+tweet.id).slideDown('slow');
 		
 		
-		$('.tweet-image').tooltip({ 
+		$('.tweet-image img').tooltip({ 
 		    delay: 0, 
 		    showURL: false, 
 		    opacity: 0,
@@ -421,6 +418,12 @@ function App_Twitter_API(application_data)
 		    bodyHandler: function() {
 		        return $("<img/>").attr('height', '300').attr("src", $(this).attr('src').replace(/_normal/, "").replace(/_bigger/, ""));
 		    } 
+		});
+		
+		$(".tweet a").fancybox({
+			'zoomSpeedIn':	0, 
+			'zoomSpeedOut':	0,
+			'frameWidth': 820, 'frameHeight': 500
 		});
 	}
 	
@@ -537,7 +540,7 @@ function App_Twitter_API(application_data)
 					external_link = this.settings.api_url.replace("api", username);
 					break;
 			}
-			
+
 		}
 		
 		return external_link;

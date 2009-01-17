@@ -3,66 +3,49 @@
 	session_start();
 ?>
 
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	
 		<title>Tweenky | A Tweet Client</title>
+		
 	 	<link rel="stylesheet" type="text/css" href="/css/main.css" />
-	 	<link rel="stylesheet" type="text/css" href="/js/jquery/cluetip/jquery.cluetip.css" />
-		<link rel="stylesheet" href="http://jquery.com/demo/thickbox/thickbox-code/thickbox.css" type="text/css" media="screen" />
 	    
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">
-		  google.load("language", "1");
+			google.load("language", "1");
+			google.load("jquery", "1.2");
 		</script>
-		<script type="text/javascript" src="/js/app.twitter.js?68435483"></script>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
-		<script type="text/javascript" src="http://jqueryjs.googlecode.com/svn/trunk/plugins/corner/jquery.corner.js"></script>
-		<script type="text/javascript" src="http://jqueryjs.googlecode.com/svn/trunk/plugins/selectboxes/jquery.selectboxes.js"></script>
-		<script type="text/javascript" src="http://jquery-json.googlecode.com/files/jquery.json-1.2.js"></script>
+		<script type="text/javascript" src="/js/jquery/jquery.json-1.2.js"></script>
+		<script type="text/javascript" src="/js/jquery/jquery.tooltip.js"></script>
+		<script type="text/javascript" src="/js/jquery/fancybox/jquery.metadata.js"></script>
+		<script type="text/javascript" src="/js/jquery/fancybox/jquery.pngFix.pack.js"></script>
+		<script type="text/javascript" src="/js/jquery/fancybox/jquery.fancybox-1.0.0.js"></script>
 		<script type="text/javascript" src="/js/persist-js-0.1.0/persist.js"></script>
-		<script type="text/javascript" src="/js/jquery/jfade.1.0.js"></script>
-		<script type="text/javascript" src="/js/jquery/cluetip/jquery.cluetip.js"></script>
 		<script type="text/javascript" src="/js/tweenky.js?68435483"></script>
 		<script type="text/javascript" src="/js/helpers.js?68435483"></script>
-		<script type="text/javascript" src="/js/jquery/jquery-ui-selectable-1.6rc4.min.js"></script>
+		<script type="text/javascript" src="/js/app.twitter.js?68435483"></script>
+		
 		<link rel="stylesheet" href="http://jquery.bassistance.de/tooltip/jquery.tooltip.css" />
-		<script src="http://jquery.bassistance.de/tooltip/lib/jquery.bgiframe.js" type="text/javascript"></script>
-		<script src="http://jquery.bassistance.de/tooltip/lib/jquery.dimensions.js" type="text/javascript"></script>
-		<script src="http://jquery.bassistance.de/tooltip/jquery.tooltip.js" type="text/javascript"></script>
-		
-		
+		<link rel="stylesheet" type="text/css" href="/js/jquery/fancybox/fancy.css" media="screen" />
 		
 		<script>
 			_refresh_timer 	= null;
 			_state_interval = null
 			_home_hash		= "timeline=friends";
-			$(document).ready(function() {
-				$('.rounded').corner("5px");
-				//get_settings();
+			
+			google.setOnLoadCallback(function() {
 				$(".section .title").bind("click", function(title){
 					if ($(title.target).attr("class").match(/right-arrow/) != null || $(title.target).attr("class").match(/down-arrow/) != null)
 					{
 						section_display_toggle(title.target.parentNode.id)
 					}
 				});
-				
-				$('.tweet-author').tooltip({ 
-				    delay: 0, 
-				    showURL: false, 
-				    bodyHandler: function() { 
-				        return $("<img/>").attr("src", "http://beta.tweenky.com/images/tweenky_small.png"); 
-				    } 
-				});
-				
 			});
 			
-			
-			//render_settings();
 			_state_interval = setInterval ( "check_state()", _refresh_time );
-			
-			
 			
 			function section_display_toggle(section_title, method, action)
 			{
@@ -99,10 +82,9 @@
 			}
 			
 		</script>
-		
-		
 	</head>
 	<body>
+
 		<div id="loading" style="font-size:12px; position:absolute;top:-2px;left:48%;background-color:yellow; width:100px; padding:3px;">Loading...</div>
 		<div id="maincontainer">
 
