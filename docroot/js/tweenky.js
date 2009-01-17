@@ -100,7 +100,10 @@
 					window.location.hash = "#ak="+first_app_key+"&timeline=friends";
 			}
 		},
-		storage			: new Persist.Store('Tweenky')
+		storage			: new Persist.Store('Tweenky'),
+		
+		utils	: {
+		}
 	};
 	
 	
@@ -714,6 +717,22 @@
 	function log(msg)
 	{
 		console.log(msg);
+	}
+	
+	function decode_tinyurl(url)
+	{
+		$.post(
+			"/action.php", 
+			{
+				"a"		: 55,
+				"url"	: url,
+			},
+			function(response)
+			{
+				$("a[@href="+response.url+"]").html(response.decoded).attr("href", response.decoded).attr("onmouseover", '');
+				console.log(response.url + " => " + response.decoded);
+		  	}, "json"
+		);
 	}
 	
 	

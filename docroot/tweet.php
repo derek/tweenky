@@ -10,8 +10,6 @@
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	
 		<title>Tweenky | A Tweet Client</title>
-		
-	 	<link rel="stylesheet" type="text/css" href="/css/main.css" />
 	    
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">
@@ -29,7 +27,10 @@
 		<script type="text/javascript" src="/js/helpers.js?68435483"></script>
 		<script type="text/javascript" src="/js/app.twitter.js?68435483"></script>
 		
-		<link rel="stylesheet" href="http://jquery.bassistance.de/tooltip/jquery.tooltip.css" />
+		
+	 	<link rel="stylesheet" type="text/css" href="/css/reset.css" />
+	 	<link rel="stylesheet" type="text/css" href="/css/main.css" />
+		<link rel="stylesheet" type="text/css" href="/css/jquery.tooltip.css" />
 		<link rel="stylesheet" type="text/css" href="/js/jquery/fancybox/fancy.css" media="screen" />
 		
 		<script>

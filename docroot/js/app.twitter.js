@@ -221,19 +221,19 @@ function App_Twitter_API(application_data)
 			<div class='tweet-"+item.unread+" tweet' style='clear:left; display:none' id='tweetid-"+item.id+"'> \
 				<div style='"+tweet_style+"'><div id='reply-to-tweetid-"+item.id+"'></div></div> \
 				<div> \
-					<a  class='tweet-image fancybox' href='"+user_link+"' target='_blank'> \
+					<a  class='tweet-image fancybox' href='"+user_link+"'> \
 						<img src='" + item.from_profile_image_url + "' height='50' width='50'> \
 					</a> \
 				</div> \
 				<div class='tweet-body'> \
 					<p class='tweet-text' style='display:none;'>"+item.text+"</p> \
-					<p class='tweet-tweet'><a href='"+user_link+"' target='_blank' class='tweet-author fancybox'>"+item.from_screen_name+"</a>: <span class='tweet-text'>" + this.tweet_wrap(item) +"</span></p> \
+					<p class='tweet-tweet'><a href='"+user_link+"' class='tweet-author fancybox'>"+item.from_screen_name+"</a>: <span class='tweet-text'>" + this.tweet_wrap(item.text) +"</span></p> \
 					<div class='tweet-footer'> \
-						" + item.from_name + " said <a href='" + external_url + "' target='_blank' title='" + (item.created_at) + "' class='timestamp'>"+relative_time(item.created_at)+"</a> " + ((item.source != '') ? "from "+ item.source : "") +" on "+ this.settings.title + " ";
+						" + item.from_name + " said <a href='" + external_url + "' title='" + (item.created_at) + "' class='timestamp'>"+relative_time(item.created_at)+"</a> " + ((item.source != '') ? "from "+ item.source : "") +" on "+ this.settings.title + " ";
 						
 						if (item.in_reply_to_status_id > 0)
 						{
-							html += " in reply to <a href='http://www.twitter.com/"+ item.in_reply_to_screen_name+"/status/"+item.in_reply_to_status_id+"' target='_blank'>"+ item.in_reply_to_screen_name+"</a>";
+							html += " in reply to <a href='http://www.twitter.com/"+ item.in_reply_to_screen_name+"/status/"+item.in_reply_to_status_id+"'>"+ item.in_reply_to_screen_name+"</a>";
 						}	
 							
 				html += " | <span class='pseudolink' onclick='create_status(\"@"+item.from_screen_name+" \", \""+item.service_id+"\", "+item.from_user_id+");'>Reply</span> | \
@@ -420,11 +420,12 @@ function App_Twitter_API(application_data)
 		    } 
 		});
 		
-		$(".tweet a").fancybox({
+		$(".tweet a:not(a[@target=_blank])").fancybox({
 			'zoomSpeedIn':	0, 
 			'zoomSpeedOut':	0,
-			'frameWidth': 820, 'frameHeight': 500
+			'frameWidth': 820, 'frameHeight': 472
 		});
+	 
 	}
 	
 	this.display = function(timeline)
@@ -528,7 +529,7 @@ function App_Twitter_API(application_data)
 					break;
 			}
 		}
-		else
+		else if (username)
 		{
 			switch(this.application_id)
 			{
@@ -542,7 +543,20 @@ function App_Twitter_API(application_data)
 			}
 
 		}
-		
+		else
+		{
+			switch(this.application_id)
+			{
+				case 1:
+					external_link = this.settings.api_url+"/";
+					break;
+
+				case 2:
+					external_link = this.settings.api_url.replace("api", '');
+					break;
+			}
+
+		}
 		return external_link;
 	}
 	
@@ -642,28 +656,15 @@ function App_Twitter_API(application_data)
 	
 	/* HELPERS */
 	
-	this.tweet_wrap = function(tweet)
+	this.tweet_wrap = function(text)
 	{
-		//This is wrapped around every tweet displayed to make it more user friendly
-		text = this.reply_wrap(tweet); // wrap any @ replies to go to search the user
-		text = this.link_wrap(text); // wrap the links
+		text = text.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi,'<a href="$1" target="_blank">$1</a>');
+		text = text.replace(/@([a-zA-Z0-9_]+)/gi,'<a class="query" href="'+this.get_external_url()+'$1">@$1</a>');
+		text = text.replace(/<a[^>]+>(http:\/\/tinyurl.com\/[^<]+)<\/a>/g,'<a href="$1" target="_blank" onmouseover="decode_tinyurl(\'$1\')">$1</a>');
+		text = text.replace(/<a[^>]+>([http:\/\/]*[a-zA-Z0-9_\.]*youtube.com\/watch\?v=([^<]+))<\/a>/g,'<a class="{frameWidth: 425, frameHeight: 355}" href="http://ddev.tweenky.com/youtube.php?key=$2" onmouseover="log(\'$2\')">$1</a>');
+
+
 
 		return text;
 	}
-
-	this.reply_wrap = function(tweet) {
-	    var userRegex = /@([a-zA-Z0-9_]+)/gi;
-		//var tweetText = tweet.text.replace(userRegex,'<a class="query" href="http:www.twitter.com/$1">@$1</a>');
-		var tweetText = tweet.text.replace(userRegex,'<a class="query" href="#ak='+this.application_key+'&query=from:$1">@$1</a>');
-
-		return tweetText;
-	}
-
-	this.link_wrap = function(tweetText) {
-		var urlRegex = /((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi;
-		var tweetText = tweetText.replace(urlRegex,'<a href="$1" target="_blank">$1</a>');
-
-		return tweetText;
-	}
-	
 }

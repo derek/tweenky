@@ -41,7 +41,7 @@
 		
 		if ($_SERVER['REQUEST_METHOD'] == "POST")
 		{
-			$postfields['source'] = "Tweenky";
+			$fields['source'] = "Tweenky";
 			
 			curl_setopt($ch, CURLOPT_POST, 				1 );
 			curl_setopt($ch, CURLOPT_POSTFIELDS, 		$fields );
