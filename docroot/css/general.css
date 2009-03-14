@@ -1,0 +1,84 @@
+.small {
+font-size: 10px;
+}
+
+a, .pseudolink {
+color: #4173AF;
+cursor: pointer;
+text-decoration: none;
+}
+
+a:hover, .pseudolink:hover {
+text-decoration: underline;
+}
+
+#loading123{
+font-size:12px; 
+position:absolute;
+top:-2px;
+left:48%;
+background-color:yellow; 
+width:200px; 
+padding:5px; 
+text-align:center;
+}
+
+.arrow-right:before { content:"\25B6 \0020"; }
+.arrow-down:before  { content:"\25BC \0020"; }
+
+
+/* the overlayed element */ 
+div.overlay { 
+    background-image:url(http://static.mycatholicvoice.com/v4/images/backgrounds/white.png);         
+    display:none; 
+    padding:30px; 
+} 
+
+/* default close button positioned on upper right corner */ 
+div.overlay div.close { 
+    background-image:url(http://static.mycatholicvoice.com/v4/images/icons/close.png); 
+    position:absolute; 
+    right:5px; 
+    top:5px; 
+    cursor:pointer; 
+    height:35px; 
+    width:35px; 
+}
+
+
+#login-overlay { 
+    width:				320px; 
+    height:				280px;
+    background-image:	url(http://static.mycatholicvoice.com/v4/images/backgrounds/apple.png); 
+    color:				#fff;
+	text-align: 		left;
+	vertical-align:		middle;
+}
+
+
+#login-overlay label{
+	float: left;
+	width: 130px;
+	font-weight: bold;
+}
+
+#login-overlay input,
+#login-overlay span{
+	width: 170px;
+	margin-bottom: 5px;
+}
+
+#login-overlay #invalid_login{
+	color:#FF4F4F; 
+	font-weight:bold; 
+	font-size:14px; 
+	margin:0px 0px 0px 40px;
+	display:none;
+}
+
+#login-overlay br{
+	clear: left;
+}
+
+
+
