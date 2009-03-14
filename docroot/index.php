@@ -125,7 +125,6 @@
 								<li>
 									<span class="pseudolink" onclick="$('#twitpic-info').toggle();">TwitPic</span>
 									<form id="twitpic" method="POST" onsubmit="return service_twitpic()">
-										<input type="hidden" name="url" value="http://twitpic.com/api/upload">
 										<div id="twitpic-info" style="display:none">
 											File: <input type="file" name="media"> <input type="submit" value="Upload">
 										</div>	
