@@ -699,7 +699,7 @@
 	function service_twitpic()
 	{
 		$("#twitpic").ajaxSubmit({
-			"url" : "/proxy.php",
+			"url" : "/proxy.php?original_url=http://twitpic.com/api/upload",
 			"type": "POST",
 			"dataType": "xml",
 			"success": function(xml){

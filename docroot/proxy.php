@@ -37,7 +37,7 @@
 				}
 			}
 			
-			if (strstr($url, "twitpic"))
+			if (strstr($_GET['original_url'], "twitpic"))
 			{
 				$_POST['media'] = "@".$_FILES['media']['tmp_name'];
 				$_POST['username'] = $username;
