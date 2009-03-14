@@ -32,6 +32,9 @@
 					case 2:
 						Tweenky.applications[application_data.application_key] = new App_Twitter_API(application_data);
 						break;
+					case 3:
+						Tweenky.applications[application_data.application_key] = new App_TweetGroups(application_data);
+						break;
 				}
 				
 				Tweenky.applications[application_data.application_key].install();
@@ -335,6 +338,9 @@
 			html += '<li>';
 				html += '<input type="button" onclick="application_install(2)" value="Add"> Laconi.ca / Identi.ca';
 			html += '</li>';
+			html += '<li>';
+				html += '<input type="button" onclick="application_install(3)" value="Add"> TweetGroups';
+			html += '</li>';
 		html += '</ul>';
 		html += "</form>";
 		
@@ -365,6 +371,9 @@
 			case 2:
 				application = new App_Twitter_API(app);
 				break;
+			case 3:
+				application = new App_TweetGroups(app);
+				break;
 		}
 		application.install();
 		render_settings();
@@ -389,7 +398,7 @@
 	}
 
 
-
+/*
 	function toggle_application(node)
 	{
 		tmp = node.parentNode.parentNode.id.split("-", 3);
@@ -454,7 +463,7 @@
 			);
 		}
 	}
-
+*/
 	function show_settings(tab)
 	{
 		$("#loading").hide();

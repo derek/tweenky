@@ -13,6 +13,7 @@ function App_Twitter_API(application_data)
 	
 	this.install = function()
 	{
+		
 		if(!this.settings)
 			this.settings = {};
 		
@@ -408,23 +409,7 @@ function App_Twitter_API(application_data)
 		parent.prepend(this.tweet_to_html(tweet, level));
 		
 		$("#tweetid-"+tweet.id).slideDown('slow');
-		
-		
-		$('.tweet-image img').tooltip({ 
-		    delay: 0, 
-		    showURL: false, 
-		    opacity: 0,
-		    fade: 250,
-		    bodyHandler: function() {
-		        return $("<img/>").attr('height', '300').attr("src", $(this).attr('src').replace(/_normal/, "").replace(/_bigger/, ""));
-		    } 
-		});
-		
-		$(".tweet a:not(a[@target=_blank])").fancybox({
-			'zoomSpeedIn':	0, 
-			'zoomSpeedOut':	0,
-			'frameWidth': 820, 'frameHeight': 472
-		});
+
 	 
 	}
 	

@@ -22,10 +22,12 @@
 		<script type="text/javascript" src="/js/jquery/fancybox/jquery.pngFix.pack.js"></script>
 		<script type="text/javascript" src="/js/jquery/fancybox/jquery.fancybox-1.0.0.js"></script>
 		<script type="text/javascript" src="/js/jquery/jfade.1.0.js"></script>
+		<script type="text/javascript" src="/js/jquery/jquery.livequery.js"></script>
 		<script type="text/javascript" src="/js/persist-js-0.1.0/persist.js"></script>
 		<script type="text/javascript" src="/js/tweenky.js?<?= rand(1,100000) ?>"></script>
 		<script type="text/javascript" src="/js/helpers.js?<?= rand(1,100000) ?>"></script>
 		<script type="text/javascript" src="/js/app.twitter.js?<?= rand(1,100000) ?>"></script>
+		<script type="text/javascript" src="/js/app.groups.js?<?= rand(1,100000) ?>"></script>
 		
 		
 	 	<link rel="stylesheet" type="text/css" href="/css/reset.css" />
@@ -44,6 +46,30 @@
 					{
 						section_display_toggle(title.target.parentNode.id)
 					}
+				});
+				
+				$(".tweet a:not(a[@target=_blank])").livequery('click', function(event) {
+					$(this).fancybox({
+						'zoomSpeedIn':	0, 
+						'zoomSpeedOut':	0,
+						'frameWidth': 820, 'frameHeight': 472
+					});
+					$(this).click();
+					return false;
+				});
+				
+				$(".tweet-image img").livequery(function(){
+					$(this).hover(function() {
+						$(this).tooltip({ 
+						    delay: 0, 
+						    showURL: false, 
+						    opacity: 0,
+						    fade: 250,
+						    bodyHandler: function() {
+						        return $("<img/>").attr('height', '300').attr("src", $(this).attr('src').replace(/_normal/, "").replace(/_bigger/, ""));
+						    } 
+						});
+					});
 				});
 			});
 			
@@ -112,7 +138,6 @@
 							</ul>
 						</div>
 						<div class="innertube">
-							
 							<div id="settings-account"  class="settings-menu">
 								<div class="innertube">
 								</div>
