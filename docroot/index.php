@@ -187,13 +187,14 @@
 				</div>
 
 				<br>
-
+				<!-- 
 				<h3>Links</h3>
 				<ul>
 					<li><a href="http://www.twitter.com/derek" target="_blank">twitter.com/derek</a></li>
 					<li><a href="http://www.twitter.com/tweenky" target="_blank">twitter.com/tweenky</a></li>
 					<li><a href="http://blog.tweenky.com" target="_blank">blog.tweenky.com</a></li>
 				</ul>
+			-->
 			</div>
 			
 			<div id="footer">
