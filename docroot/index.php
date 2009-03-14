@@ -160,7 +160,7 @@
 				</ul>
 				
 				<br />
-				
+				<!--
 				<h3>Groups</h3>
 				<div style="list-style-type: none;" id="groups-list">
 					<div style="text-align:center">
@@ -178,7 +178,7 @@
 				</div>
 				
 				<br>
-				
+			-->
 				<h3>Popular Topics</h3>
 				<div id="trends">
 					<div style="text-align:center">

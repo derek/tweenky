@@ -31,8 +31,8 @@
 		
 	
 		reset_trends();
-		load_groups();
-		load_queries();
+		//load_groups();
+		//load_queries();
 		
 		setInterval("check_state()", 50);
 		setInterval("recalculate_timestamps()", 60000 );
@@ -248,7 +248,7 @@
 								tweet.user = tweet.sender;
 								tweet.source = '';
 							}
-							console.log(tweet);
+							//console.log(tweet);
 							$("#tweets").prepend(tweet_to_html({
 								id                      : tweet.id,
 								text                    : tweet.text, 
