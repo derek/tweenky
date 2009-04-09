@@ -153,7 +153,7 @@
 	function proxy(opt)
 	{
 		opt.url = "proxy.php?original_url="+opt.url
-		console.log(opt);
+		//console.log(opt);
 		$.ajax(opt);				
 	}
 	
@@ -164,22 +164,22 @@
 		{
 			case "friends":
 				var url = 'http://www.twitter.com/statuses/friends_timeline.json';
-				var type = "POST";
+				var type = "GET";
 				break;
 
 			case "replies":
 				var url = 'http://www.twitter.com/statuses/replies.json';
-				var type = "POST";
+				var type = "GET";
 				break;
 
 			case "archive":
 				var url = 'http://www.twitter.com/statuses/user_timeline.json';
-				var type = "POST";
+				var type = "GET";
 				break;
 
 			case "public":
 				var url = 'http://www.twitter.com/statuses/public_timeline.json';
-				var type = "POST";
+				var type = "GET";
 				break;
 
 			case "directs":
@@ -208,6 +208,8 @@
 		
 		loading_show();
 		
+
+		current_refresh = setTimeout('get_timeline("'+timeline+'", false)', 60000);
 		//console.log(url);
 		proxy({
 			type    : type,
@@ -269,8 +271,6 @@
 					{
 						$(".tweet").show();
 					}
-
-					current_refresh = setTimeout('get_timeline("'+timeline+'", false)', 60000);
 				}
 			}
 		});
@@ -349,7 +349,7 @@
 			var d = new Date();
 		    document.cookie = "PHPSESSID=0;path=/;expires=" + d.toGMTString() + ";" + ";";
 		    
-			window.location.href = "/";
+			window.location.href = "/oauth.php?logout";
 		}
 	}
 	
@@ -419,6 +419,8 @@
 			
 		loading_show();
 		
+			
+		current_refresh = setTimeout('get_search("'+addslashes(query)+'", false)', 20000);
 		console.log(search_url);
 		proxy({
 			type    : "GET",
@@ -465,8 +467,6 @@
 				{
 					$(".tweet").show();
 				}
-					
-				current_refresh = setTimeout('get_search("'+addslashes(query)+'", false)', 15000);
 			}
 		});
 	}

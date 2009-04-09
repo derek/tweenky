@@ -1,83 +1,60 @@
 <?
-		session_start();
-		
-		if (strstr($_GET['original_url'], "tweetburner"))
-		{
-			echo `curl http://tweetburner.com/links -d link[url]={$_POST['link']['url']}`;
-			die();
-		}
-		
-		$ch = curl_init();
-			
-			
-		if (isset($_POST['username'])) 											$username = $_SESSION['username'] = $_POST['username'];
-		elseif (isset($_SESSION['username']) && !empty($_SESSION['username']))	$username = $_SESSION['username'];
 
-		if (isset($_POST['password'])) 											$password = $_SESSION['password'] = $_POST['password'];	
-		elseif (isset($_SESSION['password']) && !empty($_SESSION['password'])) 	$password = $_SESSION['password'];
-		//die($username . $password);
-		if (isset($username) && isset($password))
-			curl_setopt($ch, CURLOPT_USERPWD,			$username.":".$password);
+	require_once('../config.php');
+	
+	if (stristr( $_GET['original_url'], "www.twitter.com"))
+	{	
 			
-		if ($_SERVER['REQUEST_METHOD'] == "POST")
+		$_POST['source'] = "Tweenky";
+	    $Twitter = new TwitterOAuth(TWITTER_OAUTH_CONSUMER_KEY, TWITTER_OAUTH_CONSUMER_SECRET, $_SESSION['oauth_access_token'], $_SESSION['oauth_access_token_secret']);
+	    echo $Twitter->OAuthRequest($_GET['original_url'], array_merge($_POST, $_GET), $_SERVER['REQUEST_METHOD']);
+
+		die();
+	}
+
+	$ch = curl_init();
+		
+	if ($_SERVER['REQUEST_METHOD'] == "POST")
+	{
+		$_POST = array_map_r("stripslashes", $_POST);
+		
+		if (strstr($_GET['original_url'], "twitpic"))
 		{
-			$_POST = array_map_r("stripslashes", $_POST);
-				
-			$_POST['source'] = "Tweenky";
-			
-			if (isset($_POST['status']))
-			{
-				$status = urlencode(stripslashes(urldecode($_POST['status'])));
-				unset($_POST['status']);
-				
-				$_GET['original_url'] = sprintf($_GET['original_url'] . "?status=%s", $status);
-				if (isset($_POST['in_reply_to_status_id'])) {
-					$_GET['original_url'] .= sprintf("&reply_to_status_id=%s", $_POST['in_reply_to_status_id']);
-					unset($_POST['in_reply_to_status_id']);
-				}
-			}
-			
-			if (strstr($_GET['original_url'], "twitpic"))
-			{
-				$_POST['media'] = "@".$_FILES['media']['tmp_name'];
-				$_POST['username'] = $username;
-				$_POST['password'] = $password;
-			}
-			
-			curl_setopt($ch, CURLOPT_POST, 				1 );
-			curl_setopt($ch, CURLOPT_POSTFIELDS, 		$_POST );
-		}
-		else
-		{
-			if (strstr($_GET['original_url'], "search.twitter.com"))
-			{
-				$_GET['original_url'] = (stripslashes(str_replace("q=#", "q=%23", $_GET['original_url'])));
-				//$_GET['original_url'] = 'http://search.twitter.com/search?q="John+Stewart"+OR+"Jon+Stewart"';
-				$p = (parse_url($_GET['original_url']));
-				$_GET['original_url'] = $p["scheme"]."://".$p["host"].$p["path"]."?".make_happy($p["query"]);
-				
-			}	
+			$_POST['media'] = "@".$_FILES['media']['tmp_name'];
+			$_POST['username'] = $username;
+			$_POST['password'] = $password;
 		}
 		
-		//die($_GET['original_url']);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER,	1);
-		curl_setopt($ch, CURLOPT_URL, 				$_GET['original_url'] );
-		curl_setopt($ch, CURLOPT_HTTPHEADER, 		array('Expect:')); 
-		
-		//print_r($_POST);die();
-		//print_r($_GET);die();
-		
-		
-		$response =  curl_exec( $ch );
-		//echo curl_error($ch);
-		curl_close($ch);
-		
-		if (is_xml($response))
+		curl_setopt($ch, CURLOPT_POST, 				1 );
+		curl_setopt($ch, CURLOPT_POSTFIELDS, 		$_POST );
+	}
+	else
+	{
+		if (strstr($_GET['original_url'], "search.twitter.com"))
 		{
-			header("Content-type: text/xml");
+			$_GET['original_url'] = (stripslashes(str_replace("q=#", "q=%23", $_GET['original_url'])));
+			//$_GET['original_url'] = 'http://search.twitter.com/search?q="John+Stewart"+OR+"Jon+Stewart"';
+			$p = (parse_url($_GET['original_url']));
+			$_GET['original_url'] = $p["scheme"]."://".$p["host"].$p["path"]."?".make_happy($p["query"]);
+			
 		}	
-		
-		echo $response;
+	}	
+	
+	//die($_GET['original_url']);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER,	1);
+	curl_setopt($ch, CURLOPT_URL, 				$_GET['original_url'] );
+	curl_setopt($ch, CURLOPT_HTTPHEADER, 		array('Expect:')); 
+	$response = curl_exec($ch);
+	//print_r($_POST);die();
+	//print_r($_GET);die();
+	
+	
+	if (is_xml($response))
+	{
+		header("Content-type: text/xml");
+	}	
+	
+	echo $response;
 
 /*******************************************/
 

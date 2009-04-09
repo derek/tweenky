@@ -1,3 +1,32 @@
+<?
+
+require_once('../config.php');
+
+session_start();
+
+if (isset($_GET['logout'])) {
+  	session_destroy();
+  	session_start();
+	header("Location: index.php");
+	die();
+}
+
+/* If oauth_token is missing get it */
+if (!isset($_SESSION['oauth_token'])) {
+	$Twitter = new TwitterOAuth(TWITTER_OAUTH_CONSUMER_KEY, TWITTER_OAUTH_CONSUMER_SECRET);
+	$token = $Twitter->getRequestToken();
+
+	/* Save tokens for later */
+	$_SESSION['oauth_request_token'] 		= $token['oauth_token'];
+	$_SESSION['oauth_request_token_secret'] = $token['oauth_token_secret'];
+
+	/* Build the authorization URL */
+	$request_link = $Twitter->getAuthorizeURL($_SESSION['oauth_request_token']);
+}
+
+?>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
@@ -28,23 +57,10 @@
 		</div>
 		
 		<div class="overlay" id="login-overlay">  
-			<form method="POST" onsubmit="return login()" id="form_login">
-				<h2 style="font-size:18px; text-align:center;">Tweenky</h2><br /><br />
-			
-				<label for="username">Twitter Username:</label>
-				<input id="username" type="text" name="username" value="" /><br />
-
-				<label for="password">Twitter Password:</label>
-				<input id="password" type="password" name="password" value="" /><br />
-				
-				<label for="login_submit">&nbsp;</label>
-				<input id="login_submit" type="submit" name="submit" value="Login"/><br />
-				
-				<label>&nbsp;</label>
-				<span id="invalid_login">Invalid Login</span>
-			</form>
+			<h2 style="font-size:18px; text-align:center;">Tweenky</h2>
 			<br /><br />
-			<p align="center">Note: We never store your username or password.</p>
+			<p align="center">Click <a href="<?= $request_link ?>">here</a> to login with your Twitter account</p>
+			<div style="width:100%; text-align:center;"><img src="http://www.hueniverse.com/.a/6a00e00993be8888330112794442ee28a4-800wi" height="100" /></div>
 		</div>		
 		
 		<div id="loading" style="font-size:12px; position:absolute;top:-2px;left:48%;background-color:yellow; width:200px; padding:5px; text-align:center;"></div>
@@ -91,7 +107,7 @@
 								<span style="font-size:26px; float:right" id="character_count">0</span>
 									<img src="http://directory.fedoraproject.org/wiki/images/c/cc/Note.png" height="25"> What are you doing?
 								</h1>
-								<textarea id="status" style="width:500px; height:100px; font-size:23px; font-family:arial;" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" wrap="soft"><?= $status ?></textarea>
+								<textarea id="status" style="width:500px; height:120px; font-size:23px; font-family:arial;" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" wrap="soft"><?= $status ?></textarea>
 								<input type="submit" value="Update" style=" font-size:16px;float:right;">
 							</form>
 						</div>
@@ -110,16 +126,16 @@
 										URL: <input type="text" id="url-to-isgd" value="http://"><input type="button" value="Shorten URL" onclick="service_isgd()">
 									</div>	
 								</li>
-								<li>
-									<span class="pseudolink" onclick="$('#tweetburner-info').toggle();">TweetBurner</span>
-									<div id="tweetburner-info" style="display:none">
-										URL: <input type="text" id="url-to-tweetburn" value="http://"><input type="button" value="Shorten URL" onclick="service_tweetburner()">
+								<li style="display:none;">
+									<span class="pseudolink" onclick="$('#digg-info').toggle();">Digg</span>
+									<div id="digg-info" style="display:none">
+										URL: <input type="text" id="url-to-digg" value="http://"><input type="button" value="Shorten URL" onclick="service_digg()">
 									</div>	
 								</li>
 							</ul>
 							
 							<br />
-							
+							<!--
 							<h3>Other</h3>
 							<ul>
 								<li>
@@ -130,7 +146,10 @@
 										</div>	
 									</form>
 								</li>
-							</ul>
+							</ul>-->
+						</div>
+						<div style="float:right">
+							<span class="pseudolink" onclick="$('#new_tweet_box').slideUp();">Close</span>
 						</div>
 						<div style="clear:both"></div>
 					</div>
@@ -151,11 +170,11 @@
 				<h3>Timelines</h3>
 
 				<ul>
-					<li><a href="#timeline=friends">Friends</a></li>
-					<li><a href="#timeline=replies">Replies</a></li>
+					<li><a href="#timeline=friends">Followers</a></li>
+					<li><a href="#timeline=replies">@</a></li>
+					<li><a href="#timeline=archive">From </a></li>
 					<li><a href="#timeline=directs">Directs</a></li>
-					<li><a href="#timeline=archive">Archive</a></li>
-					<li><a href="#timeline=public">Public</a></li>
+					<li><a href="#timeline=public">Everyone</a></li>
 				</ul>
 				
 				<br />
@@ -175,8 +194,7 @@
 						<img src="http://ddev.tweenky.com/images/ajax.gif">
 					</div>
 				</div>
-				
-				<br>
+						<br>
 			-->
 				<h3>Popular Topics</h3>
 				<div id="trends">
