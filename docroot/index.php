@@ -167,14 +167,14 @@ if (!isset($_SESSION['oauth_token'])) {
 		
 				<br />
 		
-				<h3>Timelines</h3>
+				<h3>Twitter</h3>
 
 				<ul>
-					<li><a href="#timeline=friends">Followers</a></li>
-					<li><a href="#timeline=replies">@</a></li>
-					<li><a href="#timeline=archive">From </a></li>
-					<li><a href="#timeline=directs">Directs</a></li>
-					<li><a href="#timeline=public">Everyone</a></li>
+					<li><a href="#timeline=friends">Friends</a></li>
+					<li><a href="#timeline=replies">Replies</a></li>
+					<li><a href="#timeline=archive">Sent</a></li>
+					<li><a href="#timeline=directs">Private</a></li>
+					<!--<li><a href="#timeline=public">Everyone</a></li>-->
 				</ul>
 				
 				<br />
