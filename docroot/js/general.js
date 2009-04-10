@@ -32,7 +32,7 @@
 	
 		reset_trends();
 		//load_groups();
-		//load_queries();
+		load_queries();
 		
 		setInterval("check_state()", 50);
 		setInterval("recalculate_timestamps()", 60000 );
@@ -42,37 +42,58 @@
 	
 	function load_groups()
 	{
+		group_id = 0;
 		proxy({
-			url: "http://derekgathright.com/tweetgroups.xml",
+			url: "http://derekgathright.com/tweetgroups/groups.opml",
 			dataType: "xml", 
 			success: function(xml){
-				group_id = 0;
-				$('#groups-list').html("<ul style='list-style-type:none;  padding-left:10px;'></ul>");
-				$(xml).find('settings1').each(function(){
-					$(this).find('group').each(function(){
-						$(this).find('title').each(function(){
-							group_id++;
-						    title = $(this).text();
-					
-							html = '<li id="groupid-'+group_id+'"> \
-								<span class="pseudolink arrow-right" onclick="toggle_group('+group_id+')"></span> \
-								<span class="pseudolink" onclick="group_search('+group_id+')">'+title+'</span> \
-								<ul class="group-list" style="display:none;"> \
-							';
-						});	
+				$(xml).find('body').each(function(){
+					$(this).find('outline').each(function(){
 						
-						$(this).find('users').each(function(){
-							$(this).find('user').each(function(){
-							    user = $(this).text();
-								html += '<li><a href="#query=from%3A'+user+'">'+user+'</a></li>';
-							});
+						xmlUrl 	= $(this).attr("xmlUrl");
+						id 		= hex_md5(xmlUrl);
+						
+						proxy({
+							url: xmlUrl,
+							dataType: "xml", 
+							success: function(xml){
+								$(xml).find('tweetgroup').each(function(i){
+									html  = "<h3>"+ $(this).attr("title") +"</h3>";
+									html += "<ul style='list-style-type:none; padding-left:10px;'>";
+									$(this).children().each(function(i){
+										if (this.nodeName == "list")
+										{
+											group_id++;
+									    	title = $(this).attr("title");
+									
+											html += '<li id="groupid-'+group_id+'"> \
+												<span class="pseudolink arrow-right" onclick="toggle_group('+group_id+')"></span> \
+												<span class="pseudolink" onclick="group_search('+group_id+')">'+title+'</span> \
+												<ul class="group-list" style="display:none;"> \
+											';
+											
+											$($(this)).find('item').each(function(){
+												qtitle = $(this).attr("title");
+												query = $(this).attr("query");
+												html += '<li><a href="#query='+query+'">'+qtitle+'</a></li>';
+											});
+											
+											html += '</ul></li>';							
+										}
+										else
+										{
+											query = $(this).attr("query").replace("#", "%23");
+											title = $(this).attr("title");
+											html += '<li><a href="#query='+query+'">'+title+'</a></li>';
+										}
+									});	
+									html += "</ul><br />";
+									$('#tweetgroups').append(html);
+								}
+							)}
 						});
-
-						html += '</ul></li>';
-
-						$('#groups-list>ul').append(html);
-					});
-				});
+					})
+				})
 			}
 		});
 	}
@@ -137,17 +158,34 @@
 				
 				
 				
-				$("#trends").empty().html("<ol></ol>");
+				$("#twitter-trends").empty().html("<ol></ol>");
 				for(i in response.trends)
 				{
-					q = response.trends[i].url.substr( response.trends[i].url.lastIndexOf("=") + 1, response.trends[i].url.length); 
+					q = response.trends[i].url.substr( response.trends[i].url.lastIndexOf("=") + 1, response.trends[i].url.length)
+					q = q.replace('"', "%22").replace(' ', "+"); 
 					
-					$("#trends ol").append('<li><a href="#query='+q+'">'+ response.trends[i].name +'</a></li>');
+					$("#twitter-trends ol").append('<li><a href="#query='+q+'">'+ response.trends[i].name +'</a></li>');
 				}
 			}
 		});
 		
-		setTimeout('reset_trends()', 60000);
+		proxy({
+			url: "http://www.google.com/trends/hottrends/atom/hourly",
+			dataType: "text", 
+			success: function(response){
+				var regex = new RegExp('<a href="(.*)">(.*)</a></span></li>', "g");
+				google_trends = new Array();
+				while(match = regex.exec(response))
+					google_trends[google_trends.length] = match[2];
+				
+				$("#google-trends").empty().html("<ol></ol>");
+				for(i in google_trends)
+				{
+					if (i < 20)
+						$("#google-trends ol").append('<li><a href="#query=%22' + google_trends[i] + '%22 -trend">'+ google_trends[i] +'</a></li>');
+				}
+			}
+		});
 	}
 	
 	function proxy(opt)
@@ -610,7 +648,7 @@
 	function login(){
 		proxy({
 			type    : "POST",
-			url     : "http://twitter.com/account/verify_credentials.json",
+			url     : "http://www.twitter.com/account/verify_credentials.json",
 			data    : {
 				"username"	: $("#form_login :input[name=username]").val(),
 				"password"	: $("#form_login :input[name=password]").val()
@@ -726,7 +764,7 @@
 		{
 			proxy({
 				type    : "POST",
-				url     : "http://twitter.com/statuses/update.json",
+				url     : "http://www.twitter.com/statuses/update.json",
 				data    : {
 					"status"				: $("#status").val(),
 					"in_reply_to_status_id" : $("#in_reply_to_id").val()
@@ -757,7 +795,7 @@
 	{
 		$("#status").val(status);
 		$("#in_reply_to_id").val(in_reply_to_id);
-		$("#compose_tweet").click();
+		$('#new_tweet_box').slideDown();
 	}
 	
 	function loading_show()
@@ -787,8 +825,8 @@
 	function retweet(id)
 	{
 		proxy({
-			type    : "POST",
-			url     : "http://twitter.com/statuses/show/"+id+".json",
+			type    : "GET",
+			url     : "http://www.twitter.com/statuses/show/"+id+".json",
 			dataType:"json",
 			success : function(response){
 				compose_new_tweet("Retweet @"+response.user.screen_name+": "+response.text);

@@ -45,6 +45,7 @@ if (!isset($_SESSION['oauth_token'])) {
 		
 		<script type="text/javascript" src="/js/jquery/jquery-1.3.1.min.js"></script>
 		<script type="text/javascript" src="/js/general.js"></script>
+		<script type="text/javascript" src="/js/md5.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.overlay-1.0.1.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 		<script type="text/javascript" src="http://static.flowplayer.org/js/jquery.expose-1.0.0.min.js"></script>
@@ -99,19 +100,20 @@ if (!isset($_SESSION['oauth_token'])) {
 						</div>
 						<div style="clear:both;"></div>
 					</div>-->
-					<div style="background-color:#D2DBED; width:100%; display:none;" id="new_tweet_box">
+					<div style="background-color:#D2DBED; width:100%; padding:10px;">
+						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
+							<img src="http://directory.fedoraproject.org/wiki/images/c/cc/Note.png" height="25"> What are you doing?
+						</h1>
+						<div style="display:none;" id="new_tweet_box">
 						<div style="width:500px; padding:10px; float:left;">
 							<form method="POST" onsubmit="send_new_tweet(); return false;">
 								<input type="hidden" id="in_reply_to_id"  name="in_reply_to_id" value="">
-								<h1 style="text-align:left; font-size:20px;">
-								<span style="font-size:26px; float:right" id="character_count">0</span>
-									<img src="http://directory.fedoraproject.org/wiki/images/c/cc/Note.png" height="25"> What are you doing?
-								</h1>
 								<textarea id="status" style="width:500px; height:120px; font-size:23px; font-family:arial;" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" wrap="soft"><?= $status ?></textarea>
-								<input type="submit" value="Update" style=" font-size:16px;float:right;">
+								<h1 style="text-align:left; font-size:20px; float:right; padding-left:10px;" id="character_count">0</h1>
+								<input type="submit" value="Update" style="font-size:16px; float:right;">
 							</form>
 						</div>
-						<div style="float:left; margin:27px 0px 0px 20px;">
+						<div style="float:left; margin:10px 0px 0px 20px;">
 							<h3>URL Shorteners</h3>
 							<ul>
 								<li>
@@ -148,10 +150,8 @@ if (!isset($_SESSION['oauth_token'])) {
 								</li>
 							</ul>-->
 						</div>
-						<div style="float:right">
-							<span class="pseudolink" onclick="$('#new_tweet_box').slideUp();">Close</span>
-						</div>
 						<div style="clear:both"></div>
+					</div>
 					</div>
 					<div id="tweets"></div>
 				</div>
@@ -161,12 +161,12 @@ if (!isset($_SESSION['oauth_token'])) {
 				<h3 style="display:none;">
 					<a rel="#login-overlay" id="login_link">Login</a>
 				</h3>
-				<h3>
+				<!--<h3>
 					 <img src="http://directory.fedoraproject.org/wiki/images/c/cc/Note.png" height="15"> <span id="compose_tweet" class="pseudolink" onclick="$('#new_tweet_box').slideToggle();" style="font-size:15px;">New Tweet</span>
 				</h3>
 		
 				<br />
-		
+			-->
 				<h3>Twitter</h3>
 
 				<ul>
@@ -178,26 +178,20 @@ if (!isset($_SESSION['oauth_token'])) {
 				</ul>
 				
 				<br />
-				<!--
-				<h3>Groups</h3>
-				<div style="list-style-type: none;" id="groups-list">
+				
+				<div id="tweetgroups"></div>
+				
+				<h3>Twitter Trends</h3>
+				<div id="twitter-trends">
 					<div style="text-align:center">
 						<img src="http://ddev.tweenky.com/images/ajax.gif">
 					</div>
 				</div>
-				
-				<br />
-				
-				<h3>Search</h3>
-				<div id="query-list">
-					<div style="text-align:center">
-						<img src="http://ddev.tweenky.com/images/ajax.gif">
-					</div>
-				</div>
-						<br>
-			-->
-				<h3>Popular Topics</h3>
-				<div id="trends">
+
+					<br />
+
+				<h3>Google Trends</h3>
+				<div id="google-trends">
 					<div style="text-align:center">
 						<img src="http://ddev.tweenky.com/images/ajax.gif">
 					</div>
