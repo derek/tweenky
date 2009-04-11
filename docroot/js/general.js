@@ -32,7 +32,7 @@
 	
 		reset_trends();
 		//load_groups();
-		load_queries();
+		//load_queries();
 		
 		setInterval("check_state()", 50);
 		setInterval("recalculate_timestamps()", 60000 );
@@ -260,6 +260,7 @@
 			success : function(tweets){
 				if (tweets.error)
 				{	
+					alert(tweets.error);
 					$("#login_link").overlay().load();
 				}
 				else
