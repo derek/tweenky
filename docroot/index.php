@@ -1,39 +1,36 @@
 <?
 
-require_once('../config.php');
+	require_once('../config.php');
 
-session_start();
+	session_start();
 
-if (isset($_GET['logout'])) {
-  	session_destroy();
-  	session_start();
-	header("Location: index.php");
-	die();
-}
+	if (isset($_GET['logout'])) {
+	  	session_destroy();
+	  	session_start();
+		header("Location: index.php");
+		die();
+	}
 
-/* If oauth_token is missing get it */
-if (isset($_GET['login'])) {
-	$Twitter = new TwitterOAuth(TWITTER_OAUTH_CONSUMER_KEY, TWITTER_OAUTH_CONSUMER_SECRET);
-	$token = $Twitter->getRequestToken();
+	if (isset($_GET['login'])) {
+		$Twitter = new TwitterOAuth(TWITTER_OAUTH_CONSUMER_KEY, TWITTER_OAUTH_CONSUMER_SECRET);
+		$token = $Twitter->getRequestToken();
 
-	/* Save tokens for later */
-	$_SESSION['oauth_request_token'] 		= $token['oauth_token'];
-	$_SESSION['oauth_request_token_secret'] = $token['oauth_token_secret'];
+		/* Save tokens for later */
+		$_SESSION['oauth_request_token'] 		= $token['oauth_token'];
+		$_SESSION['oauth_request_token_secret'] = $token['oauth_token_secret'];
 
-	/* Build the authorization URL */
-	$request_link = $Twitter->getAuthorizeURL($_SESSION['oauth_request_token']);
+		/* Build the authorization URL */
+		$request_link = $Twitter->getAuthorizeURL($_SESSION['oauth_request_token']);
 	
-	header("Location: ".$request_link);
-	die();
-}
+		header("Location: ".$request_link);
+		die();
+	}
 
 ?>
 
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-		
 		<title>Tweenky</title>
 		
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -52,32 +49,35 @@ if (isset($_GET['login'])) {
 		<script type="text/javascript" src="/js/jquery/jquery.overlay-1.0.1.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 		<script type="text/javascript" src="http://static.flowplayer.org/js/jquery.expose-1.0.0.min.js"></script>
-		<script>
+		<script type="text/javascript">
 			user_id = '<?= $_SESSION["user_id"]?>';
 			ip = '<?= $_SERVER["REMOTE_ADDR"] ?>';
 		</script>
 	</head>
+	
 	<body>
 		
 		<div class="overlay" id="login-overlay">  
-			<h2 style="font-size:18px; text-align:center;">Login</h2></br />
-			<br />
-			<p align="center" style="font-size:18px;">Looks like you need to log into your account.  Tweenky supports OAuth, the safe &amp; secure way to login to your Twitter account without needing to provide your password. All you need to do is click the button below.</p>
-			<br />
-			<div style="width:100%; text-align:center;"><a href="/?login"><img src="http://apiwiki.twitter.com/f/1240335298/Sign-in-with-Twitter-lighter.png"></a></div>
+			<h2 style="font-size:18px; text-align:center;">Login</h2><br>
+			<br>
+			<p style="text-align:center;font-size:18px;">Looks like you need to log into your account.  Tweenky supports OAuth, the safe &amp; secure way to login to your Twitter account without needing to provide your password. All you need to do is click the button below.</p>
+			<br>
+			<div style="width:100%; text-align:center;"><a href="/?login"><img alt="sign in with twitter" src="http://apiwiki.twitter.com/f/1240335298/Sign-in-with-Twitter-lighter.png"></a></div>
 		</div>		
 		
 		<div id="loading" style="font-size:12px; position:absolute;top:-2px;left:48%;background-color:yellow; width:200px; padding:5px; text-align:center;"></div>
 		
 		<div id="container">
 			<div id="header">
-				<img src="http://ddev.tweenky.com/images/tweenky_header_01.png" style="float:left;">
+				<img alt="tweenky header" src="http://ddev.tweenky.com/images/tweenky_header_01.png" style="float:left;">
 				<div style="padding:5px;">
 					<div style="float:right;"><a href="#logout=true">Logout</a></div>
 					<div style="padding-top:10px;">
-					<form onsubmit="return false">
-						<input type="text" id="search_query" style="width:110px; font-size:13px; width:200px;">&nbsp;
-						<input type="submit" value="Search" onclick="window.location.hash='#query=' + $('#search_query').val();" style="font-size:13px;">
+					<form onsubmit="return false" action="">
+						<div>
+							<input type="text" id="search_query" style="width:110px; font-size:13px; width:200px;">
+							<input type="submit" value="Search" onclick="window.location.hash='#query=' + $('#search_query').val();" style="font-size:13px;">
+						</div>
 					</form>
 					</div>
 				</div>
@@ -85,35 +85,19 @@ if (isset($_GET['login'])) {
 			
 			<div id="wrapper">
 				<div id="content">
-					<? /* <div style="background-color:#D2DBED; width:100%;" id="profile_box">
-						<div style="float:left; padding-right:10px"><img src="http://s3.amazonaws.com/twitter_production/profile_images/63808765/self1.jpg" /></div>
-						<div style="width:200px;float:left;">
-							<p><span style="font-weight:bold">Name</span> Derek Gathright</p>
-						    <p><span style="font-weight:bold">Location</span> Kansas City, MO</p>
-						    <p><span style="font-weight:bold">Web</span> <a href="">http://www.derekville.net</a></p>
-						    <p><span style="font-weight:bold">Bio</span> Web engineer, Linux, PHP, Javascript, blogger, mac user, music geek, fish owner</p>
-						    
-							<table style="width:180px;margin-left:10px;">
-								<tr>
-									<td style="border-right:solid 1px #999999; padding:5px;">626<br />Following</td>
-									<td style="border-right:solid 1px #999999; padding:5px;">626<br />Followers</td>
-									<td style=" padding:5px;">626<br />Updates</td>
-								</tr>
-							</table>
-						</div>
-						<div style="clear:both;"></div>
-					</div> */ ?>
 					<div style="background-color:#D2DBED; width:100%; padding:10px;">
 						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
-							<img src="http://directory.fedoraproject.org/wiki/images/c/cc/Note.png" height="25"> What are you doing?
+							<img alt="thought-bubble" src="http://directory.fedoraproject.org/wiki/images/c/cc/Note.png" height="25"> What are you doing?
 						</h1>
 						<div style="display:none;" id="new_tweet_box">
 						<div style="width:500px; padding:10px; float:left;">
-							<form method="POST" onsubmit="send_new_tweet(); return false;">
-								<input type="hidden" id="in_reply_to_id"  name="in_reply_to_id" value="">
-								<textarea id="status" style="width:500px; height:120px; font-size:23px; font-family:arial;" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" wrap="soft"><?= $status ?></textarea>
-								<h1 style="text-align:left; font-size:20px; float:right; padding-left:10px;" id="character_count">0</h1>
-								<input type="submit" value="Update" style="font-size:16px; float:right;">
+							<form method="POST" onsubmit="send_new_tweet(); return false;" action="">
+								<div>
+									<input type="hidden" id="in_reply_to_id"  name="in_reply_to_id" value="">
+									<textarea id="status" style="width:500px; height:120px; font-size:23px; font-family:arial;" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" cols="20" rows="10"><?= $status ?></textarea>
+									<h1 style="text-align:left; font-size:20px; float:right; padding-left:10px;" id="character_count">0</h1>
+									<input type="submit" value="Update" style="font-size:16px; float:right;">
+								</div>
 							</form>
 						</div>
 						<div style="float:left; margin:10px 0px 0px 20px;">
@@ -138,20 +122,6 @@ if (isset($_GET['login'])) {
 									</div>	
 								</li>
 							</ul>
-							
-							<br />
-							<? /* 
-							<h3>Other</h3>
-							<ul>
-								<li>
-									<span class="pseudolink" onclick="$('#twitpic-info').toggle();">TwitPic</span>
-									<form id="twitpic" method="POST" onsubmit="return service_twitpic()">
-										<div id="twitpic-info" style="display:none">
-											File: <input type="file" name="media"> <input type="submit" value="Upload">
-										</div>	
-									</form>
-								</li>
-							</ul> */ ?>
 						</div>
 						<div style="clear:both"></div>
 					</div>
@@ -173,45 +143,35 @@ if (isset($_GET['login'])) {
 					<li><a href="#timeline=replies">Replies</a></li>
 					<li><a href="#timeline=archive">Sent</a></li>
 					<li><a href="#timeline=directs">Private</a></li>
-					<!--<li><a href="#timeline=public">Everyone</a></li>-->
 				</ul>
 				
-				<br />
+				<br>
 				
 				<div id="tweetgroups"></div>
 				<div id="twitter-trends"></div>
 				
 
 				<br>
-				<? /*
-				<h3>Links</h3>
-				<ul>
-					<li><a href="http://www.twitter.com/derek" target="_blank">twitter.com/derek</a></li>
-					<li><a href="http://www.twitter.com/tweenky" target="_blank">twitter.com/tweenky</a></li>
-					<li><a href="http://blog.tweenky.com" target="_blank">blog.tweenky.com</a></li>
-				</ul>
-			*/ ?>
+				
 				<div style="font-size:10px; margin-top:60px;">
 					<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production.  Be sure to follow him and <a href="http://www.twitter.com/tweenky" target="_blank">@Tweenky</a>!</p>
 					<p>&copy; Tweenky, 2008-2009</p>
 				</div>
-			</div>
-			
-			<div id="footer">
-				<p></p>
-			</div>
+				
+			</div>	
+			<div style="clear:both"></div>
 		</div>
 		<script type="text/javascript">
 		  var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
 		  document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
 		</script>
-		<script type=\"text/javascript\">
+		<script type="text/javascript">
 		UserVoice.Tab.show({ 
 		  key: 'tweenky',
 		  host: 'feedback.tweenky.com', 
 		  forum: 'general', 
-		  alignment: 'left',
-		  background_color:'#f00', 
+		  alignment: 'right',
+		  background_color:'#0054AB', 
 		  text_color: 'white',
 		  hover_color: '#06C',
 		  lang: 'en'
