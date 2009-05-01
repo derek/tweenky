@@ -12,7 +12,7 @@ if (isset($_GET['logout'])) {
 }
 
 /* If oauth_token is missing get it */
-if (!isset($_SESSION['oauth_token'])) {
+if (isset($_GET['login'])) {
 	$Twitter = new TwitterOAuth(TWITTER_OAUTH_CONSUMER_KEY, TWITTER_OAUTH_CONSUMER_SECRET);
 	$token = $Twitter->getRequestToken();
 
@@ -22,6 +22,9 @@ if (!isset($_SESSION['oauth_token'])) {
 
 	/* Build the authorization URL */
 	$request_link = $Twitter->getAuthorizeURL($_SESSION['oauth_request_token']);
+	
+	header("Location: ".$request_link);
+	die();
 }
 
 ?>
@@ -49,7 +52,10 @@ if (!isset($_SESSION['oauth_token'])) {
 		<script type="text/javascript" src="/js/jquery/jquery.overlay-1.0.1.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 		<script type="text/javascript" src="http://static.flowplayer.org/js/jquery.expose-1.0.0.min.js"></script>
-		
+		<script>
+			user_id = '<?= $_SESSION["user_id"]?>';
+			ip = '<?= $_SERVER["REMOTE_ADDR"] ?>';
+		</script>
 	</head>
 	<body>
 		
@@ -58,10 +64,11 @@ if (!isset($_SESSION['oauth_token'])) {
 		</div>
 		
 		<div class="overlay" id="login-overlay">  
-			<h2 style="font-size:18px; text-align:center;">Tweenky</h2>
-			<br /><br />
-			<p align="center">Click <a href="<?= $request_link ?>">here</a> to login with your Twitter account</p>
-			<div style="width:100%; text-align:center;"><img src="http://www.hueniverse.com/.a/6a00e00993be8888330112794442ee28a4-800wi" height="100" /></div>
+			<h2 style="font-size:18px; text-align:center;">Login</h2></br />
+			<br />
+			<p align="center" style="font-size:18px;">Looks like you need to log into your account.  Tweenky supports OAuth, the safe &amp; secure way to login to your Twitter account without needing to provide your password. All you need to do is click the button below.</p>
+			<br />
+			<div style="width:100%; text-align:center;"><a href="/?login"><img src="http://apiwiki.twitter.com/f/1240335298/Sign-in-with-Twitter-lighter.png"></a></div>
 		</div>		
 		
 		<div id="loading" style="font-size:12px; position:absolute;top:-2px;left:48%;background-color:yellow; width:200px; padding:5px; text-align:center;"></div>
@@ -180,22 +187,8 @@ if (!isset($_SESSION['oauth_token'])) {
 				<br />
 				
 				<div id="tweetgroups"></div>
+				<div id="twitter-trends"><ol></ol></div>
 				
-				<h3>Twitter Trends</h3>
-				<div id="twitter-trends">
-					<div style="text-align:center">
-						<img src="http://ddev.tweenky.com/images/ajax.gif">
-					</div>
-				</div>
-
-					<br />
-
-				<h3>Google Trends</h3>
-				<div id="google-trends">
-					<div style="text-align:center">
-						<img src="http://ddev.tweenky.com/images/ajax.gif">
-					</div>
-				</div>
 
 				<br>
 				<!-- 
@@ -206,11 +199,31 @@ if (!isset($_SESSION['oauth_token'])) {
 					<li><a href="http://blog.tweenky.com" target="_blank">blog.tweenky.com</a></li>
 				</ul>
 			-->
+				<div style="font-size:10px; margin-top:60px;">
+				<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production.  Be sure to follow him and <a href="http://www.twitter.com/tweenky" target="_blank">@Tweenky</a>!</p>
+				<p>&copy; Tweenky, 2008-2009</p>
+			</div>
 			</div>
 			
 			<div id="footer">
-				<p>&copy; Tweenky, 2008-2009</p>
+				<p></p>
 			</div>
 		</div>
+		<script type="text/javascript">
+		  var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
+		  document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
+		</script>
+		<script type=\"text/javascript\">
+		UserVoice.Tab.show({ 
+		  key: 'tweenky',
+		  host: 'feedback.tweenky.com', 
+		  forum: 'general', 
+		  alignment: 'left',
+		  background_color:'#f00', 
+		  text_color: 'white',
+		  hover_color: '#06C',
+		  lang: 'en'
+		})
+		</script>
 	</body>
 </html>

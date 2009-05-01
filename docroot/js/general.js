@@ -158,7 +158,7 @@
 				
 				
 				
-				$("#twitter-trends").empty().html("<ol></ol>");
+				$("#twitter-trends").empty().html("<h3>Trends</h3><ol></ol>");
 				for(i in response.trends)
 				{
 					q = response.trends[i].url.substr( response.trends[i].url.lastIndexOf("=") + 1, response.trends[i].url.length)
@@ -260,7 +260,7 @@
 			success : function(tweets){
 				if (tweets.error)
 				{	
-					alert(tweets.error);
+					//alert("Twitter says: " + tweets.error);
 					$("#login_link").overlay().load();
 				}
 				else
@@ -352,6 +352,7 @@
 	
 	function check_state()
 	{
+
 		if (window.location.hash != _last_hash)
 		{
 			_last_hash = window.location.hash;
@@ -545,7 +546,7 @@
 				<div><div id='reply-to-tweetid-"+tweet.id+"'></div></div> \
 				<div> \
 					<a  class='tweet-image fancybox' href='"+user_link+"' class='timestamp' target='_blank'> \
-						<img src='" + tweet.from_profile_image_url + "' height='50' width='50'> \
+						<img src='" + tweet.from_profile_image_url + "' height='60' width='60'> \
 					</a> \
 				</div> \
 				<div class='tweet-body'> \
@@ -558,9 +559,15 @@
 							html += " | in reply to <a href='http://www.twitter.com/"+ tweet.in_reply_to_screen_name+"/status/"+tweet.in_reply_to_status_id+"' target='_blank'>"+ tweet.in_reply_to_screen_name+"</a>";
 						}   
 
-				html += " | <span class='pseudolink' onclick='compose_new_tweet(\"@"+tweet.from_screen_name+" \", "+tweet.id+")'>Reply</span> | \
-						<span class='pseudolink' onclick='compose_new_tweet(\"d "+tweet.from_screen_name+" \")'>Direct</span> | \
-						<span class='pseudolink' onclick='retweet(\""+tweet.id+"\")'>Retweet</span> \
+				html += " | <span class='pseudolink' title='Reply to this tweet' onclick='compose_new_tweet(\"@"+tweet.from_screen_name+" \", "+tweet.id+")'>Reply</span> | \
+						<span class='pseudolink' title='Direct message this user' onclick='compose_new_tweet(\"d "+tweet.from_screen_name+" \")'>Direct</span> | \
+						<span class='pseudolink' title='Retweet this tweet' onclick='retweet(\""+tweet.id+"\")'>Retweet</span> | \
+						<span class='pseudolink chirper' title='Chirp this Tweet!  Will send it over to TopChirp.com which is kinda like Digg, but for Twitter!' onclick='topchirp_upchirp("+tweet.id+")'>Chirp it</span> \
+						<span id='topchirp-box-"+tweet.id+"' style='display:none; background-color:white; position: relative; width:100px;height:50px; border:solid black; right:50px; top:38px; padding:20px;'>\
+							Tags <input type='text' value='' id='topchirp-tags-"+tweet.id+"' />\
+							<input type='button' value='Add' onclick='topchirp_save_tags("+tweet.id+")' />\
+							<input type='button' value='Cancel' onclick='$(\"#topchirp-box-"+tweet.id+"\").hide()' />\
+						</span> \
 					</div> \
 				</div> \
 				<div class='clear-fix'></div> \
@@ -835,5 +842,40 @@
 		});
 	}
 	
-
+	function topchirp_upchirp(tweet_id)
+	{
+		
+		$("#tweetid-"+tweet_id+" .chirper").append(" <img src='http://ddev.tweenky.com/images/ajax.gif' height='10'>");
+		proxy({
+			type    : "POST",
+			url     : "http://stark-stream-85.heroku.com/topchirps/create?tweet="+tweet_id+"&user="+user_id+"&chirp=up&ip="+ip,
+			success : function(response){
+				$("#tweetid-"+tweet_id+" .chirper").html("Chirped!").attr("onclick", "").removeClass("pseudolink");
+			}
+		});
+		//alert("up " + tweet_id + " from " + user_id);
+	}
 	
+	function topchirp_downchirp(tweet_id)
+	{
+		proxy({
+			type    : "POST",
+			url     : "http://stark-stream-85.heroku.com/topchirps/create?tweet="+tweet_id+"&user="+user_id+"&chirp=down&ip="+ip,
+			dataType:"json",
+			success : function(response){
+				
+			}
+		});
+	}
+	
+	function topchirp_save_tags(tweet_id)
+	{
+		proxy({
+			type    : "POST",
+			url     : "http://stark-stream-85.heroku.com/topchirps/create?tweet="+tweet_id+"&user="+user_id+"&tags="+$("#topchirp-tags-"+tweet_id).val()+"&ip="+ip,
+			dataType:"json",
+			success : function(response){
+				
+			}
+		});
+	}

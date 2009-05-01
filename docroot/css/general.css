@@ -47,7 +47,7 @@ div.overlay div.close {
 
 
 #login-overlay { 
-    width:				320px; 
+    width:				400px; 
     height:				280px;
     background-image:	url(http://static.mycatholicvoice.com/v4/images/backgrounds/apple.png); 
     color:				#fff;
@@ -77,6 +77,35 @@ div.overlay div.close {
 }
 
 #login-overlay br{
+	clear: left;
+}
+
+
+
+
+#topchirp-overlay { 
+    width:				320px; 
+    height:				280px;
+    background-image:	url(http://static.mycatholicvoice.com/v4/images/backgrounds/apple.png); 
+    color:				#fff;
+	text-align: 		left;
+	vertical-align:		middle;
+}
+
+
+#topchirp-overlay label{
+	float: left;
+	width: 130px;
+	font-weight: bold;
+}
+
+#topchirp-overlay input,
+#topchirp-overlay span{
+	width: 170px;
+	margin-bottom: 5px;
+}
+
+#topchirp-overlay br{
 	clear: left;
 }
 

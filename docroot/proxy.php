@@ -39,10 +39,14 @@
 			
 		}	
 	}	
-	
-	//die($_GET['original_url']);
+	$url = $_GET['original_url'];
+	$get = $_GET;
+	unset($get['original_url']);
+	if (!empty($get))
+		$url .= "&" . http_build_query($get);
+	//die($url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER,	1);
-	curl_setopt($ch, CURLOPT_URL, 				$_GET['original_url'] );
+	curl_setopt($ch, CURLOPT_URL, 				$url);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, 		array('Expect:')); 
 	$response = curl_exec($ch);
 	//print_r($_POST);die();
