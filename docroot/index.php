@@ -59,10 +59,6 @@ if (isset($_GET['login'])) {
 	</head>
 	<body>
 		
-		<div class="overlay" id="overlay">
-			<div class="wrap"></div>
-		</div>
-		
 		<div class="overlay" id="login-overlay">  
 			<h2 style="font-size:18px; text-align:center;">Login</h2></br />
 			<br />
@@ -89,7 +85,7 @@ if (isset($_GET['login'])) {
 			
 			<div id="wrapper">
 				<div id="content">
-					<!--<div style="background-color:#D2DBED; width:100%;" id="profile_box">
+					<? /* <div style="background-color:#D2DBED; width:100%;" id="profile_box">
 						<div style="float:left; padding-right:10px"><img src="http://s3.amazonaws.com/twitter_production/profile_images/63808765/self1.jpg" /></div>
 						<div style="width:200px;float:left;">
 							<p><span style="font-weight:bold">Name</span> Derek Gathright</p>
@@ -106,7 +102,7 @@ if (isset($_GET['login'])) {
 							</table>
 						</div>
 						<div style="clear:both;"></div>
-					</div>-->
+					</div> */ ?>
 					<div style="background-color:#D2DBED; width:100%; padding:10px;">
 						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
 							<img src="http://directory.fedoraproject.org/wiki/images/c/cc/Note.png" height="25"> What are you doing?
@@ -144,7 +140,7 @@ if (isset($_GET['login'])) {
 							</ul>
 							
 							<br />
-							<!--
+							<? /* 
 							<h3>Other</h3>
 							<ul>
 								<li>
@@ -155,7 +151,7 @@ if (isset($_GET['login'])) {
 										</div>	
 									</form>
 								</li>
-							</ul>-->
+							</ul> */ ?>
 						</div>
 						<div style="clear:both"></div>
 					</div>
@@ -168,12 +164,8 @@ if (isset($_GET['login'])) {
 				<h3 style="display:none;">
 					<a rel="#login-overlay" id="login_link">Login</a>
 				</h3>
-				<!--<h3>
-					 <img src="http://directory.fedoraproject.org/wiki/images/c/cc/Note.png" height="15"> <span id="compose_tweet" class="pseudolink" onclick="$('#new_tweet_box').slideToggle();" style="font-size:15px;">New Tweet</span>
-				</h3>
-		
-				<br />
-			-->
+
+
 				<h3>Twitter</h3>
 
 				<ul>
@@ -187,22 +179,22 @@ if (isset($_GET['login'])) {
 				<br />
 				
 				<div id="tweetgroups"></div>
-				<div id="twitter-trends"><ol></ol></div>
+				<div id="twitter-trends"></div>
 				
 
 				<br>
-				<!-- 
+				<? /*
 				<h3>Links</h3>
 				<ul>
 					<li><a href="http://www.twitter.com/derek" target="_blank">twitter.com/derek</a></li>
 					<li><a href="http://www.twitter.com/tweenky" target="_blank">twitter.com/tweenky</a></li>
 					<li><a href="http://blog.tweenky.com" target="_blank">blog.tweenky.com</a></li>
 				</ul>
-			-->
+			*/ ?>
 				<div style="font-size:10px; margin-top:60px;">
-				<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production.  Be sure to follow him and <a href="http://www.twitter.com/tweenky" target="_blank">@Tweenky</a>!</p>
-				<p>&copy; Tweenky, 2008-2009</p>
-			</div>
+					<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production.  Be sure to follow him and <a href="http://www.twitter.com/tweenky" target="_blank">@Tweenky</a>!</p>
+					<p>&copy; Tweenky, 2008-2009</p>
+				</div>
 			</div>
 			
 			<div id="footer">
