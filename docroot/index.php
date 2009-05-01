@@ -85,46 +85,46 @@
 			
 			<div id="wrapper">
 				<div id="content">
-					<div style="background-color:#D2DBED; width:100%; padding:10px;">
+					<div style="background-color:#D2DBED; padding:10px;">
 						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
 							<img alt="thought-bubble" src="http://directory.fedoraproject.org/wiki/images/c/cc/Note.png" height="25"> What are you doing?
 						</h1>
 						<div style="display:none;" id="new_tweet_box">
-						<div style="width:500px; padding:10px; float:left;">
-							<form method="POST" onsubmit="send_new_tweet(); return false;" action="">
-								<div>
-									<input type="hidden" id="in_reply_to_id"  name="in_reply_to_id" value="">
-									<textarea id="status" style="width:500px; height:120px; font-size:23px; font-family:arial;" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" cols="20" rows="10"><?= $status ?></textarea>
-									<h1 style="text-align:left; font-size:20px; float:right; padding-left:10px;" id="character_count">0</h1>
-									<input type="submit" value="Update" style="font-size:16px; float:right;">
-								</div>
-							</form>
+							<div style="width:500px; padding:10px; float:left;">
+								<form method="POST" onsubmit="send_new_tweet(); return false;" action="">
+									<div>
+										<input type="hidden" id="in_reply_to_id"  name="in_reply_to_id" value="">
+										<textarea id="status" style="width:500px; height:120px; font-size:23px; font-family:arial;" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" cols="20" rows="10"><?= $status ?></textarea>
+										<h1 style="text-align:left; font-size:20px; float:right; padding-left:10px;" id="character_count">0</h1>
+										<input type="submit" value="Update" style="font-size:16px; float:right;">
+									</div>
+								</form>
+							</div>
+							<div style="float:left; margin:10px 0px 0px 20px;">
+								<h3>URL Shorteners</h3>
+								<ul>
+									<li>
+										<span class="pseudolink" onclick="$('#tiny-info').toggle();">TinyURL</span>
+										<div id="tiny-info" style="display:none">
+											URL: <input type="text" id="url-to-tiny" value="http://"><input type="button" value="Shorten URL" onclick="service_tinyurl()">
+										</div>	
+									</li>
+									<li>
+										<span class="pseudolink" onclick="$('#isgd-info').toggle();">is.gd</span>
+										<div id="isgd-info" style="display:none">
+											URL: <input type="text" id="url-to-isgd" value="http://"><input type="button" value="Shorten URL" onclick="service_isgd()">
+										</div>	
+									</li>
+									<li style="display:none;">
+										<span class="pseudolink" onclick="$('#digg-info').toggle();">Digg</span>
+										<div id="digg-info" style="display:none">
+											URL: <input type="text" id="url-to-digg" value="http://"><input type="button" value="Shorten URL" onclick="service_digg()">
+										</div>	
+									</li>
+								</ul>
+							</div>
+							<div style="clear:both"></div>
 						</div>
-						<div style="float:left; margin:10px 0px 0px 20px;">
-							<h3>URL Shorteners</h3>
-							<ul>
-								<li>
-									<span class="pseudolink" onclick="$('#tiny-info').toggle();">TinyURL</span>
-									<div id="tiny-info" style="display:none">
-										URL: <input type="text" id="url-to-tiny" value="http://"><input type="button" value="Shorten URL" onclick="service_tinyurl()">
-									</div>	
-								</li>
-								<li>
-									<span class="pseudolink" onclick="$('#isgd-info').toggle();">is.gd</span>
-									<div id="isgd-info" style="display:none">
-										URL: <input type="text" id="url-to-isgd" value="http://"><input type="button" value="Shorten URL" onclick="service_isgd()">
-									</div>	
-								</li>
-								<li style="display:none;">
-									<span class="pseudolink" onclick="$('#digg-info').toggle();">Digg</span>
-									<div id="digg-info" style="display:none">
-										URL: <input type="text" id="url-to-digg" value="http://"><input type="button" value="Shorten URL" onclick="service_digg()">
-									</div>	
-								</li>
-							</ul>
-						</div>
-						<div style="clear:both"></div>
-					</div>
 					</div>
 					<div id="tweets"></div>
 				</div>
@@ -158,8 +158,12 @@
 					<p>&copy; Tweenky, 2008-2009</p>
 				</div>
 				
-			</div>	
+			</div>
+			
+			<div id="footer"><p>&nbsp;</p></div>
+	
 			<div style="clear:both"></div>
+	
 		</div>
 		<script type="text/javascript">
 		  var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
