@@ -27,6 +27,13 @@ text-align:center;
 .arrow-down:before  { content:"\25BC \0020"; }
 
 
+#tweetgroups>ul{
+list-style-type:none;
+
+}
+
+
+
 /* the overlayed element */ 
 div.overlay { 
     background-image:url(http://static.mycatholicvoice.com/v4/images/backgrounds/white.png);         

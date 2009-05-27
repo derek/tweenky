@@ -78,7 +78,7 @@
 
 
 				reset_trends();
-				//load_userlists(<?= $_SESSION['user_id'] ?>);
+				load_userlists(<?= $_SESSION['user_id'] ?>);
 				//load_groups();
 				//load_queries();
 
@@ -184,9 +184,11 @@
 				<br>
 				
 				<div id="tweetgroups"></div>
+				
+				<br />
+				
 				<div id="twitter-trends"></div>
 				
-
 				<br>
 				
 				<div style="font-size:10px; margin-top:60px;">
