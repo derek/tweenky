@@ -41,17 +41,54 @@
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/general.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/tweet.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/js/jquery/fancybox/fancy.css" >
-		<link media="screen, projection" rel="stylesheet" type="text/css" href="http://flowplayer.org/tools/css/overlay-minimal.css" >
+		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/overlay-minimal.css" >
 		
 		<script type="text/javascript" src="/js/jquery/jquery-1.3.1.min.js"></script>
 		<script type="text/javascript" src="/js/general.js"></script>
 		<script type="text/javascript" src="/js/md5.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.overlay-1.0.1.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
-		<script type="text/javascript" src="http://static.flowplayer.org/js/jquery.expose-1.0.0.min.js"></script>
+		<script type="text/javascript" src="/js/jquery/jquery.expose-1.0.0.min.js"></script>
 		<script type="text/javascript">
 			user_id = '<?= $_SESSION["user_id"]?>';
 			ip = '<?= $_SERVER["REMOTE_ADDR"] ?>';
+			
+			$(document).ready(function() {
+
+				/*overlay = $("#compose_tweet").overlay({ 
+			        onBeforeLoad: function() {
+			            this.getBackgroundImage().expose({color: '#000000'}); 
+			        },  
+			        onClose: function() { 
+			            $.expose.close(); 
+						$("#status").val('');
+						$("#in_reply_to_id").val('');
+			        } 
+			    });*/
+
+				$("#login_link").overlay({ 
+			        onBeforeLoad: function() {
+			            this.getBackgroundImage().expose({color: '#000000'}); 
+			        },  
+			        onClose: function() { 
+			            $.expose.close(); 
+						$("#status").val('');
+						$("#in_reply_to_id").val('');
+			        } 
+			    });
+
+
+				reset_trends();
+				load_userlists(<?= $_SESSION['user_id'] ?>);
+				//load_groups();
+				//load_queries();
+
+				setInterval("check_state()", 50);
+				setInterval("recalculate_timestamps()", 60000 );
+				setInterval('show_tweet()', 700);
+				setInterval('cleanup()', 6000);
+			})
+			
 		</script>
 	</head>
 	
@@ -62,14 +99,14 @@
 			<br>
 			<p style="text-align:center;font-size:18px;">Looks like you need to log into your account.  Tweenky supports OAuth, the safe &amp; secure way to login to your Twitter account without needing to provide your password. All you need to do is click the button below.</p>
 			<br>
-			<div style="width:100%; text-align:center;"><a href="/?login"><img alt="sign in with twitter" src="http://apiwiki.twitter.com/f/1240335298/Sign-in-with-Twitter-lighter.png"></a></div>
+			<div style="width:100%; text-align:center;"><a href="/?login"><img alt="sign in with twitter" src="/images/Sign-in-with-Twitter-lighter.png"></a></div>
 		</div>		
 		
 		<div id="loading" style="font-size:12px; position:absolute;top:-2px;left:48%;background-color:yellow; width:200px; padding:5px; text-align:center;"></div>
 		
 		<div id="container">
 			<div id="header">
-				<img alt="tweenky header" src="http://ddev.tweenky.com/images/tweenky_header_01.png" style="float:left;">
+				<img alt="tweenky header" src="/images/tweenky_header_01.png" style="float:left;">
 				<div style="padding:5px;">
 					<div style="float:right;"><a href="#logout=true">Logout</a></div>
 					<div style="padding-top:10px;">
@@ -87,7 +124,7 @@
 				<div id="content">
 					<div style="background-color:#D2DBED; padding:10px;">
 						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
-							<img alt="thought-bubble" src="http://directory.fedoraproject.org/wiki/images/c/cc/Note.png" height="25"> What are you doing?
+							<img alt="thought-bubble" src="/images/thought.png" height="25"> What are you doing?
 						</h1>
 						<div style="display:none;" id="new_tweet_box">
 							<div style="width:500px; padding:10px; float:left;">

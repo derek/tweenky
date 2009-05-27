@@ -5,41 +5,51 @@
 	var loading_timeout = null;
 	try { console.log(''); } catch(e) { console = { log: function() {} } }
 	
-	$(document).ready(function() {
-		
-		/*overlay = $("#compose_tweet").overlay({ 
-	        onBeforeLoad: function() {
-	            this.getBackgroundImage().expose({color: '#000000'}); 
-	        },  
-	        onClose: function() { 
-	            $.expose.close(); 
-				$("#status").val('');
-				$("#in_reply_to_id").val('');
-	        } 
-	    });*/
-		
-		$("#login_link").overlay({ 
-	        onBeforeLoad: function() {
-	            this.getBackgroundImage().expose({color: '#000000'}); 
-	        },  
-	        onClose: function() { 
-	            $.expose.close(); 
-				$("#status").val('');
-				$("#in_reply_to_id").val('');
-	        } 
-	    });
-		
+
 	
-		reset_trends();
-		//load_groups();
-		//load_queries();
-		
-		setInterval("check_state()", 50);
-		setInterval("recalculate_timestamps()", 60000 );
-		setInterval('show_tweet()', 700);
-		setInterval('cleanup()', 6000);
-	})
-	
+	function load_userlists()
+	{
+		var group_id = 0;
+		proxy({
+			url: "http://userlists.org/1974.xml",
+			dataType: "xml", 
+			success: function(xml){
+				$(xml).find('tweetgroup').each(function(i){
+					html  = "<h3>"+ $(this).attr("title") +"</h3>";
+					html += "<ul style='list-style-type:none; padding-left:10px;'>";
+					$(this).children().each(function(i){
+						if (this.nodeName == "list")
+						{
+							group_id++;
+					    	title = $(this).attr("title");
+					
+							html += '<li id="groupid-'+group_id+'"> \
+								<span class="pseudolink arrow-right" onclick="toggle_group('+group_id+')"></span> \
+								<span class="pseudolink" onclick="group_search('+group_id+')">'+title+'</span> \
+								<ul class="group-list" style="display:none;"> \
+							';
+							
+							$($(this)).find('item').each(function(){
+								qtitle = $(this).attr("title");
+								query = $(this).attr("query");
+								html += '<li><a href="#query='+query+'">'+qtitle+'</a></li>';
+							});
+							
+							html += '</ul></li>';							
+						}
+						else
+						{
+							query = $(this).attr("query").replace("#", "%23");
+							title = $(this).attr("title");
+							html += '<li><a href="#query='+query+'">'+title+'</a></li>';
+						}
+					});	
+					html += "</ul><br />";
+					$('#tweetgroups').append(html);
+				}
+			)}
+		});
+	}
 	function load_groups()
 	{
 		group_id = 0;
