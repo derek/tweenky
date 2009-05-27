@@ -25,7 +25,6 @@
 		header("Location: ".$request_link);
 		die();
 	}
-
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -79,7 +78,7 @@
 
 
 				reset_trends();
-				load_userlists(<?= $_SESSION['user_id'] ?>);
+				//load_userlists(<?= $_SESSION['user_id'] ?>);
 				//load_groups();
 				//load_queries();
 
