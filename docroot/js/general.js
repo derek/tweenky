@@ -517,13 +517,15 @@
 
 				html += " | <span class='pseudolink' title='Reply to this tweet' onclick='compose_new_tweet(\"@"+tweet.from_screen_name+" \", "+tweet.id+")'>Reply</span> | \
 						<span class='pseudolink' title='Direct message this user' onclick='compose_new_tweet(\"d "+tweet.from_screen_name+" \")'>Direct</span> | \
-						<span class='pseudolink' title='Retweet this tweet' onclick='retweet(\""+tweet.id+"\")'>Retweet</span> | \
-						<span class='pseudolink chirper' title='Chirp this Tweet!  Will send it over to TopChirp.com which is kinda like Digg, but for Twitter!' onclick='topchirp_upchirp("+tweet.id+")'>Chirp it</span> \
+						<span class='pseudolink' title='Retweet this tweet' onclick='retweet(\""+tweet.id+"\")'>Retweet</span> ";
+				/*html += "| <span class='pseudolink chirper' title='Chirp this Tweet!  Will send it over to TopChirp.com which is kinda like Digg, but for Twitter!' onclick='topchirp_upchirp("+tweet.id+")'>Chirp it</span> \
 						<span id='topchirp-box-"+tweet.id+"' style='display:none; background-color:white; position: relative; width:100px;height:50px; border:solid black; right:50px; top:38px; padding:20px;'>\
 							Tags <input type='text' value='' id='topchirp-tags-"+tweet.id+"' />\
 							<input type='button' value='Add' onclick='topchirp_save_tags("+tweet.id+")' />\
 							<input type='button' value='Cancel' onclick='$(\"#topchirp-box-"+tweet.id+"\").hide()' />\
-						</span> \
+						</span>";
+				*/
+				html += " \
 					</div> \
 				</div> \
 				<div class='clear-fix'></div> \
