@@ -28,8 +28,9 @@ text-align:center;
 
 
 #tweetgroups>ul{
-list-style-type:none;
-
+	list-style-type:none;
+	padding:0px 0px 0px 5px;
+	margin:0px;
 }
 
 

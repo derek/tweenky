@@ -472,13 +472,15 @@
 		var params = get_querystring_object();
 		if (params.query)
 		{
-			params.query = params.query.replace(/"/g, "");
-			regex = new RegExp("("+params.query+")", "gi");
-			text = text.replace(regex,'<span style="background-color:yellow; font-weight:bold;">$1<\/span>');
+			//params.query = params.query.replace(/"/g, "");
+			//text = text.replace( new RegExp("("+params.query+")", "gi"),'<span style="background-color:yellow; font-weight:bold;">$1<\/span>');	
+			//return text;
 		}
 		text = text.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi,'<a href="$1" target="_blank">$1<\/a>');
-		text = text.replace(/@([a-zA-Z0-9_]+)/gi,'<a class="query" href="#query=from:$1">@$1<\/a>');
-		text = text.replace(/<a[^>]+>(http:\/\/tinyurl.com\/[^<]+)<\/a>/g,'<a href="$1" target="_blank" onmouseover="decode_tinyurl(\'$1\')">$1<\/a>');
+		text = text.replace(/@([a-zA-Z0-9_]+)/gi,'<a class="query" href="http://www.twitter.com/$1" target="_blank">@$1<\/a>');
+		//text = text.replace(/http:\/\/twitpic.com\/([a-z0-9]{5})/gi,'<a href="http://www.twitpic.com/$1" target="_blank"><img src="http://twitpic.com/show/large/$1" height="200" /></a>');
+		//text = text.replace(/youtube/gi,'<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/D7ffQMer544&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/D7ffQMer544&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>');
+		//text = text.replace(/<a[^>]+>(http:\/\/tinyurl.com\/[^<]+)<\/a>/g,'<a href="$1" target="_blank" onmouseover="decode_tinyurl(\'$1\')">$1<\/a>');
 		//text = text.replace(/<a[^>]+>([http:\/\/]*[a-zA-Z0-9_\.]*youtube.com\/watch\?v=([^<]+))<\/a>/g,'<a class="{frameWidth: 425, frameHeight: 355}" href="http://ddev.tweenky.com/youtube.php?key=$2" onmouseover="log(\'$2\')">$1<\/a>');
 
 		return text;
@@ -492,20 +494,20 @@
 	function tweet_to_html(tweet)
 	{
 		//user_link = "http://www.twitter.com/"+tweet.from_screen_name;
-		user_link = "/#query=from:"+tweet.from_screen_name;
+		user_link = "http://www.twitter.com/"+tweet.from_screen_name;
 		external_url = user_link + "/statuses/" + tweet.id;
 		
 		html = "\
 			<div class='tweet' style='clear:left; display:none' id='tweetid-"+tweet.id+"'> \
 				<div><div id='reply-to-tweetid-"+tweet.id+"'></div></div> \
 				<div> \
-					<a  class='tweet-image fancybox' href='"+user_link+"' class='timestamp'> \
+					<a  class='tweet-image fancybox' href='"+user_link+"' class='timestamp' target='_blank'> \
 						<img src='" + tweet.from_profile_image_url + "' height='60' width='60'> \
 					</a> \
 				</div> \
 				<div class='tweet-body'> \
 					<p class='tweet-text' style='display:none;'>"+tweet_wrap(tweet.text)+"</p> \
-					<p class='tweet-tweet'><a href='"+user_link+"' class='tweet-author'>"+tweet.from_screen_name+"</a>: <span class='tweet-text'>" + tweet_wrap(tweet.text) +"</span></p> \
+					<p class='tweet-tweet'><a href='"+user_link+"' class='tweet-author' target='_blank'>"+tweet.from_screen_name+"</a>: <span class='tweet-text'>" + tweet_wrap(tweet.text) +"</span></p> \
 					<div class='tweet-footer'><a href='" + external_url + "' title='" + (tweet.date_created) + "' class='timestamp' target='_blank'>"+relative_time(tweet.date_created)+"</a> " + ((tweet.source != '') ? "from "+ tweet.source : "");
 
 						if (tweet.in_reply_to_status_id > 0)
@@ -791,7 +793,7 @@
 			url     : "http://www.twitter.com/statuses/show/"+id+".json",
 			dataType:"json",
 			success : function(response){
-				compose_new_tweet("Retweet @"+response.user.screen_name+": "+response.text);
+				compose_new_tweet("RT @"+response.user.screen_name+": "+response.text);
 			}
 		});
 	}
