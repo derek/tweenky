@@ -78,6 +78,7 @@
 
 
 				reset_trends();
+				load_saved_searches();
 				load_userlists(<?= $_SESSION['user_id'] ?>);
 				//load_groups();
 				//load_queries();
@@ -86,6 +87,7 @@
 				setInterval("recalculate_timestamps()", 60000 );
 				setInterval('show_tweet()', 700);
 				setInterval('cleanup()', 6000);
+				setInterval('reset_trends()', 60000);
 			})
 			
 		</script>
@@ -146,15 +148,15 @@
 										</div>	
 									</li>
 									<li>
-										<span class="pseudolink" onclick="$('#isgd-info').toggle();">is.gd</span>
-										<div id="isgd-info" style="display:none">
-											URL: <input type="text" id="url-to-isgd" value="http://"><input type="button" value="Shorten URL" onclick="service_isgd()">
+										<span class="pseudolink" onclick="$('#trim-info').toggle();">Tr.im</span>
+										<div id="trim-info" style="display:none">
+											URL: <input type="text" id="url-to-trim" value="http://"><input type="button" value="Shorten URL" onclick="service_trim()">
 										</div>	
 									</li>
-									<li style="display:none;">
-										<span class="pseudolink" onclick="$('#digg-info').toggle();">Digg</span>
-										<div id="digg-info" style="display:none">
-											URL: <input type="text" id="url-to-digg" value="http://"><input type="button" value="Shorten URL" onclick="service_digg()">
+									<li>
+										<span class="pseudolink" onclick="$('#bitly-info').toggle();">Bit.ly</span>
+										<div id="bitly-info" style="display:none">
+											URL: <input type="text" id="url-to-bitly" value="http://"><input type="button" value="Shorten URL" onclick="service_bitly()">
 										</div>	
 									</li>
 								</ul>
@@ -187,13 +189,17 @@
 				
 				<br />
 				
+				<div id="saved-searches"></div>
+				
+				<br>
+				
 				<div id="twitter-trends"></div>
 				
 				<br>
 				
 				<div style="font-size:10px; margin-top:60px;">
 					<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production.  Be sure to follow him and <a href="http://www.twitter.com/tweenky" target="_blank">@Tweenky</a>!</p>
-					<p>&copy; Tweenky, 2008-2009</p>
+					<p>&copy; 2008-2009</p>
 				</div>
 				
 			</div>

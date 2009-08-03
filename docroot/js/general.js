@@ -83,6 +83,22 @@
 		});
 	}
 	
+	function load_saved_searches()
+	{
+		proxy({
+			url: "http://www.twitter.com/saved_searches.json",
+			dataType: "json", 
+			success: function(response){
+				$("#saved-searches").empty().html("<h3>Saved Searches</h3><ul></ul>");
+				for(i in response)
+				{
+					search = response[i];
+					$("#saved-searches ul").append('<li><a href="#query=%22' + search.query + '%22">'+ search.name +'</a></li>');
+				}
+			}
+		});
+	}
+	
 	function reset_trends()
 	{
 		proxy({
@@ -414,7 +430,6 @@
 		
 			
 		current_refresh = setTimeout('get_search("'+addslashes(query)+'", false)', 20000);
-		console.log(search_url);
 		proxy({
 			type    : "GET",
 			url     : search_url,
@@ -654,19 +669,19 @@
 		}
 	}
 	
-	function service_isgd()
+	function service_trim()
 	{
-		orig_url = $("#url-to-isgd").val();
+		orig_url = $("#url-to-trim").val();
 		
 		if (isURL(orig_url))
 		{
 			proxy({
 				type    : "POST",
-				url     : "http://is.gd/api.php?longurl="+orig_url,
+				url     : "http://api.tr.im/api/trim_simple?url="+orig_url,
 				success : function(tinyurl){
 					$("#status").val($("#status").val() + tinyurl);
-					$("#isgd-info").slideUp();
-					$("#url-to-isgd").val('http://');
+					$("#trim-info").slideUp();
+					$("#url-to-trim").val('http://');
 				}
 			});
 		}
@@ -676,21 +691,19 @@
 		}
 	}
 	
-	function service_tweetburner()
+	function service_bitly()
 	{
-		orig_url = $("#url-to-tweetburn").val();
+		orig_url = $("#url-to-bitly").val();
 		if (isURL(orig_url))
 		{
 			proxy({
 				type    : "POST",
-				url     : "http://tweetburner.com/links",
-				data    : {
-					"link[url]" : orig_url
-				},
-				success : function(tinyurl){
-					$("#status").val($("#status").val() + tinyurl);
-					$("#tweetburner-info").slideUp();
-					$("#url-to-tweetburn").val('http://');
+				url     : "http://api.bit.ly/shorten?version=2.0.1&longUrl=" + orig_url + "&login=drgath&apiKey=R_0333378559d79e167d505a678a1779ce",
+				dataType: "json",
+				success : function(data){
+					$("#status").val($("#status").val() + data.results[orig_url].shortUrl);
+					$("#bitly-info").slideUp();
+					$("#url-to-bitly").val('http://');
 				}
 			});
 		}
