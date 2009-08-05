@@ -93,7 +93,7 @@
 				for(i in response)
 				{
 					search = response[i];
-					$("#saved-searches ul").append('<li><a href="#query=%22' + search.query + '%22">'+ search.name +'</a></li>');
+					$("#saved-searches ul").append('<li><a href="#query=' + search.query + '">'+ search.name +'</a></li>');
 				}
 			}
 		});
@@ -532,7 +532,8 @@
 
 				html += " | <span class='pseudolink' title='Reply to this tweet' onclick='compose_new_tweet(\"@"+tweet.from_screen_name+" \", "+tweet.id+")'>Reply</span> | \
 						<span class='pseudolink' title='Direct message this user' onclick='compose_new_tweet(\"d "+tweet.from_screen_name+" \")'>Direct</span> | \
-						<span class='pseudolink' title='Retweet this tweet' onclick='retweet(\""+tweet.id+"\")'>Retweet</span> ";
+						<span class='pseudolink' title='Retweet this tweet' onclick='retweet(\""+tweet.id+"\")'>Retweet</span>";
+				//html += "  | <span class='pseudolink' title='Via this tweet' onclick='retweet(\""+tweet.id+"\", true)'>Via</span> ";
 				/*html += "| <span class='pseudolink chirper' title='Chirp this Tweet!  Will send it over to TopChirp.com which is kinda like Digg, but for Twitter!' onclick='topchirp_upchirp("+tweet.id+")'>Chirp it</span> \
 						<span id='topchirp-box-"+tweet.id+"' style='display:none; background-color:white; position: relative; width:100px;height:50px; border:solid black; right:50px; top:38px; padding:20px;'>\
 							Tags <input type='text' value='' id='topchirp-tags-"+tweet.id+"' />\
@@ -801,14 +802,17 @@
 		$("#loading").append(" Try refreshing?");
 	}
 	
-	function retweet(id)
+	function retweet(id, via)
 	{
 		proxy({
 			type    : "GET",
 			url     : "http://www.twitter.com/statuses/show/"+id+".json",
 			dataType:"json",
 			success : function(response){
-				compose_new_tweet("RT @"+response.user.screen_name+": "+response.text);
+				if (via)
+					compose_new_tweet(response.text + " (via @"+response.user.screen_name+")");
+				else
+					compose_new_tweet("RT @"+response.user.screen_name+": "+response.text);
 			}
 		});
 	}
