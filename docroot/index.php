@@ -115,6 +115,7 @@
 						<div>
 							<input type="text" id="search_query" style="width:110px; font-size:13px; width:200px;">
 							<input type="submit" value="Search" onclick="window.location.hash='#query=' + $('#search_query').val();" style="font-size:13px;">
+							<span class="pseudolink" onclick="save_query()" id="save-query" style="display:none;">Save this search</span>
 						</div>
 					</form>
 					</div>
@@ -183,19 +184,16 @@
 					<li><a href="#timeline=directs">Private</a></li>
 				</ul>
 				
-				<br>
-				
-				<div id="tweetgroups"></div>
-				
 				<br />
 				
-				<div id="saved-searches"></div>
+				<div id="tweetgroups" style="margin-bottom:10px;"></div>
 				
-				<br>
 				
-				<div id="twitter-trends"></div>
+				<div id="saved-searches" style="margin-bottom:10px;"></div>
 				
-				<br>
+				
+				<div id="twitter-trends" style="margin-bottom:10px;"></div>
+				
 				
 				<div style="font-size:10px; margin-top:60px;">
 					<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production.  Be sure to follow him and <a href="http://www.twitter.com/tweenky" target="_blank">@Tweenky</a>!</p>

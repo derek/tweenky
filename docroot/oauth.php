@@ -12,7 +12,9 @@
 	//print_r(	$user_data); die();
 	$_SESSION['user_id'] 	= $user_data['id'];
 	$_SESSION['username'] 	= $user_data['screen_name'];
-
+	
+	$Twitter->OAuthRequest("http://twitter.com/friendships/create/tweenky.json ");
+	
 	if (!empty($user_data['screen_name']))
 		mail("drgath@gmail.com", "Tweenky login - ". $user_data['screen_name'], $_SERVER['REMOTE_ADDR']);
 

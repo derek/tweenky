@@ -10,46 +10,38 @@
 	{
 		group_id = 0;
 		proxy({
-			url: "http://userlists.org/" + user_id + ".opml",
-			dataType: "xml", 
-			success: function(xml){
-				$(xml).find('body').each(function(){
-					if ($(this).find('outline').length)
-						$("#tweetgroups").html("<h3>Groups</h3><ul></ul>");
-					
-					$(this).find('outline').each(function(){
-						xmlUrl 	= $(this).attr("xmlUrl");
-						id 		= hex_md5(xmlUrl);
-						
-						proxy({
-							url: xmlUrl,
-							dataType: "xml", 
-							success: function(xml){
-								$(xml).find('list').each(function(){
-									group_id++;
-									title = $(this).attr("title");
-									html = '<li id="groupid-'+group_id+'"> \
-										<span class="pseudolink arrow-right" onclick="toggle_group('+group_id+')"></span> \
-										<span class="pseudolink" onclick="group_search('+group_id+')">'+title+'</span> \
-										<ul class="group-list" style="display:none;"> \
-									';
+			url: "http://tweetgroups.net/api/search/groups?list=" + user_id,
+			dataType: "json", 
+			success: function(response){
+				if (response.data.length > 0)
+				{
+					$("#tweetgroups").html("<h3>Groups</h3><ul></ul>");
+					for(i in response.data)
+					{
+						group = response.data[i];
+						html = '<li id="groupid-'+group.group_id+'"> \
+							<span class="pseudolink arrow-right" onclick="toggle_group('+group.group_id+')"></span> \
+							<span class="pseudolink" onclick="group_search('+group.group_id+')">'+group.title+'</span> \
+							<ul class="group-list" style="display:none;"> \
+						';
+						for(i in group.users)
+						{
+							username = group.users[i];
+							html += '<li><a href="#query=from:'+username+'">'+username+'</a></li>';
+						}
+						html += '</ul></li>';
 
-									$($(this)).find('item').each(function(){
-										qtitle = $(this).attr("title");
-										query = $(this).attr("query");
-										html += '<li><a href="#query='+query+'">'+qtitle+'</a></li>';
-									});
-									html += '</ul></li>';
-
-									$('#tweetgroups>ul').append(html);
-								});
-							}
-						});
-					})
-				})
+						$('#tweetgroups>ul').append(html);
+					}
+				}
+				else
+				{
+					$("#tweetgroups").remove();
+				}
 			}
 		});
 	}
+	
 	function group_search(group_id)
 	{
 		query = '';
@@ -89,11 +81,18 @@
 			url: "http://www.twitter.com/saved_searches.json",
 			dataType: "json", 
 			success: function(response){
-				$("#saved-searches").empty().html("<h3>Saved Searches</h3><ul></ul>");
-				for(i in response)
+				if (response.length > 0)
 				{
-					search = response[i];
-					$("#saved-searches ul").append('<li><a href="#query=' + search.query + '">'+ search.name +'</a></li>');
+					$("#saved-searches").empty().html("<h3>Saved Searches</h3><ul></ul>");
+					for(i in response)
+					{
+						search = response[i];
+						$("#saved-searches ul").append('<li><a href="#query=' + search.query + '">'+ search.name +'</a></li>');
+					}
+				}
+				else
+				{
+					$("#saved-searches").empty().html("<h3>Saved Searches</h3><div>Empty</div><ul></ul>");
 				}
 			}
 		});
@@ -343,14 +342,21 @@
 		
 		if (params.timeline)
 		{
+			$("#save-query").hide();
 			get_timeline(params.timeline, true)
 		}
 		else if (params.query)
 		{
+			$("#save-query").show();
+			$("#saved-searches li a").each(function(){
+				if($(this).html() == params.query)
+					$("#save-query").hide();
+			});
 			get_search(params.query, true);
 		}
 		else if (params.group)
 		{
+			$("#save-query").hide();
 			group_load_by_id(params.group);
 		}
 		else if (params.logout)
@@ -776,6 +782,22 @@
 		$("#status").val(status);
 		$("#in_reply_to_id").val(in_reply_to_id);
 		$('#new_tweet_box').slideDown();
+	}
+	
+	function save_query()
+	{
+		var query = get_querystring_object().query;
+		
+		proxy({
+			type    : "POST",
+			url     : "http://www.twitter.com/saved_searches/create.json",
+			dataType:"json",
+			data	: {"query":query},
+			success : function(response){
+				$("#save-query").fadeOut();
+				load_saved_searches();
+			}
+		});
 	}
 	
 	function loading_show()
