@@ -160,6 +160,14 @@
 											URL: <input type="text" id="url-to-bitly" value="http://"><input type="button" value="Shorten URL" onclick="service_bitly()">
 										</div>	
 									</li>
+									<? if ($_SESSION['user_id'] == "1974") { ?>
+										<li>
+											<span class="pseudolink" onclick="$('#waly-info').toggle();">Wa.ly</span>
+											<div id="waly-info" style="display:none">
+												URL: <input type="text" id="url-to-waly" value="http://"><input type="button" value="Shorten URL" onclick="service_waly()">
+											</div>	
+										</li>
+									<? } ?>
 								</ul>
 							</div>
 							<div style="clear:both"></div>

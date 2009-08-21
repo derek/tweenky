@@ -720,6 +720,28 @@
 		}
 	}
 	
+	function service_waly()
+	{
+		orig_url = $("#url-to-waly").val();
+		if (isURL(orig_url))
+		{
+			proxy({
+				type    : "POST",
+				url     : "http://wa.ly/api/url/create?url=" + orig_url,
+				dataType: "json",
+				success : function(data){
+					$("#status").val($("#status").val() + data.url);
+					$("#waly-info").slideUp();
+					$("#url-to-waly").val('http://');
+				}
+			});
+		}
+		else
+		{
+			alert('Invalid URL');
+		}
+	}
+	
 	function service_twitpic()
 	{
 		$("#twitpic").ajaxSubmit({
