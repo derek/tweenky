@@ -203,7 +203,7 @@
 				<div id="twitter-trends" style="margin-bottom:10px;"></div>
 				
 				<div style="font-size:10px; margin-top:60px;">
-					<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production.  Be sure to follow him and <a href="http://www.twitter.com/tweenky" target="_blank">@Tweenky</a>!</p>
+					<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production</p>
 					<p>&copy; 2008-2009</p>
 				</div>
 				

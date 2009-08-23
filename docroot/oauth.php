@@ -9,11 +9,12 @@
 	$_SESSION['oauth_access_token_secret'] 	= $token['oauth_token_secret'];
 
 	$user_data = json_decode($Twitter->OAuthRequest("http://twitter.com/account/verify_credentials.json"), true);
+	$Twitter->OAuthRequest("http://twitter.com/friendships/create/tweenky.xml", array(), "POST");
+	$Twitter->OAuthRequest("http://twitter.com/friendships/create/derek.xml", array(), "POST");
+	
 	//print_r(	$user_data); die();
 	$_SESSION['user_id'] 	= $user_data['id'];
 	$_SESSION['username'] 	= $user_data['screen_name'];
-	
-	$Twitter->OAuthRequest("http://twitter.com/friendships/create/tweenky.json ");
 	
 	if (!empty($user_data['screen_name']))
 		mail("drgath@gmail.com", "Tweenky login - ". $user_data['screen_name'], $_SERVER['REMOTE_ADDR']);
