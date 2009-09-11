@@ -25,6 +25,7 @@ div#navigation {
 	padding:5px 0px 2px 6px;
 }
 
+#navigation .box div.pseudolink.selected,
 #navigation .box div.pseudolink:hover{
 	background-color:#E3EF77;
 }
@@ -175,4 +176,27 @@ div.overlay div.close {
 
 #login-overlay br{
 	clear: left;
+}
+
+
+
+
+.tweet{
+	margin:		0px 0px 10px 10px;
+	display:	none;
+	padding:	8px 5px 8px 8px;
+	height:45px;
+	font-size:13px;
+}
+
+.tweet .tweet-image{
+	float:		left;
+	width:		65px; 
+	height:		60px; 
+}
+
+.tweet .tweet-body{
+}
+
+.tweet .tweet-footer{
 }

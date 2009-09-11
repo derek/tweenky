@@ -6,7 +6,41 @@
 	try { console.log(''); } catch(e) { console = { log: function() {} } }
 	
 	
-	function load_tweetgroups(user_id)
+	
+	$(document).ready(function() {
+		
+		$("#login_link").overlay({ 
+	        onBeforeLoad: function() {
+	            this.getBackgroundImage().expose({color: '#000000'}); 
+	        },  
+	        onClose: function() { 
+	            $.expose.close(); 
+				//$("#status").val('');
+				//$("#in_reply_to_id").val('');
+	        } 
+	    });
+
+		reset_trends();
+		load_saved_searches();
+		load_tweetgroups();
+
+		setInterval("check_state()", 50);
+		setInterval("recalculate_timestamps()", 60000 );
+		setInterval('show_hidden_tweets()', 700);
+		setInterval('cleanup()', 6000);
+		setInterval('reset_trends()', 60000);
+		
+		$("#navigation .pseudolink").click(function(){
+			$("#navigation .pseudolink.selected").removeClass("selected");
+			$(this).addClass("selected");
+		});
+		
+		
+	})
+	
+	
+	
+	function load_tweetgroups()
 	{
 		group_id = 0;
 		proxy({
@@ -775,7 +809,7 @@
 	
 	function loading_unable()
 	{
-		$("#loading").append(" Try <span class=\"pseudolink\" onclick=\"window.location.href = window.location.href\" refreshing?");
+		$("#loading").append(" Try <span class=\"pseudolink\" onclick=\"window.location.href = window.location.href\">refreshing</span>");
 	}
 	
 	

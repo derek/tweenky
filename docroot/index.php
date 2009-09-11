@@ -27,54 +27,28 @@
 	}
 ?>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
 	<head>
 		<title>Tweenky</title>
-		
+		<meta name="keywords" content="Tweenky, Twitter, Twitter Client, Microblogging, Tweets" >
+	    <meta name="description" content="Tweenky is an open-source Javascript Twitter client" >
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
 		
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/reset.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/default.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/general.css" >
-		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/tweet.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/js/jquery/fancybox/fancy.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/overlay-minimal.css" >
 		
 		<script type="text/javascript" src="/js/jquery/jquery-1.3.1.min.js"></script>
 		<script type="text/javascript" src="/js/general.js"></script>
-		<script type="text/javascript" src="/js/md5.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.overlay-1.0.1.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.expose-1.0.0.min.js"></script>
 		<script type="text/javascript">
-			user_id = '<?= $_SESSION["user_id"]?>';
-			//ip 		= '<?= $_SERVER["REMOTE_ADDR"] ?>';
-			
-			$(document).ready(function() {
-				
-				$("#login_link").overlay({ 
-			        onBeforeLoad: function() {
-			            this.getBackgroundImage().expose({color: '#000000'}); 
-			        },  
-			        onClose: function() { 
-			            $.expose.close(); 
-						//$("#status").val('');
-						//$("#in_reply_to_id").val('');
-			        } 
-			    });
-
-				reset_trends();
-				load_saved_searches();
-				load_tweetgroups(<?= $_SESSION['user_id'] ?>);
-
-				setInterval("check_state()", 50);
-				setInterval("recalculate_timestamps()", 60000 );
-				setInterval('show_hidden_tweets()', 700);
-				setInterval('cleanup()', 6000);
-				setInterval('reset_trends()', 60000);
-			})
-			
+			var user_id = '<?= $_SESSION["user_id"]?>';		
 		</script>
 	</head>
 	
@@ -168,27 +142,27 @@
 				<div class="box">
 					<div class="title">Twitter</div>
 					<div class="pseudolink" onclick='window.location.href="#timeline=friends"'>Home</div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=replies"'>@replies</a></div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=archive"'>Sent</a></div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=favorites"'>Favorites</a></div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=dmin"'>DM - Received</a></div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=dmout"'>DM - Sent</a></div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=replies"'>@replies</div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=archive"'>Sent</div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=favorites"'>Favorites</div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=dmin"'>DM - Received</div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=dmout"'>DM - Sent</div>
 				</div>
 				
 				<div class="box">
-					<div class="title">Groups <span style='font-size:11px;'>(<a href='http://www.tweetgroups.net' target='_blank'>Manage</a>)</span></span></div>
-					<div id="tweetgroups"><img src="http://ddev.tweenky.com/images/ajax.gif"></div>
+					<div class="title">Groups <span style='font-size:11px;'>(<a href='http://www.tweetgroups.net' target='_blank'>Manage</a>)</span></div>
+					<div id="tweetgroups"><img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading"></div>
 				</div>
 				
 				<div class="box">
 					<div class="title">Saved Searches</div>
-					<div id="saved-searches"><img src="http://ddev.tweenky.com/images/ajax.gif"></div>
+					<div id="saved-searches"><img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading"></div>
 				</div>
 				
 				
 				<div class="box">
 					<div class="title">Trends</div>
-					<div id="twitter-trends" ><img src="http://ddev.tweenky.com/images/ajax.gif"></div>
+					<div id="twitter-trends" ><img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading"></div>
 				</div>
 				
 				<div style="font-size:10px; margin-top:60px;">
@@ -204,29 +178,30 @@
 	
 		</div>
 		<script type="text/javascript">
-		  var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
-		  document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
+			var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
+			document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
 		</script>
 		<script type="text/javascript">
-		UserVoice.Tab.show({ 
-		  key: 'tweenky',
-		  host: 'feedback.tweenky.com', 
-		  forum: 'general', 
-		  alignment: 'right',
-		  background_color:'#0054AB', 
-		  text_color: 'white',
-		  hover_color: '#06C',
-		  lang: 'en'
-		})
+			UserVoice.Tab.show({ 
+				key: 'tweenky',
+				host: 'feedback.tweenky.com', 
+				forum: 'general', 
+				alignment: 'right',
+				background_color:'#0054AB', 
+				text_color: 'white',
+				hover_color: '#06C',
+				lang: 'en'
+			})
 		</script>
 		<script type="text/javascript">
-		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+			document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 		</script>
 		<script type="text/javascript">
-		try {
-		var pageTracker = _gat._getTracker("UA-51709-12");
-		pageTracker._trackPageview();
-		} catch(err) {}</script>
+			try {
+				var pageTracker = _gat._getTracker("UA-51709-12");
+				pageTracker._trackPageview();
+			} catch(err) {}
+		</script>
 	</body>
 </html>
