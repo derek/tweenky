@@ -35,7 +35,6 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
 		
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/reset.css" >
-		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/layout.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/default.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/general.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/tweet.css" >
@@ -50,42 +49,28 @@
 		<script type="text/javascript" src="/js/jquery/jquery.expose-1.0.0.min.js"></script>
 		<script type="text/javascript">
 			user_id = '<?= $_SESSION["user_id"]?>';
-			ip = '<?= $_SERVER["REMOTE_ADDR"] ?>';
+			//ip 		= '<?= $_SERVER["REMOTE_ADDR"] ?>';
 			
 			$(document).ready(function() {
-
-				/*overlay = $("#compose_tweet").overlay({ 
-			        onBeforeLoad: function() {
-			            this.getBackgroundImage().expose({color: '#000000'}); 
-			        },  
-			        onClose: function() { 
-			            $.expose.close(); 
-						$("#status").val('');
-						$("#in_reply_to_id").val('');
-			        } 
-			    });*/
-
+				
 				$("#login_link").overlay({ 
 			        onBeforeLoad: function() {
 			            this.getBackgroundImage().expose({color: '#000000'}); 
 			        },  
 			        onClose: function() { 
 			            $.expose.close(); 
-						$("#status").val('');
-						$("#in_reply_to_id").val('');
+						//$("#status").val('');
+						//$("#in_reply_to_id").val('');
 			        } 
 			    });
 
-
 				reset_trends();
 				load_saved_searches();
-				load_userlists(<?= $_SESSION['user_id'] ?>);
-				//load_groups();
-				//load_queries();
+				load_tweetgroups(<?= $_SESSION['user_id'] ?>);
 
 				setInterval("check_state()", 50);
 				setInterval("recalculate_timestamps()", 60000 );
-				setInterval('show_tweet()', 700);
+				setInterval('show_hidden_tweets()', 700);
 				setInterval('cleanup()', 6000);
 				setInterval('reset_trends()', 60000);
 			})
@@ -103,7 +88,7 @@
 			<div style="width:100%; text-align:center;"><a href="/?login"><img alt="sign in with twitter" src="/images/Sign-in-with-Twitter-lighter.png"></a></div>
 		</div>		
 		
-		<div id="loading" style="font-size:12px; position:absolute;top:-2px;left:48%;background-color:yellow; width:200px; padding:5px; text-align:center;"></div>
+		<div id="loading"></div>
 		
 		<div id="container">
 			<div id="header">
@@ -124,6 +109,7 @@
 			
 			<div id="wrapper">
 				<div id="content">
+
 					<div style="background-color:#D2DBED; padding:10px;">
 						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
 							<img alt="thought-bubble" src="/images/thought.png" height="25"> What are you doing?
@@ -133,7 +119,8 @@
 								<form method="POST" onsubmit="send_new_tweet(); return false;" action="">
 									<div>
 										<input type="hidden" id="in_reply_to_id"  name="in_reply_to_id" value="">
-										<textarea id="status" style="width:500px; height:120px; font-size:23px; font-family:arial;" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" cols="20" rows="10"><?= $status ?></textarea>
+
+										<textarea id="status" style="width:500px; height:120px; font-size:23px; font-family:arial;" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" cols="20" rows="10"></textarea>
 										<h1 style="text-align:left; font-size:20px; float:right; padding-left:10px;" id="character_count">0</h1>
 										<input type="submit" value="Update" style="font-size:16px; float:right;">
 									</div>
@@ -141,6 +128,7 @@
 							</div>
 							<div style="float:left; margin:10px 0px 0px 20px;">
 								<h3>URL Shorteners</h3>
+
 								<ul>
 									<li>
 										<span class="pseudolink" onclick="$('#tiny-info').toggle();">TinyURL</span>
@@ -149,6 +137,7 @@
 										</div>	
 									</li>
 									<li>
+
 										<span class="pseudolink" onclick="$('#trim-info').toggle();">Tr.im</span>
 										<div id="trim-info" style="display:none">
 											URL: <input type="text" id="url-to-trim" value="http://"><input type="button" value="Shorten URL" onclick="service_trim()">
@@ -157,23 +146,17 @@
 									<li>
 										<span class="pseudolink" onclick="$('#bitly-info').toggle();">Bit.ly</span>
 										<div id="bitly-info" style="display:none">
+
 											URL: <input type="text" id="url-to-bitly" value="http://"><input type="button" value="Shorten URL" onclick="service_bitly()">
 										</div>	
 									</li>
-									<? if ($_SESSION['user_id'] == "1974") { ?>
-										<li>
-											<span class="pseudolink" onclick="$('#waly-info').toggle();">Wa.ly</span>
-											<div id="waly-info" style="display:none">
-												URL: <input type="text" id="url-to-waly" value="http://"><input type="button" value="Shorten URL" onclick="service_waly()">
-											</div>	
-										</li>
-									<? } ?>
-								</ul>
+																	</ul>
 							</div>
 							<div style="clear:both"></div>
 						</div>
 					</div>
 					<div id="tweets"></div>
+
 				</div>
 			</div>
 			
@@ -182,25 +165,31 @@
 					<a rel="#login-overlay" id="login_link">Login</a>
 				</h3>
 
-
-				<h3>Twitter</h3>
-
-				<ul>
-					<li><a href="#timeline=friends">Friends</a></li>
-					<li><a href="#timeline=replies">Replies</a></li>
-					<li><a href="#timeline=archive">Sent</a></li>
-					<li><a href="#timeline=directs">Private</a></li>
-				</ul>
+				<div class="box">
+					<div class="title">Twitter</div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=friends"'>Home</div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=replies"'>@replies</a></div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=archive"'>Sent</a></div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=favorites"'>Favorites</a></div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=dmin"'>DM - Received</a></div>
+					<div class="pseudolink" onclick='window.location.href="#timeline=dmout"'>DM - Sent</a></div>
+				</div>
 				
-				<br />
+				<div class="box">
+					<div class="title">Groups <span style='font-size:11px;'>(<a href='http://www.tweetgroups.net' target='_blank'>Manage</a>)</span></span></div>
+					<div id="tweetgroups"><img src="http://ddev.tweenky.com/images/ajax.gif"></div>
+				</div>
 				
-				<div id="tweetgroups" style="margin-bottom:10px;"></div>
+				<div class="box">
+					<div class="title">Saved Searches</div>
+					<div id="saved-searches"><img src="http://ddev.tweenky.com/images/ajax.gif"></div>
+				</div>
 				
 				
-				<div id="saved-searches" style="margin-bottom:10px;"></div>
-				
-				
-				<div id="twitter-trends" style="margin-bottom:10px;"></div>
+				<div class="box">
+					<div class="title">Trends</div>
+					<div id="twitter-trends" ><img src="http://ddev.tweenky.com/images/ajax.gif"></div>
+				</div>
 				
 				<div style="font-size:10px; margin-top:60px;">
 					<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production</p>

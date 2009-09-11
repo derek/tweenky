@@ -5,7 +5,7 @@
 	if (stristr( $_GET['original_url'], "www.twitter.com"))
 	{	
 	    $Twitter = new TwitterOAuth(TWITTER_OAUTH_CONSUMER_KEY, TWITTER_OAUTH_CONSUMER_SECRET, $_SESSION['oauth_access_token'], $_SESSION['oauth_access_token_secret']);
-
+		header("Content-type: application/json");
 		$data = array_map("stripslashes", array_merge($_POST, $_GET));
 		echo $Twitter->OAuthRequest($_GET['original_url'], $data, $_SERVER['REQUEST_METHOD']);
 

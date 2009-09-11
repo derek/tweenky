@@ -6,20 +6,21 @@
 	try { console.log(''); } catch(e) { console = { log: function() {} } }
 	
 	
-	function load_userlists(user_id)
+	function load_tweetgroups(user_id)
 	{
 		group_id = 0;
 		proxy({
 			url: "http://tweetgroups.net/api/search/groups?list=" + user_id,
 			dataType: "json", 
 			success: function(response){
+				
+				$('#tweetgroups').html('');
 				if (response.data.length > 0)
 				{
-					$("#tweetgroups").html("<h3>Groups</h3><ul></ul>");
 					for(i in response.data)
 					{
 						group = response.data[i];
-						html = '<li id="groupid-'+group.group_id+'"> \
+						html = '<div id="groupid-'+group.group_id+'"> \
 							<span class="pseudolink arrow-right" onclick="toggle_group('+group.group_id+')"></span> \
 							<span class="pseudolink" onclick="group_search('+group.group_id+')">'+group.title+'</span> \
 							<ul class="group-list" style="display:none;"> \
@@ -29,14 +30,14 @@
 							username = group.users[i];
 							html += '<li><a href="#query=from:'+username+'">'+username+'</a></li>';
 						}
-						html += '</ul></li>';
+						html += '</ul></div>';
 
-						$('#tweetgroups>ul').append(html);
+						$('#tweetgroups').append(html);
 					}
 				}
 				else
 				{
-					$("#tweetgroups").remove();
+					$('#tweetgroups').append("<div style='font-style:italic;color:#999999;'>None</div><ul></ul>");
 				}
 			}
 		});
@@ -60,13 +61,13 @@
 			url: "http://derekgathright.com/tweetgroups.xml",
 			dataType: "xml", 
 			success: function(xml){
-				$('#query-list').html("<ul></ul>");
+				$('#query-list').empty();
 				$(xml).find('settings1').each(function(){
 					$(this).find('queries').each(function(){
 						html = '';
 						$(this).find('query').each(function(){
 						    query = $(this).text();
-							html += '<li><a href="#query='+query+'">'+query+'</a></li>';
+							html += '<div><a href="#query='+query+'">'+query+'</a></div>';
 						});
 						$('#query-list ul').append(html);
 					});
@@ -83,16 +84,16 @@
 			success: function(response){
 				if (response.length > 0)
 				{
-					$("#saved-searches").empty().html("<h3>Saved Searches</h3><ul></ul>");
+					$("#saved-searches").html("<ul></ul>");
 					for(i in response)
 					{
 						search = response[i];
-						$("#saved-searches ul").append('<li><a href="#query=' + search.query + '">'+ search.name +'</a></li>');
+						$("#saved-searches").append('<div><a href="#query=' + search.query + '">'+ search.name +'</a></div>');
 					}
 				}
 				else
 				{
-					$("#saved-searches").empty().html("<h3>Saved Searches</h3><div>Empty</div><ul></ul>");
+					$("#saved-searches").html("<div style='font-style:italic;color:#999999;'>Empty</div><ul></ul>");
 				}
 			}
 		});
@@ -126,7 +127,7 @@
 				
 				
 				
-				$("#twitter-trends").empty().html("<h3>Trends</h3><ol></ol>");
+				$("#twitter-trends").html("<ol></ol>");
 				for(i in response.trends)
 				{
 					q = response.trends[i].url.substr( response.trends[i].url.lastIndexOf("=") + 1, response.trends[i].url.length)
@@ -188,8 +189,18 @@
 				var type = "GET";
 				break;
 
-			case "directs":
+			case "favorites":
+				var url = 'http://www.twitter.com/favorites.json';
+				var type = "GET";
+				break;
+
+			case "dmin":
 				var url = 'http://www.twitter.com/direct_messages.json';
+				var type = "GET";
+				break;
+				
+			case "dmout":
+				var url = 'http://www.twitter.com/direct_messages/sent.json';
 				var type = "GET";
 				break;
 		}
@@ -252,25 +263,37 @@
 						
 						if ($("#tweetid-"+tweet.id).length == 0)
 						{
-							if (timeline == "directs")
+							var tw = new Tweet(tweet.id);
+							tw.text                    = tweet.text; 
+							tw.date_created            = tweet.created_at;
+							tw.from_user_id            = tweet.user.id;
+							tw.from_screen_name        = tweet.user.screen_name;
+							tw.from_name               = tweet.user.name;
+							tw.from_profile_image_url  = tweet.user.profile_image_url;
+							tw.source                  = tweet.source;
+							tw.in_reply_to_status_id   = tweet.in_reply_to_status_id;
+							tw.in_reply_to_user_id     = tweet.in_reply_to_user_id;
+							tw.favorited               = tweet.favorited;
+							tw.in_reply_to_screen_name = tweet.in_reply_to_screen_name;
+							
+							
+							if (timeline == "dmin")
 							{
-								tweet.user = tweet.sender;
-								tweet.source = '';
+								tw.user = tweet.sender;
+								tw.source = '';
 							}
-							//console.log(tweet);
-							$("#tweets").prepend(tweet_to_html({
-								id                      : tweet.id,
-								text                    : tweet.text, 
-								date_created            : tweet.created_at,
-								from_user_id            : tweet.user.id,
-								from_screen_name        : tweet.user.screen_name,
-								from_name               : tweet.user.name,
-								from_profile_image_url  : tweet.user.profile_image_url,
-								source                  : tweet.source,
-								in_reply_to_status_id   : tweet.in_reply_to_status_id,
-								in_reply_to_user_id     : tweet.in_reply_to_user_id,
-								in_reply_to_screen_name : tweet.in_reply_to_screen_name
-							}));
+							
+							if (timeline == "dmout")
+							{
+								tw.user = tweet.sender;
+								tw.source = '';
+								
+								tw.in_reply_to_user_id 		= tweet.recipient.id; 
+								tw.in_reply_to_screen_name 	= tweet.recipient.screen_name;
+								tw.in_reply_to_status_id 	= 0;
+							}
+							
+							$("#tweets").prepend(tw.get_html());
 						}
 					});
 
@@ -283,13 +306,6 @@
 		});
 	}
 	
-	function show_tweet()
-	{
-		if ($(".tweet:hidden").length > 0)
-		{
-			$(".tweet:hidden:last").slideDown();
-		}
-	}
 	
 	function cleanup()
 	{
@@ -436,6 +452,7 @@
 		
 			
 		current_refresh = setTimeout('get_search("'+addslashes(query)+'", false)', 20000);
+		
 		proxy({
 			type    : "GET",
 			url     : search_url,
@@ -458,22 +475,21 @@
 					values = tweet.created_at.split(" ");
 					tweet.created_at = Date.parse(values[2] + " " + values[1] + ", " + values[3] + " " + values[4]);
 					
-					
 					if ($("#tweetid-"+tweet.id).length == 0)
 					{
-						$("#tweets").prepend(tweet_to_html({
-							id                      : tweet.id,
-							profile_image_url       : tweet.profile_image_url,
-							from_user               : tweet.from_user,
-							text                    : tweet.text, 
-							date_created            : tweet.created_at,
-							from_user_id            : tweet.from_user_id,
-							from_screen_name        : tweet.from_user,
-							from_name               : tweet.from_user,
-							from_profile_image_url  : tweet.profile_image_url,
-							to_user                 : tweet.to_user,
-							source                  : ''
-						}));
+						tw = new Tweet(tweet.id);
+						tw.profile_image_url       = tweet.profile_image_url;
+						tw.from_user               = tweet.from_user;
+						tw.text                    = tweet.text;
+						tw.date_created            = tweet.created_at;
+						tw.from_user_id            = tweet.from_user_id;
+						tw.from_screen_name        = tweet.from_user;
+						tw.from_name               = tweet.from_user;
+						tw.from_profile_image_url  = tweet.profile_image_url;
+						tw.to_user                 = tweet.to_user;
+						tw.source                  = '';
+						
+						$("#tweets").prepend(tw.get_html());
 					}
 				});
 				
@@ -484,28 +500,9 @@
 			}
 		});
 	}
+	
 	function addslashes( str ) {
 	    return (str+'').replace(/([\\"'])/g, "\\$1").replace(/\0/g, "\\0");
-	}
-	
-	function tweet_wrap(text)
-	{
-		var params = get_querystring_object();
-		if (params.query)
-		{
-			//params.query = params.query.replace(/"/g, "");
-			//text = text.replace( new RegExp("("+params.query+")", "gi"),'<span style="background-color:yellow; font-weight:bold;">$1<\/span>');	
-			//return text;
-		}
-		text = text.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi,'<a href="$1" target="_blank">$1<\/a>');
-		text = text.replace(/@([a-zA-Z0-9_]+)/gi,'<a class="query" href="http://www.twitter.com/$1" target="_blank">@$1<\/a>');
-		text = text.replace(/#([a-zA-Z0-9_]+)/gi,'<a class="query" href="#query=#$1">#$1<\/a>');
-		//text = text.replace(/http:\/\/twitpic.com\/([a-z0-9]{5})/gi,'<a href="http://www.twitpic.com/$1" target="_blank"><img src="http://twitpic.com/show/large/$1" height="200" /></a>');
-		//text = text.replace(/youtube/gi,'<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/D7ffQMer544&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/D7ffQMer544&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>');
-		//text = text.replace(/<a[^>]+>(http:\/\/tinyurl.com\/[^<]+)<\/a>/g,'<a href="$1" target="_blank" onmouseover="decode_tinyurl(\'$1\')">$1<\/a>');
-		//text = text.replace(/<a[^>]+>([http:\/\/]*[a-zA-Z0-9_\.]*youtube.com\/watch\?v=([^<]+))<\/a>/g,'<a class="{frameWidth: 425, frameHeight: 355}" href="http://ddev.tweenky.com/youtube.php?key=$2" onmouseover="log(\'$2\')">$1<\/a>');
-
-		return text;
 	}
 	
 	function decode_tinyurl()
@@ -513,49 +510,7 @@
 		
 	}
 	
-	function tweet_to_html(tweet)
-	{
-		//user_link = "http://www.twitter.com/"+tweet.from_screen_name;
-		user_link = "http://www.twitter.com/"+tweet.from_screen_name;
-		external_url = user_link + "/statuses/" + tweet.id;
-		
-		html = "\
-			<div class='tweet' style='clear:left; display:none' id='tweetid-"+tweet.id+"'> \
-				<div><div id='reply-to-tweetid-"+tweet.id+"'></div></div> \
-				<div> \
-					<a  class='tweet-image fancybox' href='"+user_link+"' class='timestamp' target='_blank'> \
-						<img src='" + tweet.from_profile_image_url + "' height='60' width='60'> \
-					</a> \
-				</div> \
-				<div class='tweet-body'> \
-					<p class='tweet-text' style='display:none;'>"+tweet_wrap(tweet.text)+"</p> \
-					<p class='tweet-tweet'><a href='"+user_link+"' class='tweet-author' target='_blank'>"+tweet.from_screen_name+"</a>: <span class='tweet-text'>" + tweet_wrap(tweet.text) +"</span></p> \
-					<div class='tweet-footer'><a href='" + external_url + "' title='" + (tweet.date_created) + "' class='timestamp' target='_blank'>"+relative_time(tweet.date_created)+"</a> " + ((tweet.source != '') ? "from "+ tweet.source : "");
-
-						if (tweet.in_reply_to_status_id > 0)
-						{
-							html += " | in reply to <a href='http://www.twitter.com/"+ tweet.in_reply_to_screen_name+"/status/"+tweet.in_reply_to_status_id+"' target='_blank'>"+ tweet.in_reply_to_screen_name+"</a>";
-						}   
-
-				html += " | <span class='pseudolink' title='Reply to this tweet' onclick='compose_new_tweet(\"@"+tweet.from_screen_name+" \", "+tweet.id+")'>Reply</span> | \
-						<span class='pseudolink' title='Direct message this user' onclick='compose_new_tweet(\"d "+tweet.from_screen_name+" \")'>Direct</span> | \
-						<span class='pseudolink' title='Retweet this tweet' onclick='retweet(\""+tweet.id+"\")'>Retweet</span>";
-				//html += "  | <span class='pseudolink' title='Via this tweet' onclick='retweet(\""+tweet.id+"\", true)'>Via</span> ";
-				/*html += "| <span class='pseudolink chirper' title='Chirp this Tweet!  Will send it over to TopChirp.com which is kinda like Digg, but for Twitter!' onclick='topchirp_upchirp("+tweet.id+")'>Chirp it</span> \
-						<span id='topchirp-box-"+tweet.id+"' style='display:none; background-color:white; position: relative; width:100px;height:50px; border:solid black; right:50px; top:38px; padding:20px;'>\
-							Tags <input type='text' value='' id='topchirp-tags-"+tweet.id+"' />\
-							<input type='button' value='Add' onclick='topchirp_save_tags("+tweet.id+")' />\
-							<input type='button' value='Cancel' onclick='$(\"#topchirp-box-"+tweet.id+"\").hide()' />\
-						</span>";
-				*/
-				html += " \
-					</div> \
-				</div> \
-				<div class='clear-fix'></div> \
-			</div> \
-		";
-		return html;                
-	}
+	
 
 	function relative_time(parsed_date) {
 	   var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
@@ -593,33 +548,8 @@
 	function toggle_group(group_id)
 	{
 		$('#groupid-'+group_id+' span:first').toggleClass('arrow-right').toggleClass('arrow-down');
-		$('#groupid-'+group_id+' .group-list').toggle();
+		$('#groupid-'+group_id+' .group-list').slideToggle();
 	}
-	/*
-	function show_group_page(group)
-	{
-		loading_hide();
-		html =  "\
-		<h1 style='text-decoration:underline;'>Group Edit</h1> \
-		<h2>Title: " + group.title + "</h2> \
-		<h2>Description: " + group.description + "</h2> \
-		<h2>Users:</h2> \
-		<ul>";
-		
-		for(j in group.users)
-		{
-			html += '<li>[<span class="pseudolink" onclick="tweetgroup_delete_user('+group.group_id+', \''+groups[i].users[j]+'\')">x</span>] '+groups[i].users[j]+'</li>';
-		}
-		html += ' \
-		</ul> \
-		<br /> \
-		<h2>Add User:</h2> \
-		<input type="text" id="new_username"><input type="button" value="add" onclick="tweetgroup_add_user('+group.group_id+')"> \
-		';
-		
-		$("#tweets").html(html);
-		
-	}*/
 	
 	
 	
@@ -823,6 +753,7 @@
 		});
 	}
 	
+	
 	function loading_show()
 	{
 		$("#loading").html("Loading...").show();
@@ -844,10 +775,12 @@
 	
 	function loading_unable()
 	{
-		$("#loading").append(" Try refreshing?");
+		$("#loading").append(" Try <span class=\"pseudolink\" onclick=\"window.location.href = window.location.href\" refreshing?");
 	}
 	
-	function retweet(id, via)
+	
+	
+	function retweetHandler(id, via)
 	{
 		proxy({
 			type    : "GET",
@@ -861,41 +794,114 @@
 			}
 		});
 	}
-	
-	function topchirp_upchirp(tweet_id)
+	 
+	function favoriteHandler(id, action)
 	{
+		tweet = new Tweet(id);
+		tweet.favorite(action);
+	}
+	
+	function show_hidden_tweets()
+	{
+		if ($(".tweet:hidden").length > 0)
+		{
+			$(".tweet:hidden:last").slideDown();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	function Tweet(tweet_id)
+	{
+		this.id = tweet_id;
 		
-		$("#tweetid-"+tweet_id+" .chirper").append(" <img src='http://ddev.tweenky.com/images/ajax.gif' height='10'>");
-		proxy({
-			type    : "POST",
-			url     : "http://stark-stream-85.heroku.com/topchirps/create?tweet="+tweet_id+"&user="+user_id+"&chirp=up&ip="+ip,
-			success : function(response){
-				$("#tweetid-"+tweet_id+" .chirper").html("Chirped!").attr("onclick", "").removeClass("pseudolink");
+		this.get_html = function()
+		{
+			//user_link = "http://www.twitter.com/"+tweet.from_screen_name;
+			user_link = "http://www.twitter.com/"+this.from_screen_name;
+			external_url = user_link + "/statuses/" + this.id;
+
+			html = "\
+				<div class='tweet' style='clear:left; display:none' id='tweetid-"+this.id+"'> \
+					<div><div id='reply-to-tweetid-"+this.id+"'></div></div> \
+					<div> \
+						<a  class='tweet-image fancybox' href='"+user_link+"' class='timestamp' target='_blank'> \
+							<img src='" + this.from_profile_image_url + "' height='60' width='60'> \
+						</a> \
+					</div> \
+					<div class='tweet-body'> \
+						<p class='tweet-tweet'><a href='"+user_link+"' class='tweet-author' target='_blank'>"+this.from_screen_name+"</a>: <span class='tweet-text'>" + this.wrap() +"</span></p> \
+						<div class='tweet-footer'><a href='" + external_url + "' title='" + (this.date_created) + "' class='timestamp' target='_blank'>"+relative_time(this.date_created)+"</a> " + ((this.source != '') ? "from "+ this.source : "");
+
+							if (this.in_reply_to_screen_name)
+							{
+								html += " | in reply to <a href='http://www.twitter.com/"+ this.in_reply_to_screen_name+"/status/"+this.in_reply_to_status_id+"' target='_blank'>"+ this.in_reply_to_screen_name+"</a>";
+							}   
+
+							html += " | <span class='pseudolink' title='Reply to this tweet' onclick='compose_new_tweet(\"@"+this.from_screen_name+" \", "+this.id+")'>Reply</span> | \
+									<span class='pseudolink' title='Direct message this user' onclick='compose_new_tweet(\"d "+this.from_screen_name+" \")'>Direct</span> | ";
+
+							if   (this.favorited )	html += "<span class='pseudolink' title='Unfavorite this tweet' onclick='favoriteHandler(\""+this.id+"\", \"destroy\")'>Unfavorite</span> | ";
+							else					html += "<span class='pseudolink' title='Favorite this tweet' onclick='favoriteHandler(\""+this.id+"\", \"create\")'>Favorite</span> | ";
+
+							html += "<span class='pseudolink' title='Retweet this tweet' onclick='retweetHandler(\""+this.id+"\")'>Retweet</span>";
+
+					//html += "  | <span class='pseudolink' title='Via this tweet' onclick='retweet(\""+tweet.id+"\", true)'>Via</span> ";
+					/*html += "| <span class='pseudolink chirper' title='Chirp this Tweet!  Will send it over to TopChirp.com which is kinda like Digg, but for Twitter!' onclick='topchirp_upchirp("+tweet.id+")'>Chirp it</span> \
+							<span id='topchirp-box-"+tweet.id+"' style='display:none; background-color:white; position: relative; width:100px;height:50px; border:solid black; right:50px; top:38px; padding:20px;'>\
+								Tags <input type='text' value='' id='topchirp-tags-"+tweet.id+"' />\
+								<input type='button' value='Add' onclick='topchirp_save_tags("+tweet.id+")' />\
+								<input type='button' value='Cancel' onclick='$(\"#topchirp-box-"+tweet.id+"\").hide()' />\
+							</span>";
+					*/
+					html += " \
+						</div> \
+					</div> \
+					<div class='clear-fix'></div> \
+				</div> \
+			";
+			return html;                
+		}
+		
+		this.wrap = function()
+		{
+			text = this.text;
+			var params = get_querystring_object();
+			if (params.query)
+			{
+				//params.query = params.query.replace(/"/g, "");
+				//text = text.replace( new RegExp("("+params.query+")", "gi"),'<span style="background-color:yellow; font-weight:bold;">$1<\/span>');	
+				//return text;
 			}
-		});
-		//alert("up " + tweet_id + " from " + user_id);
-	}
-	
-	function topchirp_downchirp(tweet_id)
-	{
-		proxy({
-			type    : "POST",
-			url     : "http://stark-stream-85.heroku.com/topchirps/create?tweet="+tweet_id+"&user="+user_id+"&chirp=down&ip="+ip,
-			dataType:"json",
-			success : function(response){
-				
-			}
-		});
-	}
-	
-	function topchirp_save_tags(tweet_id)
-	{
-		proxy({
-			type    : "POST",
-			url     : "http://stark-stream-85.heroku.com/topchirps/create?tweet="+tweet_id+"&user="+user_id+"&tags="+$("#topchirp-tags-"+tweet_id).val()+"&ip="+ip,
-			dataType:"json",
-			success : function(response){
-				
-			}
-		});
+			text = text.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi,'<a href="$1" target="_blank">$1<\/a>');
+			text = text.replace(/@([a-zA-Z0-9_]+)/gi,'<a class="query" href="http://www.twitter.com/$1" target="_blank">@$1<\/a>');
+			text = text.replace(/#([a-zA-Z0-9_]+)/gi,'<a class="query" href="#query=#$1">#$1<\/a>');
+			//text = text.replace(/http:\/\/twitpic.com\/([a-z0-9]{5})/gi,'<a href="http://www.twitpic.com/$1" target="_blank"><img src="http://twitpic.com/show/large/$1" height="200" /></a>');
+			//text = text.replace(/youtube/gi,'<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/D7ffQMer544&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/D7ffQMer544&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>');
+			//text = text.replace(/<a[^>]+>(http:\/\/tinyurl.com\/[^<]+)<\/a>/g,'<a href="$1" target="_blank" onmouseover="decode_tinyurl(\'$1\')">$1<\/a>');
+			//text = text.replace(/<a[^>]+>([http:\/\/]*[a-zA-Z0-9_\.]*youtube.com\/watch\?v=([^<]+))<\/a>/g,'<a class="{frameWidth: 425, frameHeight: 355}" href="http://ddev.tweenky.com/youtube.php?key=$2" onmouseover="log(\'$2\')">$1<\/a>');
+
+			return text;
+		}
+		
+		this.favorite = function(action)
+		{
+			
+			proxy({
+				type    : "POST",
+				url     : "http://www.twitter.com/favorites/"+action+"/"+this.id+".json",
+				dataType:"json",
+				success : function(response){
+
+				}
+			});
+		}
 	}
