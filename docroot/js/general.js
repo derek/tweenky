@@ -3,22 +3,17 @@
 	var _last_hash      = null;
 	var overlay 		= null;
 	var loading_timeout = null;
-	try { console.log(''); } catch(e) { console = { log: function() {} } }
+	
+	search_t = Object();
+	search_numbers = Array();
+//	try { console.log(''); } catch(e) { console = { log: function() {} } }
 	
 	
 	
 	$(document).ready(function() {
 		
-		$("#login_link").overlay({ 
-	        onBeforeLoad: function() {
-	            this.getBackgroundImage().expose({color: '#000000'}); 
-	        },  
-	        onClose: function() { 
-	            $.expose.close(); 
-				//$("#status").val('');
-				//$("#in_reply_to_id").val('');
-	        } 
-	    });
+		
+
 
 		reset_trends();
 		load_saved_searches();
@@ -30,8 +25,8 @@
 		setInterval('cleanup()', 6000);
 		setInterval('reset_trends()', 60000);
 		
-		$("#navigation .pseudolink").click(function(){
-			$("#navigation .pseudolink.selected").removeClass("selected");
+		$("#navigation a div").live("click", function(){
+			$("#navigation .selected").removeClass("selected");
 			$(this).addClass("selected");
 		});
 		
@@ -39,6 +34,35 @@
 	})
 	
 	
+	function show_login_overlay()
+	{
+		$("#facebox").overlay({
+
+			// custom top position
+			top: 100,
+
+			// some expose tweaks suitable for facebox-looking dialogs
+			expose: {
+
+				// you might also consider a "transparent" color for the mask
+				color: '#fff',
+
+				// load mask a little faster
+				loadSpeed: 200,
+
+				// highly transparent
+				opacity: 0.5
+			},
+
+			// disable this for modal dialog-type of overlays
+			closeOnClick: false,
+
+			// we want to use the programming API
+			api: true
+
+		// load it immediately after the construction
+		}).load();
+	}
 	
 	function load_tweetgroups()
 	{
@@ -48,30 +72,35 @@
 			dataType: "json", 
 			success: function(response){
 				
-				$('#tweetgroups').html('');
+				$('#tweetgroups .inner').empty();
 				if (response.data.length > 0)
 				{
 					for(i in response.data)
 					{
 						group = response.data[i];
-						html = '<div id="groupid-'+group.group_id+'"> \
+						/*html = '<div id="groupid-'+group.group_id+'"> \
 							<span class="pseudolink arrow-right" onclick="toggle_group('+group.group_id+')"></span> \
 							<span class="pseudolink" onclick="group_search('+group.group_id+')">'+group.title+'</span> \
 							<ul class="group-list" style="display:none;"> \
-						';
+						';*/
+						//html =  '<div id="groupid-'+group.group_id+'">';
+						html = '<a href="#" onclick="group_search('+group.group_id+'); return false;"><div>'+group.title+'</div></a>';
+						html += '<ul id="group-list-'+group.group_id+'" class="group-list" style="display:none;">';
 						for(i in group.users)
 						{
 							username = group.users[i];
 							html += '<li><a href="#query=from:'+username+'">'+username+'</a></li>';
 						}
-						html += '</ul></div>';
+						html += '</ul>';
+						//html += '</div>';
+						
 
-						$('#tweetgroups').append(html);
+						$('#tweetgroups .inner').append(html);
 					}
 				}
 				else
 				{
-					$('#tweetgroups').append("<div style='font-style:italic;color:#999999;'>None</div><ul></ul>");
+					$('#tweetgroups .inner').append("<div style='font-style:italic;color:#999999;'>None</div><ul></ul>");
 				}
 			}
 		});
@@ -81,12 +110,13 @@
 	{
 		query = '';
 		delimeter = '';
-		$("#groupid-"+group_id+" li a").each(function(){
-			query = query + delimeter + $(this).attr("href").replace("#query=", "");
-			delimeter = " OR ";
+		toggle_group(group_id);
+		$("#group-list-"+group_id+" li a").each(function(){
+			query = query + delimeter + $(this).attr("href").replace("#query=from:", "");
+			delimeter = ",";
 		});
 		
-		window.location.hash = "#query=" + query;
+		window.location.hash = "#group=" + query;
 	}
 	
 	function load_queries()
@@ -118,16 +148,16 @@
 			success: function(response){
 				if (response.length > 0)
 				{
-					$("#saved-searches").html("<ul></ul>");
+					$("#saved-searches .inner").empty();
 					for(i in response)
 					{
 						search = response[i];
-						$("#saved-searches").append('<div><a href="#query=' + search.query + '">'+ search.name +'</a></div>');
+						$("#saved-searches .inner").append('<a href="#query=' + search.query + '"><div>'+ search.name +'</div></a>');
 					}
 				}
 				else
 				{
-					$("#saved-searches").html("<div style='font-style:italic;color:#999999;'>Empty</div><ul></ul>");
+					$("#saved-searches .inner").html("<div style='font-style:italic;color:#999999;'>Empty</div>");
 				}
 			}
 		});
@@ -141,7 +171,7 @@
 			success: function(response){
 				//console.log("Trends reset");
 				
-				$("#trends ol li a").each(function(i){
+				/*$("#trends ol li a").each(function(i){
 					for(j in response.trends)
 					{
 						if (response.trends[j].name == $(this).html())
@@ -157,17 +187,15 @@
 							//console.log(response.trends[j].name + " & " + $(this).html() + ": " + i + " - " + j)
 						}
 					}
-				})
+				})*/
 				
-				
-				
-				$("#twitter-trends").html("<ol></ol>");
+				$("#twitter-trends .inner").html("");
 				for(i in response.trends)
 				{
 					q = response.trends[i].url.substr( response.trends[i].url.lastIndexOf("=") + 1, response.trends[i].url.length)
 					q = q.replace('"', "%22").replace(' ', "+"); 
 					
-					$("#twitter-trends ol").append('<li><a href="#query='+q+'">'+ response.trends[i].name +'</a></li>');
+					$("#twitter-trends .inner").append('<a href="#query='+q+'"><div>'+ response.trends[i].name +'</div></a>');
 				}
 			}
 		});
@@ -243,7 +271,7 @@
 		
 		if (new_search)
 		{
-			$("#tweets").empty();
+			$("#tweets").fadeOut(300, function(){$(this).show().html("<img src='http://www.ajaxload.info/cache/FF/FF/FF/00/00/00/18-1.gif'>")});
 			$("#search_query").val('');
 		}
 		else
@@ -274,7 +302,7 @@
 				if (tweets.error)
 				{	
 					//alert("Twitter says: " + tweets.error);
-					$("#login_link").overlay().load();
+					show_login_overlay();
 				}
 				else
 				{
@@ -284,7 +312,11 @@
 					if (!new_search)
 					{
 						$("#tweets").prepend("<fieldset style='border-top:solid 1px #999999;'><legend align='right' style='color:#999999; padding-left:5px;' >"+tweets.length + ' new tweets at '+get_time()+'</legend> </fieldset>');
-					}   
+					}
+					else
+					{
+						$("#tweets").empty();
+					}
 
 					$.each(tweets, function(i, tweet) {
 						values = tweet.created_at.split(" ");
@@ -333,7 +365,7 @@
 
 					if (new_search)
 					{
-						$(".tweet").show();
+						$(".tweet").fadeIn();
 					}
 				}
 			}
@@ -389,9 +421,10 @@
 		clearTimeout(current_refresh);
 		//$("#loading").show();
 		var params = get_querystring_object();
-		
+
 		if (params.timeline)
 		{
+			$(".group-list").slideUp(); // Since we definitely aren't viewing a group anymore
 			$("#save-query").hide();
 			get_timeline(params.timeline, true)
 		}
@@ -402,7 +435,12 @@
 				if($(this).html() == params.query)
 					$("#save-query").hide();
 			});
-			get_search(params.query, true);
+			get_search(params.query, true, false);
+		}
+		else if (params.group)
+		{
+			$("#save-query").hide();
+			get_search(params.group, true, true);
 		}
 		else if (params.group)
 		{
@@ -413,7 +451,6 @@
 		{
 			var d = new Date();
 		    document.cookie = "PHPSESSID=0;path=/;expires=" + d.toGMTString() + ";" + ";";
-		    
 			window.location.href = "/oauth.php?logout";
 		}
 	}
@@ -454,7 +491,141 @@
 		
 	}
 	
-	function get_search(query, new_search)
+	function get_search(query, new_search, group_search)
+	{
+		// Reset these values
+		search_numbers = Array();
+		search_t = Object();
+		
+
+		current_refresh = setTimeout('get_search("'+addslashes(query)+'", false)', 20000);
+		
+		since_id = 0;
+		
+		if (!new_search)
+		{
+			$(".tweet").each(function(i, t){
+				id = $(t).attr('id').replace("tweetid-", "");
+				if (id > since_id)
+				{
+					//console.log(id + " is greater than " + since_id);
+					since_id = id;
+				}
+				else
+				{
+					//console.log(id + " is NOT greater than " + since_id);
+				}
+			});
+		}
+		else
+		{
+			$("#tweets").fadeOut(300, function(){$(this).show().html("<img src='http://www.ajaxload.info/cache/FF/FF/FF/00/00/00/18-1.gif'>")});
+			if (group_search)
+				$("#search_query").val('');
+			else
+				$("#search_query").val(query);
+		}
+		
+		queries = new Array();
+		if (group_search)
+		{
+			users = query.split(",");
+
+			var i = 0;
+			for(var n in users)
+			{
+				if ((queries[i] + "from:" + users[n] + " OR ").length > 140)
+					i++;
+				if (queries[i])
+					queries[i] += " OR ";
+				else
+					queries[i] = "";
+				queries[i] += "from:" + users[n];
+			}
+		}
+		else
+		{
+			queries[0] = query;
+		}
+		for (var i in queries)
+		{
+			queries_run = 0;
+			search_url = "http://search.twitter.com/search.json?rpp=50&q=" + queries[i].replace("#", "%23") + "&callback=?";
+
+			if (since_id > 0)
+				search_url += "&since_id="+since_id;
+
+			loading_show();
+			
+			$.getJSON(search_url,
+		        function(response){
+					queries_run++;
+					for(var i=0; i < response.results.length; i++)
+					{
+						search_numbers[search_numbers.length] = response.results[i].id;
+						search_t[response.results[i].id] = response.results[i];
+					}
+					
+					if (queries_run == queries.length)
+						display_search_tweets(new_search);
+		        }
+			);
+		}
+	}
+	
+	
+	function display_search_tweets(new_search)
+	{
+		loading_hide();
+		
+		if (new_search)
+		{
+			$("#tweets").empty();
+			//$("#content").prepend(" <span style='float:right; padding-left:10px;'>"+response.results.length + ' tweets at '+get_time()+'</span> <hr />');
+		}
+		else    
+		{   
+			$("#tweets").prepend("<fieldset style='border-top:solid 1px #999999;'><legend align='right' style='color:#999999; padding-left:5px;' >new tweets at "+get_time()+"</legend> </fieldset>");
+		}
+		
+		search_numbers.sort();
+		tweets = search_t;
+		
+		html = ''
+		
+		for(var i in search_numbers) {
+			tweet = tweets[search_numbers[i]];
+			
+			values = tweet.created_at.split(" ");
+			tweet.created_at = Date.parse(values[2] + " " + values[1] + ", " + values[3] + " " + values[4]);
+			
+			if ($("#tweetid-"+tweet.id).length == 0)
+			{
+				tw = new Tweet(tweet.id);
+				tw.profile_image_url       = tweet.profile_image_url;
+				tw.from_user               = tweet.from_user;
+				tw.text                    = tweet.text;
+				tw.date_created            = tweet.created_at;
+				tw.from_user_id            = tweet.from_user_id;
+				tw.from_screen_name        = tweet.from_user;
+				tw.from_name               = tweet.from_user;
+				tw.from_profile_image_url  = tweet.profile_image_url;
+				tw.to_user                 = tweet.to_user;
+				tw.source                  = '';
+				
+				$("#tweets").prepend(tw.get_html());
+			}
+		}
+		
+		if (new_search)
+		{
+			$(".tweet").fadeIn();
+		}
+
+
+	}
+	
+	function old_search()
 	{
 		since_id = 0;
 		
@@ -475,6 +646,7 @@
 		}
 		else
 		{
+			$("#tweets").fadeOut(300, function(){$(this).show().html("<img src='http://www.ajaxload.info/cache/FF/FF/FF/00/00/00/18-1.gif'>")});
 			$("#search_query").val(query);
 		}
 		search_url  = "http://search.twitter.com/search.json?q="+(query.replace("#", "%23")) + "&rpp=50";
@@ -581,8 +753,8 @@
 	
 	function toggle_group(group_id)
 	{
-		$('#groupid-'+group_id+' span:first').toggleClass('arrow-right').toggleClass('arrow-down');
-		$('#groupid-'+group_id+' .group-list').slideToggle();
+		$(".group-list").slideUp();
+		$('#group-list-'+group_id).slideToggle();
 	}
 	
 	

@@ -1,7 +1,7 @@
 html,body {
 	margin: 0;
 	padding: 0;
-	font-family: arial,sans-serif;
+	font-family:"lucida grande",tahoma,verdana,arial,sans-serif
 }
 
 div#header {
@@ -10,29 +10,45 @@ div#header {
 	background: url("/images/tweenky_header_bg.png") repeat-x;
 }
 
+
+
 div#navigation {
 	float: left;
 	width: 140px;
 	font-size: 12px;
-	margin: 0px 5px 0px 5px;
-	padding: 0px 5px 5px 5px;
+	padding: 0px 0px 5px 5px;
+	border-right:3px solid #D2DBED;
+	background-color:#fdfdfd;
 }
 #navigation .box {
 	margin:6px 0px 0px 0px;
 }
-#navigation .box div{
-	border-bottom:solid 1px #dfdfdf;
-	padding:5px 0px 2px 6px;
-}
 
-#navigation .box div.pseudolink.selected,
-#navigation .box div.pseudolink:hover{
-	background-color:#E3EF77;
-}
 #navigation .box .title{
 	font-weight:bold;
 	padding:5px 0px 2px 0px;
 }
+#navigation .box .inner div{
+	border-bottom:solid 1px #D6D9DE;
+	padding:3px 0px 3px 6px;
+}
+
+#navigation .box .pseudolink{
+	color:black;
+	text-decoration:none;
+}
+#navigation .box .inner a div.selected{
+	background-color:#005EBE;
+	color:white;
+}
+#navigation .box .inner a div:hover{
+	background-color:#D2DBED;
+	color:black;
+}
+
+
+
+
 
 .bold{
 	font-weight:bold;
@@ -46,7 +62,7 @@ div#wrapper {
 }
 
 div#container {
-	background: url("/images/tweenky_navigation.png") repeat-y;
+	/*background: url("/images/tweenky_navigation.png") repeat-y;*/
 }
 
 div#content {
@@ -60,7 +76,6 @@ div#content p {
 div#footer {
 	clear: both;
 	width: 100%;
-	background: #333;
 	color: #FFF
 }
 
@@ -199,4 +214,39 @@ div.overlay div.close {
 }
 
 .tweet .tweet-footer{
+}
+
+
+#facebox {
+
+	/* overlay is hidden before loading */
+	display:none;
+
+	/* standard decorations */
+	width:400px;
+	background-color:#fff;
+	border:10px solid #666;
+
+	/* for modern browsers use semi-transparent color on the border. nice! */
+	border:10px solid rgba(82, 82, 82, 0.698);
+
+	/* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+}
+
+#facebox div {
+	padding:10px;
+	border:1px solid #3B5998;
+	font-family:"lucida grande",tahoma,verdana,arial,sans-serif
+}
+
+#facebox h2 {
+	margin:-11px;
+	margin-bottom:0px;
+	color:#fff;
+	background-color:#6D84B4;
+	padding:5px 10px;
+	border:1px solid #3B5998;
+	font-size:20px;
 }

@@ -39,14 +39,11 @@
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/reset.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/default.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/general.css" >
-		<link media="screen, projection" rel="stylesheet" type="text/css" href="/js/jquery/fancybox/fancy.css" >
-		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/overlay-minimal.css" >
 		
 		<script type="text/javascript" src="/js/jquery/jquery-1.3.1.min.js"></script>
 		<script type="text/javascript" src="/js/general.js"></script>
-		<script type="text/javascript" src="/js/jquery/jquery.overlay-1.0.1.js"></script>
+		<script type="text/javascript" src="http://flowplayer.org/js/tools/1.1.0/all/jquery.tools.min.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
-		<script type="text/javascript" src="/js/jquery/jquery.expose-1.0.0.min.js"></script>
 		<script type="text/javascript">
 			var user_id = '<?= $_SESSION["user_id"]?>';		
 		</script>
@@ -54,13 +51,25 @@
 	
 	<body>
 		
-		<div class="overlay" id="login-overlay">  
-			<h2 style="font-size:18px; text-align:center;">Login</h2><br>
-			<br>
-			<p style="text-align:center;font-size:18px;">Looks like you need to log into your account.  Tweenky supports OAuth, the safe &amp; secure way to login to your Twitter account without needing to provide your password. All you need to do is click the button below.</p>
-			<br>
-			<div style="width:100%; text-align:center;"><a href="/?login"><img alt="sign in with twitter" src="/images/Sign-in-with-Twitter-lighter.png"></a></div>
-		</div>		
+		<div id="facebox">
+
+			<div>
+				<h2>Login</h2>
+				
+				<br />
+				
+				<p align="center">
+					Twitter is requesting that you log in now
+				</p>
+
+				<p align="center">
+					<span onclick="window.location.href= '/?login'" class="pseudolink"><img alt="sign in with twitter" src="/images/Sign-in-with-Twitter-lighter.png"></span>
+					<span   class="close"></span>
+				</p>
+			</div>
+
+		</div>
+		
 		
 		<div id="loading"></div>
 		
@@ -84,7 +93,7 @@
 			<div id="wrapper">
 				<div id="content">
 
-					<div style="background-color:#D2DBED; padding:10px;">
+					<div style="background-color:#D2DBED; padding:10px; display:none;">
 						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
 							<img alt="thought-bubble" src="/images/thought.png" height="25"> What are you doing?
 						</h1>
@@ -135,41 +144,45 @@
 			</div>
 			
 			<div id="navigation">
-				<h3 style="display:none;">
-					<a rel="#login-overlay" id="login_link">Login</a>
-				</h3>
-
+				
 				<div class="box">
 					<div class="title">Twitter</div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=friends"'>Home</div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=replies"'>@replies</div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=archive"'>Sent</div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=favorites"'>Favorites</div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=dmin"'>DM - Received</div>
-					<div class="pseudolink" onclick='window.location.href="#timeline=dmout"'>DM - Sent</div>
+					<div class="inner">
+						<a href="#timeline=friends"><div>Home</div></a>
+						<a href="#timeline=replies"><div>Replies</div></a>
+						<a href="#timeline=archive"><div>Sent</div></a>
+						<a href="#timeline=favorites"><div>Favorites</div></a>
+						<a href="#timeline=dmin"><div>DM - Received</div></a>
+						<a href="#timeline=dmout"><div>DM - Sent</div></a>
+					</div>
 				</div>
 				
-				<div class="box">
+				<div id="tweetgroups" class="box">
 					<div class="title">Groups <span style='font-size:11px;'>(<a href='http://www.tweetgroups.net' target='_blank'>Manage</a>)</span></div>
-					<div id="tweetgroups"><img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading"></div>
+					<div class="inner">
+						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
+					</div>
 				</div>
 				
-				<div class="box">
+			
+				<div id="saved-searches" class="box">
 					<div class="title">Saved Searches</div>
-					<div id="saved-searches"><img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading"></div>
+					<div class="inner">
+						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
+					</div>
 				</div>
 				
 				
-				<div class="box">
+				<div id="twitter-trends" class="box">
 					<div class="title">Trends</div>
-					<div id="twitter-trends" ><img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading"></div>
+					<div class="inner">
+						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
+					</div>
 				</div>
 				
 				<div style="font-size:10px; margin-top:60px;">
 					<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production</p>
-					<p>&copy; 2008-2009</p>
 				</div>
-				
 			</div>
 			
 			<div id="footer"><p>&nbsp;</p></div>
