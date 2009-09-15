@@ -40,11 +40,10 @@
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/default.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/general.css" >
 		
-		<script type="text/javascript" src="/js/jquery/jquery-1.3.1.min.js"></script>
-		<script type="text/javascript" src="/js/general.js"></script>
-		<script type="text/javascript" src="http://flowplayer.org/js/tools/1.1.0/all/jquery.tools.min.js"></script>
+		<!--<script type="text/javascript" src="/js/jquery/jquery-1.3.1.min.js"></script>-->
+		<script src="http://cdn.jquerytools.org/1.1.0/jquery.tools.min.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
-		<script type="text/javascript" src="http://cherne.net/brian/resources/jquery.hoverIntent.js"></script>
+		<script type="text/javascript" src="/js/general.js"></script>
 		<script type="text/javascript">
 			var user_id = '<?= $_SESSION["user_id"]?>';		
 		</script>
