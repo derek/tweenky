@@ -44,6 +44,7 @@
 		<script type="text/javascript" src="/js/general.js"></script>
 		<script type="text/javascript" src="http://flowplayer.org/js/tools/1.1.0/all/jquery.tools.min.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
+		<script type="text/javascript" src="http://cherne.net/brian/resources/jquery.hoverIntent.js"></script>
 		<script type="text/javascript">
 			var user_id = '<?= $_SESSION["user_id"]?>';		
 		</script>
@@ -92,8 +93,7 @@
 			
 			<div id="wrapper">
 				<div id="content">
-
-					<div style="background-color:#D2DBED; padding:10px; display:none;">
+					<div style="background-color:#D2DBED; padding:10px;">
 						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
 							<img alt="thought-bubble" src="/images/thought.png" height="25"> What are you doing?
 						</h1>
@@ -158,7 +158,7 @@
 				</div>
 				
 				<div id="tweetgroups" class="box">
-					<div class="title">Groups <span style='font-size:11px;'>(<a href='http://www.tweetgroups.net' target='_blank'>Manage</a>)</span></div>
+					<div class="title">Groups <span style='font-size:11px;'>(<a href='http://www.tweetgroups.net/?tweenky' target='_blank'>Manage</a>)</span></div>
 					<div class="inner">
 						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
 					</div>

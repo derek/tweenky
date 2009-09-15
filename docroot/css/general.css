@@ -14,7 +14,7 @@ div#header {
 
 div#navigation {
 	float: left;
-	width: 140px;
+	width: 143px;
 	font-size: 12px;
 	padding: 0px 0px 5px 5px;
 	border-right:3px solid #D2DBED;
@@ -38,8 +38,9 @@ div#navigation {
 	text-decoration:none;
 }
 #navigation .box .inner a div.selected{
-	background-color:#005EBE;
-	color:white;
+	background-color:#D2DBED;
+	color:black;
+	font-weight:bold;
 }
 #navigation .box .inner a div:hover{
 	background-color:#D2DBED;
