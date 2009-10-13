@@ -251,3 +251,31 @@ div.overlay div.close {
 	border:1px solid #3B5998;
 	font-size:20px;
 }
+
+#whatthetrend{
+	display:none;
+	background-color:blue;
+	color:#666;
+	/* standard decorations */
+	
+	background-color:#B7D6E8;
+	border:5px solid #666;
+
+	/* for modern browsers use semi-transparent color on the border. nice! */
+	border:5px solid rgba(82, 82, 82, 0.698);
+
+	/* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	padding:5px;
+	margin:5px 50px 5px 50px;
+}
+
+#whatthetrend .pseudolink{
+	font-size:10px;
+}
+
+#tweet{
+	clear:left; 
+	display:none
+}

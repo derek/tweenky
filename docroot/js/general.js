@@ -1,42 +1,12 @@
-	var current_query   = null;
-	var current_refresh = null;
-	var _last_hash      = null;
-	var overlay 		= null;
-	var loading_timeout = null;
-	
-	search_t = Object();
-	search_numbers = Array();
-//	try { console.log(''); } catch(e) { console = { log: function() {} } }
-	
-	
-	
-	$(document).ready(function() {
-		
-		
+	var current_query;
+	var current_refresh;
+	var _last_hash;
+	var overlay;
+	var loading_timeout;
+	var search_t = {};
+	var search_numbers = [];
+	try { console.log(''); } catch(e) { console = { log: function() {}}; }
 
-		setTimeout("load_tweetgroups()", 1500);
-		setTimeout("load_saved_searches()", 2200);
-		setTimeout("reset_trends()", 3000);
-		
-		setInterval("check_state()", 50);
-		setInterval("recalculate_timestamps()", 60000 );
-		setInterval('show_hidden_tweets()', 700);
-		setInterval('cleanup()', 6000);
-		setInterval('reset_trends()', 60000);
-		
-		$("#navigation a div").live("click", function(){
-			$("#navigation .selected").removeClass("selected");
-			$(this).addClass("selected");
-		});
-		/*$("#tweetgroups .inner a div").live("mouseover", function(e, myName, myValue){
-			group_id = e.target.id.replace("group-title-", "");
-			toggle_group(group_id);
-		});*/
-		
-		
-	})
-	
-	
 	function show_login_overlay()
 	{
 		$("#facebox").overlay({
@@ -77,7 +47,7 @@
 				$('#tweetgroups .inner').empty();
 				if (response.data.length > 0)
 				{
-					for(i in response.data)
+					for (var i in response.data)
 					{
 						group = response.data[i];
 						/*html = '<div id="groupid-'+group.group_id+'"> \
@@ -88,7 +58,7 @@
 						//html =  '<div id="groupid-'+group.group_id+'">';
 						html = '<a href="#" onclick="group_search('+group.group_id+'); return false;"><div id="group-title-' + group.group_id + '">'+group.title+'</div></a>';
 						html += '<ul id="group-list-'+group.group_id+'" class="group-list" style="display:none;">';
-						for(i in group.users)
+						for (var i in group.users)
 						{
 							username = group.users[i];
 							html += '<li><a href="#query=from:'+username+'">'+username+'</a></li>';
@@ -110,8 +80,8 @@
 	
 	function group_search(group_id)
 	{
-		query = '';
-		delimeter = '';
+		var query = '';
+		var delimeter = '';
 		toggle_group(group_id);
 		$("#group-list-"+group_id+" li a").each(function(){
 			query = query + delimeter + $(this).attr("href").replace("#query=from:", "");
@@ -151,7 +121,7 @@
 				if (response.length > 0)
 				{
 					$("#saved-searches .inner").empty();
-					for(i in response)
+					for (var i in response)
 					{
 						search = response[i];
 						$("#saved-searches .inner").append('<a href="#query=' + search.query + '"><div>'+ search.name +'</div></a>');
@@ -174,7 +144,7 @@
 				//console.log("Trends reset");
 				
 				/*$("#trends ol li a").each(function(i){
-					for(j in response.trends)
+					for (j in response.trends)
 					{
 						if (response.trends[j].name == $(this).html())
 						{
@@ -192,12 +162,12 @@
 				})*/
 				
 				$("#twitter-trends .inner").html("");
-				for(i in response.trends)
+				for (var i in response.trends)
 				{
-					q = response.trends[i].url.substr( response.trends[i].url.lastIndexOf("=") + 1, response.trends[i].url.length)
+					q = response.trends[i].url.substr( response.trends[i].url.lastIndexOf("=") + 1, response.trends[i].url.length);
 					q = q.replace('"', "%22").replace(' ', "+"); 
 					
-					$("#twitter-trends .inner").append('<a href="#query='+q+'"><div>'+ response.trends[i].name +'</div></a>');
+					$("#twitter-trends .inner").append('<a href="#trend='+q+'"><div>'+ response.trends[i].name +'</div></a>');
 				}
 			}
 		});
@@ -207,15 +177,18 @@
 			dataType: "text", 
 			success: function(response){
 				var regex = new RegExp('<a href="(.*)">(.*)</a></span></li>', "g");
-				google_trends = new Array();
+				var google_trends = [];
 				while(match = regex.exec(response))
+				{	
 					google_trends[google_trends.length] = match[2];
-				
+				}
 				$("#google-trends").empty().html("<ol></ol>");
-				for(i in google_trends)
+				for (var i in google_trends)
 				{
 					if (i < 20)
+					{
 						$("#google-trends ol").append('<li><a href="#query=%22' + google_trends[i] + '%22 -trend">'+ google_trends[i] +'</a></li>');
+					}
 				}
 			}
 		});
@@ -223,57 +196,61 @@
 	
 	function proxy(opt)
 	{
-		opt.url = "proxy.php?original_url="+opt.url
+		opt.url = "proxy.php?original_url="+opt.url;
 		//console.log(opt);
 		$.ajax(opt);				
 	}
 	
 	function get_timeline(timeline, new_search)
 	{
-	
+		var url;
+		var type;
+		var since_id = 1;
+		var current_query = "timeline:"+timeline;
+
 		switch(timeline)
 		{
 			case "friends":
-				var url = 'http://www.twitter.com/statuses/friends_timeline.json';
-				var type = "GET";
+				url = 'http://www.twitter.com/statuses/friends_timeline.json';
+				type = "GET";
 				break;
 
 			case "replies":
-				var url = 'http://www.twitter.com/statuses/replies.json';
-				var type = "GET";
+				url = 'http://www.twitter.com/statuses/replies.json';
+				type = "GET";
 				break;
 
 			case "archive":
-				var url = 'http://www.twitter.com/statuses/user_timeline.json';
-				var type = "GET";
+				url = 'http://www.twitter.com/statuses/user_timeline.json';
+				type = "GET";
 				break;
 
 			case "public":
-				var url = 'http://www.twitter.com/statuses/public_timeline.json';
-				var type = "GET";
+				url = 'http://www.twitter.com/statuses/public_timeline.json';
+				type = "GET";
 				break;
 
 			case "favorites":
-				var url = 'http://www.twitter.com/favorites.json';
-				var type = "GET";
+				url = 'http://www.twitter.com/favorites.json';
+				type = "GET";
 				break;
 
 			case "dmin":
-				var url = 'http://www.twitter.com/direct_messages.json';
-				var type = "GET";
+				url = 'http://www.twitter.com/direct_messages.json';
+				type = "GET";
 				break;
 				
 			case "dmout":
-				var url = 'http://www.twitter.com/direct_messages/sent.json';
-				var type = "GET";
+				url = 'http://www.twitter.com/direct_messages/sent.json';
+				type = "GET";
 				break;
 		}
 		
-		var since_id = 1;
-		
 		if (new_search)
 		{
-			$("#tweets").fadeOut(300, function(){$(this).show().html("<div align='center'><br /><br /><br /><img src='/image/ajaxsm.gif'></div>")});
+			$("#tweets").fadeOut(300, function(){
+				$(this).show().html("<div align='center'><br /><br /><br /><img src='/image/ajaxsm.gif'></div>");
+			});
 			$("#search_query").val('');
 		}
 		else
@@ -281,17 +258,16 @@
 			$(".tweet").each(function(i, t){
 				id = $(t).attr('id').replace("tweetid-", "");
 				if (id > since_id)
+				{
 					since_id = id;
-			})
+				}
+			});
 		}
-		
-		current_query = "timeline:"+timeline;
 		
 		loading_show();
 		
-
 		current_refresh = setTimeout('get_timeline("'+timeline+'", false)', 60000);
-		//console.log(url);
+		
 		proxy({
 			type    : type,
 			url     : url,
@@ -322,7 +298,7 @@
 					}
 
 					$.each(tweets, function(i, tweet) {
-						values = tweet.created_at.split(" ");
+						var values = tweet.created_at.split(" ");
 						tweet.created_at = Date.parse( values[1] + " " + values[2] + ", " + values[5] + " " + values[3]);
 						
 						/*
@@ -332,7 +308,7 @@
 						}
 						*/
 						
-						if ($("#tweetid-"+tweet.id).length == 0)
+						if ($("#tweetid-"+tweet.id).length === 0)
 						{
 							var tw = new Tweet(tweet.id);
 							if (timeline == "dmin")
@@ -346,9 +322,9 @@
 								tweet.user = tweet.sender;
 								tweet.source = '';
 								
-								tweet.in_reply_to_user_id 		= tweet.recipient.id; 
-								tweet.in_reply_to_screen_name 	= tweet.recipient.screen_name;
-								tweet.in_reply_to_status_id 	= 0;
+								tweet.in_reply_to_user_id = tweet.recipient.id; 
+								tweet.in_reply_to_screen_name = tweet.recipient.screen_name;
+								tweet.in_reply_to_status_id	= 0;
 							}
 							
 							tw.text                    = tweet.text; 
@@ -384,13 +360,12 @@
 			$(".tweet:visible:last").slideUp().remove();
 		}				
 	}
-	
 
 	function get_querystring_object()
 	{
-		queryString = new Object();
-
+		var queryString = {};
 		var parameters = window.location.hash.substring(1).split('&');
+
 		for (var i=0; i<parameters.length; i++) {
 			var pos = parameters[i].indexOf('=');
 			if (pos > 0) {
@@ -398,7 +373,7 @@
 				var paramval = parameters[i].substring(pos+1);
 				queryString[paramname] = unescape(paramval.replace(/\+/g,' '));
 			} else {
-				queryString[parameters[i]]="";
+				queryString[parameters[i]] = "";
 			}
 		}
 		return queryString;
@@ -406,7 +381,6 @@
 	
 	function check_state()
 	{
-
 		if (window.location.hash != _last_hash)
 		{
 			_last_hash = window.location.hash;
@@ -430,26 +404,24 @@
 		{
 			$(".group-list").slideUp(); // Since we definitely aren't viewing a group anymore
 			$("#save-query").hide();
-			get_timeline(params.timeline, true)
+			get_timeline(params.timeline, true);
 		}
-		else if (params.query)
+		else if (params.query || params.trend)
 		{
+			var q = params.query || params.trend;
 			$("#save-query").show();
 			$("#saved-searches li a").each(function(){
-				if($(this).html() == params.query)
+				if($(this).html() == q)
+				{	
 					$("#save-query").hide();
+				}
 			});
-			get_search(params.query, true, false);
+			get_search(q, true, false, params.trend?true:false);
 		}
 		else if (params.group)
 		{
 			$("#save-query").hide();
 			get_search(params.group, true, true);
-		}
-		else if (params.group)
-		{
-			$("#save-query").hide();
-			group_load_by_id(params.group);
 		}
 		else if (params.logout)
 		{
@@ -467,44 +439,46 @@
 		var curr_hour = d.getHours();
 
 		if (curr_hour < 12)
-		   {
+		{
 		   a_p = "AM";
-		   }
+		}
 		else
-		   {
+		{
 		   a_p = "PM";
-		   }
-		if (curr_hour == 0)
-		   {
+		}
+		if (curr_hour === 0)
+		{
 		   curr_hour = 12;
-		   }
+		}
 		if (curr_hour > 12)
-		   {
+		{
 		   curr_hour = curr_hour - 12;
-		   }
+		}
 
 		var curr_min = d.getMinutes();
 		if (curr_min < 10)
+		{
 			curr_min = "0" + curr_min.toString();
-
+		}
 		var curr_sec = d.getSeconds();
 		if (curr_sec < 10)
+		{
 			curr_sec = "0" + curr_sec.toString();
-			
+		}	
 		return curr_hour + ":" + curr_min + ":" + curr_sec + " " + a_p;
 		
 	}
 	
-	function get_search(query, new_search, group_search)
-	{
+	function get_search(query, new_search, group_search, trend)
+	{	
+		var since_id = 0;
+		var queries = [];
+		
 		// Reset these values
-		search_numbers = Array();
-		search_t = Object();
+		search_numbers = [];
+		search_t = {};
 		
-
 		current_refresh = setTimeout('get_search("'+addslashes(query)+'", false)', 20000);
-		
-		since_id = 0;
 		
 		if (!new_search)
 		{
@@ -523,27 +497,57 @@
 		}
 		else
 		{
-			$("#tweets").fadeOut(300, function(){$(this).show().html("<div align='center'><br /><br /><br /><img src='/image/ajaxsm.gif'></div>")});
+			$("#tweets").fadeOut(300, function(){
+				$(this).show().html("<div align='center'><br /><br /><br /><img src='/image/ajaxsm.gif'></div>");
+			});
+			
 			if (group_search)
+			{
 				$("#search_query").val('');
+			}
 			else
+			{
 				$("#search_query").val(query);
+			}
 		}
 		
-		queries = new Array();
+		if (trend)
+		{
+			proxy({
+				type    : "GET",
+				url     : "http://whatthetrend.com/api/trend/getByName/" + query + "/json",
+				data    : {},
+				dataType: "json",
+				success : function(data){
+					if (data.api.trend.blurb.text)
+					{
+						$("#whatthetrend #trend-text").html(data.api.trend.blurb.text);
+						$("#whatthetrend").show();
+					}
+				}
+			});
+		}
+		
 		if (group_search)
 		{
 			users = query.split(",");
 
 			var i = 0;
-			for(var n in users)
+			for (var n in users)
 			{
 				if ((queries[i] + "from:" + users[n] + " OR ").length > 140)
+				{	
 					i++;
+				}
 				if (queries[i])
+				{	
 					queries[i] += " OR ";
+				}
 				else
+				{	
 					queries[i] = "";
+				}
+				
 				queries[i] += "from:" + users[n];
 			}
 		}
@@ -551,27 +555,31 @@
 		{
 			queries[0] = query;
 		}
+		
 		for (var i in queries)
 		{
 			queries_run = 0;
 			search_url = "http://search.twitter.com/search.json?rpp=50&q=" + queries[i].replace("#", "%23") + "&callback=?";
 
 			if (since_id > 0)
+			{
 				search_url += "&since_id="+since_id;
-
+			}
 			loading_show();
 			
 			$.getJSON(search_url,
 		        function(response){
 					queries_run++;
 					if(response.results){
-						for(var i=0; i < response.results.length; i++)
+						for (var i=0; i < response.results.length; i++)
 						{
 							search_numbers[search_numbers.length] = response.results[i].id;
 							search_t[response.results[i].id] = response.results[i];
 						}
 							if (queries_run == queries.length)
+							{	
 								display_search_tweets(new_search);
+							}
 					}
 					else
 					{
@@ -587,6 +595,7 @@
 	
 	function display_search_tweets(new_search)
 	{
+		var html;
 		loading_hide();
 		
 		if (new_search)
@@ -601,16 +610,14 @@
 		
 		search_numbers.sort();
 		tweets = search_t;
-		
-		html = ''
-		
-		for(var i in search_numbers) {
+
+		for (var i in search_numbers) {
 			tweet = tweets[search_numbers[i]];
 			
 			values = tweet.created_at.split(" ");
 			tweet.created_at = Date.parse(values[2] + " " + values[1] + ", " + values[3] + " " + values[4]);
 			
-			if ($("#tweetid-"+tweet.id).length == 0)
+			if ($("#tweetid-"+tweet.id).length === 0)
 			{
 				tw = new Tweet(tweet.id);
 				tw.profile_image_url       = tweet.profile_image_url;
@@ -657,17 +664,20 @@
 		}
 		else
 		{
-			$("#tweets").fadeOut(300, function(){$(this).show().html("<div align='center'><br /><br /><br /><img src='/image/ajaxsm.gif'></div>")});
+			$("#tweets").fadeOut(300, function(){
+				$(this).show().html("<div align='center'><br /><br /><br /><img src='/image/ajaxsm.gif'></div>");
+			});
 			$("#search_query").val(query);
 		}
-		search_url  = "http://search.twitter.com/search.json?q="+(query.replace("#", "%23")) + "&rpp=50";
+		search_url  = "http://search.twitter.com/search.json?q=" + (query.replace("#", "%23")) + "&rpp=50";
 		
 		if (since_id > 0)
+		{	
 			search_url += "&since_id="+since_id;
-			
-		loading_show();
+		}	
 		
-			
+		loading_show();
+	
 		current_refresh = setTimeout('get_search("'+addslashes(query)+'", false)', 20000);
 		
 		proxy({
@@ -692,7 +702,7 @@
 					values = tweet.created_at.split(" ");
 					tweet.created_at = Date.parse(values[2] + " " + values[1] + ", " + values[3] + " " + values[4]);
 					
-					if ($("#tweetid-"+tweet.id).length == 0)
+					if ($("#tweetid-"+tweet.id).length === 0)
 					{
 						tw = new Tweet(tweet.id);
 						tw.profile_image_url       = tweet.profile_image_url;
@@ -749,7 +759,7 @@
 	   } else {
 		 return (parseInt(delta / 86400)).toString() + ' days ago';
 	   }
-	 };
+	 }
 
 
 
@@ -795,9 +805,13 @@
 			dataType: "json",
 			success : function(response){
 				if(response && response.id)
+				{
 					window.location.reload();
+				}
 				else
+				{
 					$("#invalid_login").show();
+				}
 			}
 		});
 		
@@ -902,7 +916,7 @@
 			"success": function(xml){
 				$(xml).find('mediaurl').each(function(){
 					media_url = $(this).text();
-				})
+				});
 				
 				$("#status").val($("#status").val() + media_url);
 				$("#twitpic-info").slideUp();
@@ -913,7 +927,7 @@
 	}
 	
 	function isURL(s) {
-		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+		var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 		return regexp.test(s);
 	}
 	
@@ -977,7 +991,7 @@
 	function loading_show()
 	{
 		$("#loading").html("Loading...").show();
-		loading_timeout = setTimeout("loading_error()", 5000);
+		loading_timeout = setTimeout(loading_error, 5000);
 		
 	}
 	
@@ -990,7 +1004,7 @@
 	function loading_error()
 	{
 		$("#loading").html("Still loading...");
-		setTimeout("loading_unable()", 15000);
+		setTimeout(loading_unable, 15000);
 	}
 	
 	function loading_unable()
@@ -1008,9 +1022,13 @@
 			dataType:"json",
 			success : function(response){
 				if (via)
+				{
 					compose_new_tweet(response.text + " (via @"+response.user.screen_name+")");
+				}
 				else
+				{	
 					compose_new_tweet("RT @"+response.user.screen_name+": "+response.text);
+				}
 			}
 		});
 	}
@@ -1030,98 +1048,20 @@
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	function Tweet(tweet_id)
-	{
-		this.id = tweet_id;
+	$(document).ready(function() {
 		
-		this.get_html = function()
-		{
-			//user_link = "http://www.twitter.com/"+tweet.from_screen_name;
-			user_link = "http://www.twitter.com/"+this.from_screen_name;
-			external_url = user_link + "/statuses/" + this.id;
-
-			html = "\
-				<div class='tweet' style='clear:left; display:none' id='tweetid-"+this.id+"'> \
-					<div><div id='reply-to-tweetid-"+this.id+"'></div></div> \
-					<div> \
-						<a  class='tweet-image fancybox' href='"+user_link+"' class='timestamp' target='_blank'> \
-							<img src='" + this.from_profile_image_url + "' height='60' width='60'> \
-						</a> \
-					</div> \
-					<div class='tweet-body'> \
-						<p class='tweet-tweet'><a href='"+user_link+"' class='tweet-author' target='_blank'>"+this.from_screen_name+"</a>: <span class='tweet-text'>" + this.wrap() +"</span></p> \
-						<div class='tweet-footer'><a href='" + external_url + "' title='" + (this.date_created) + "' class='timestamp' target='_blank'>"+relative_time(this.date_created)+"</a> " + ((this.source != '') ? "from "+ this.source : "");
-
-							if (this.in_reply_to_screen_name)
-							{
-								html += " | in reply to <a href='http://www.twitter.com/"+ this.in_reply_to_screen_name+"/status/"+this.in_reply_to_status_id+"' target='_blank'>"+ this.in_reply_to_screen_name+"</a>";
-							}   
-
-							html += " | <span class='pseudolink' title='Reply to this tweet' onclick='compose_new_tweet(\"@"+this.from_screen_name+" \", "+this.id+")'>Reply</span> | \
-									<span class='pseudolink' title='Direct message this user' onclick='compose_new_tweet(\"d "+this.from_screen_name+" \")'>Direct</span> | ";
-
-							if   (this.favorited )	html += "<span class='pseudolink' title='Unfavorite this tweet' onclick='favoriteHandler(\""+this.id+"\", \"destroy\")'>Unfavorite</span> | ";
-							else					html += "<span class='pseudolink' title='Favorite this tweet' onclick='favoriteHandler(\""+this.id+"\", \"create\")'>Favorite</span> | ";
-
-							html += "<span class='pseudolink' title='Retweet this tweet' onclick='retweetHandler(\""+this.id+"\")'>Retweet</span>";
-
-					//html += "  | <span class='pseudolink' title='Via this tweet' onclick='retweet(\""+tweet.id+"\", true)'>Via</span> ";
-					/*html += "| <span class='pseudolink chirper' title='Chirp this Tweet!  Will send it over to TopChirp.com which is kinda like Digg, but for Twitter!' onclick='topchirp_upchirp("+tweet.id+")'>Chirp it</span> \
-							<span id='topchirp-box-"+tweet.id+"' style='display:none; background-color:white; position: relative; width:100px;height:50px; border:solid black; right:50px; top:38px; padding:20px;'>\
-								Tags <input type='text' value='' id='topchirp-tags-"+tweet.id+"' />\
-								<input type='button' value='Add' onclick='topchirp_save_tags("+tweet.id+")' />\
-								<input type='button' value='Cancel' onclick='$(\"#topchirp-box-"+tweet.id+"\").hide()' />\
-							</span>";
-					*/
-					html += " \
-						</div> \
-					</div> \
-					<div class='clear-fix'></div> \
-				</div> \
-			";
-			return html;                
-		}
+		setTimeout(load_tweetgroups, 1500);
+		setTimeout(load_saved_searches, 2200);
+		setTimeout(reset_trends, 3000);
+		setInterval(check_state, 50);
+		setInterval(recalculate_timestamps, 60000 );
+		setInterval(show_hidden_tweets, 700);
+		setInterval(cleanup, 6000);
+		setInterval(reset_trends, 60000);
 		
-		this.wrap = function()
-		{
-			text = this.text;
-			var params = get_querystring_object();
-			if (params.query)
-			{
-				//params.query = params.query.replace(/"/g, "");
-				//text = text.replace( new RegExp("("+params.query+")", "gi"),'<span style="background-color:yellow; font-weight:bold;">$1<\/span>');	
-				//return text;
-			}
-			text = text.replace(/((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/gi,'<a href="$1" target="_blank">$1<\/a>');
-			text = text.replace(/@([a-zA-Z0-9_]+)/gi,'<a class="query" href="http://www.twitter.com/$1" target="_blank">@$1<\/a>');
-			text = text.replace(/#([a-zA-Z0-9_]+)/gi,'<a class="query" href="#query=#$1">#$1<\/a>');
-			//text = text.replace(/http:\/\/twitpic.com\/([a-z0-9]{5})/gi,'<a href="http://www.twitpic.com/$1" target="_blank"><img src="http://twitpic.com/show/large/$1" height="200" /></a>');
-			//text = text.replace(/youtube/gi,'<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/D7ffQMer544&hl=en&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/D7ffQMer544&hl=en&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="425" height="344"></embed></object>');
-			//text = text.replace(/<a[^>]+>(http:\/\/tinyurl.com\/[^<]+)<\/a>/g,'<a href="$1" target="_blank" onmouseover="decode_tinyurl(\'$1\')">$1<\/a>');
-			//text = text.replace(/<a[^>]+>([http:\/\/]*[a-zA-Z0-9_\.]*youtube.com\/watch\?v=([^<]+))<\/a>/g,'<a class="{frameWidth: 425, frameHeight: 355}" href="http://ddev.tweenky.com/youtube.php?key=$2" onmouseover="log(\'$2\')">$1<\/a>');
-
-			return text;
-		}
+		$("#navigation a div").live("click", function(){
+			$("#navigation .selected").removeClass("selected");
+			$(this).addClass("selected");
+		});
 		
-		this.favorite = function(action)
-		{
-			
-			proxy({
-				type    : "POST",
-				url     : "http://www.twitter.com/favorites/"+action+"/"+this.id+".json",
-				dataType:"json",
-				success : function(response){
-
-				}
-			});
-		}
-	}
+	});

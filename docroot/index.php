@@ -26,7 +26,6 @@
 		die();
 	}
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -40,10 +39,10 @@
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/default.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/general.css" >
 		
-		<!--<script type="text/javascript" src="/js/jquery/jquery-1.3.1.min.js"></script>-->
 		<script src="http://cdn.jquerytools.org/1.1.0/jquery.tools.min.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 		<script type="text/javascript" src="/js/general.js"></script>
+		<script type="text/javascript" src="/js/tweet.js"></script>
 		<script type="text/javascript">
 			var user_id = '<?= $_SESSION["user_id"]?>';		
 		</script>
@@ -77,7 +76,7 @@
 			<div id="header">
 				<img alt="tweenky header" src="/images/tweenky_header_01.png" style="float:left;">
 				<div style="padding:5px;">
-					<div style="float:right;"><a href="#logout=true">Logout</a></div>
+					<div style="float:right;">Logged in as @<?= $_SESSION['username'] ?>, <a href="#logout=true">Logout</a></div>
 					<div style="padding-top:10px;">
 					<form onsubmit="return false" action="">
 						<div>
@@ -137,6 +136,7 @@
 							<div style="clear:both"></div>
 						</div>
 					</div>
+					<div id="whatthetrend"><a href="http://www.whatthetrend.com" target="_blank">WhatTheTrend.com</a> says this trend is: <span id="trend-text"></span> <span class="pseudolink" onclick="$(this).parent().fadeOut();">hide</span></div>
 					<div id="tweets"></div>
 
 				</div>
@@ -189,9 +189,10 @@
 			<div style="clear:both"></div>
 	
 		</div>
+		
 		<script type="text/javascript">
 			var uservoiceJsHost = ("https:" == document.location.protocol) ? "https://uservoice.com" : "http://cdn.uservoice.com";
-			document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"))
+			document.write(unescape("%3Cscript src='" + uservoiceJsHost + "/javascripts/widgets/tab.js' type='text/javascript'%3E%3C/script%3E"));
 		</script>
 		<script type="text/javascript">
 			UserVoice.Tab.show({ 
@@ -203,7 +204,7 @@
 				text_color: 'white',
 				hover_color: '#06C',
 				lang: 'en'
-			})
+			});
 		</script>
 		<script type="text/javascript">
 			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
