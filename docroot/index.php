@@ -25,6 +25,15 @@
 		header("Location: ".$request_link);
 		die();
 	}
+
+	function auto_version($file)
+	{
+		if(strpos($file, '/') !== 0 || !file_exists($_SERVER['DOCUMENT_ROOT'] . $file))
+			return $file;
+
+		return $file . "?" . filemtime($_SERVER['DOCUMENT_ROOT'] . $file);
+	}
+	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -37,7 +46,7 @@
 		
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/reset.css" >
 		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/default.css" >
-		<link media="screen, projection" rel="stylesheet" type="text/css" href="/css/general.css" >
+		<link media="screen, projection" rel="stylesheet" type="text/css" href="<?= auto_version("/css/general.css") ?>" >
 		
 		<script src="http://cdn.jquerytools.org/1.1.0/jquery.tools.min.js"></script>
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
