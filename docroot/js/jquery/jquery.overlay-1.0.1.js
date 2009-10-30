@@ -197,7 +197,6 @@
 			},
 			
 			close: function() {
-				
 				if (!self.isOpened()) { return self; }
 				
 				if (fireEvent(opts, "onClose", self) === false) { return self; }

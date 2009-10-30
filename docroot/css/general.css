@@ -8,6 +8,7 @@ div#header {
 	height: 55px;
 	width: 100%;
 	background: url("/images/tweenky_header_bg.png") repeat-x;
+	font-size:12px;
 }
 
 
@@ -34,7 +35,6 @@ div#navigation {
 }
 
 #navigation .box .pseudolink{
-	color:black;
 	text-decoration:none;
 }
 #navigation .box .inner a div.selected{
@@ -130,7 +130,9 @@ text-decoration: underline;
 
 
 
-
+.group-list{
+	display:none;
+}
 
 
 

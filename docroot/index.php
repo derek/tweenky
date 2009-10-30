@@ -67,13 +67,18 @@
 				<br />
 				
 				<p align="center">
-					Twitter is requesting that you log in now
+					Twitter is requesting that you log in now.
 				</p>
 
 				<p align="center">
 					<span onclick="window.location.href= '/?login'" class="pseudolink"><img alt="sign in with twitter" src="/images/Sign-in-with-Twitter-lighter.png"></span>
 					<span   class="close"></span>
 				</p>
+				
+				<p align="center">
+					Or, <span class="pseudolink" onclick='$("#facebox").overlay().close();'>you can just browse</span>
+				</p>
+				
 			</div>
 
 		</div>
@@ -85,13 +90,19 @@
 			<div id="header">
 				<img alt="tweenky header" src="/images/tweenky_header_01.png" style="float:left;">
 				<div style="padding:5px;">
+					
+					<? if (isset($_SESSION['user_id'])) { ?>
 					<div style="float:right;">Logged in as @<?= $_SESSION['username'] ?>, <a href="#logout=true">Logout</a></div>
+					<? } ?>
+					
 					<div style="padding-top:10px;">
 					<form onsubmit="return false" action="">
 						<div>
 							<input type="text" id="search_query" style="width:110px; font-size:13px; width:200px;">
 							<input type="submit" value="Search" onclick="window.location.hash='#query=' + $('#search_query').val();" style="font-size:13px;">
-							<span class="pseudolink" onclick="save_query()" id="save-query" style="display:none;">Save this search</span>
+							<? if (isset($_SESSION['user_id'])) { ?>
+								<span class="pseudolink" onclick="save_query()" id="save-query" style="display:none;">Save this search</span>
+							<? } ?>
 						</div>
 					</form>
 					</div>
@@ -100,6 +111,8 @@
 			
 			<div id="wrapper">
 				<div id="content">
+					
+					<? if (isset($_SESSION['user_id'])) { ?>
 					<div style="background-color:#D2DBED; padding:10px;">
 						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
 							<img alt="thought-bubble" src="/images/thought.png" height="25"> What are you doing?
@@ -145,6 +158,7 @@
 							<div style="clear:both"></div>
 						</div>
 					</div>
+					<? } ?>
 					<div id="whatthetrend"><a href="http://www.whatthetrend.com" target="_blank">WhatTheTrend.com</a> says this trend is: <span id="trend-text"></span> <span class="pseudolink" onclick="$(this).parent().fadeOut();">hide</span></div>
 					<div id="tweets"></div>
 
@@ -153,20 +167,25 @@
 			
 			<div id="navigation">
 				
-				<div class="box">
+				<div class="box" >
 					<div class="title">Twitter</div>
 					<div class="inner">
-						<a href="#timeline=friends"><div>Home</div></a>
-						<a href="#timeline=replies"><div>Replies</div></a>
-						<a href="#timeline=archive"><div>Sent</div></a>
-						<a href="#timeline=favorites"><div>Favorites</div></a>
-						<a href="#timeline=dmin"><div>DM - Received</div></a>
-						<a href="#timeline=dmout"><div>DM - Sent</div></a>
+						<? if (isset($_SESSION['user_id'])) { ?>
+							<a href="#timeline=friends"><div>Home</div></a>
+							<a href="#timeline=replies"><div>Replies</div></a>
+							<a href="#timeline=archive"><div>Sent</div></a>
+							<a href="#timeline=favorites"><div>Favorites</div></a>
+							<a href="#timeline=dmin"><div>DM - Received</div></a>
+							<a href="#timeline=dmout"><div>DM - Sent</div></a>
+						<? } else { ?>	
+							<a href="/?login"><div>Login</div></a>
+						<? } ?>
 					</div>
 				</div>
 				
-				<div id="tweetgroups" class="box">
-					<div class="title">Groups <span style='font-size:11px;'>(<a href='http://www.tweetgroups.net/?tweenky' target='_blank'>Manage</a>)</span></div>
+				<? if (isset($_SESSION['user_id'])) { ?>
+				<div id="twitter-lists" class="box">
+					<div class="title">Lists</div>
 					<div class="inner">
 						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
 					</div>
@@ -178,7 +197,8 @@
 					<div class="inner">
 						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
 					</div>
-				</div>
+				</div>	
+				<? } ?>
 				
 				
 				<div id="twitter-trends" class="box">

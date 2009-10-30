@@ -1,12 +1,178 @@
 "use strict";
 
-var current_refresh;
-var _last_hash;
-var overlay;
-var loading_timeout;
-var search_t = {};
-var search_numbers = [];
-try { console.log(''); } catch(e) { console = { log: function() {}}; }
+// Create some globals
+
+	var current_refresh;
+	var _last_hash;
+	var hash;
+	var overlay;
+	var loading_timeout;
+	var search_t = {};
+	var search_numbers = [];
+	try { console.log(''); } catch(e) { console = { log: function() {}}; }
+
+
+
+
+
+// Here's some of the behind the scenes stuff
+
+
+
+	function check_state()
+	{
+		if (window.location.hash !== _last_hash)
+		{
+			_last_hash = window.location.hash;
+			new_state();
+		}
+		else if (window.location.hash === "")
+		{
+			window.location.hash = "timeline=friends";
+		}
+	
+		// Nothing changed
+		return true;
+	}
+
+	function new_state()
+	{
+		// Repopulate the global hash object
+		hash = get_querystring_object();
+		
+		if (current_refresh)
+			clearTimeout(current_refresh);
+		
+		if (hash.timeline)
+		{
+			$(".group-list:visible").slideUp(); // Since we aren't viewing a group anymore
+			$("#save-query").hide();
+		
+			get_timeline(hash.timeline, true);
+		}
+		else if (hash.query || hash.trend)
+		{
+			var q = hash.query || hash.trend;
+			$("#save-query").show();
+			$("#saved-searches li a").each(function(){
+				if($(this).html() === q)
+				{	
+					$("#save-query").hide();
+				}
+			});
+			get_search(q, true, false, hash.trend ? true : false);
+		}
+		else if (hash.group)
+		{
+			$("#save-query").hide();
+			get_search(hash.group, true, true);
+		}
+		else if (hash.logout)
+		{
+			var d = new Date();
+		    document.cookie = "PHPSESSID=0;path=/;expires=" + d.toGMTString() + ";" + ";";
+			window.location.href = "/oauth.php?logout";
+		}
+	}
+	
+	function get_querystring_object()
+	{
+		var queryString = {};
+		var parameters  = window.location.hash.substring(1).split('&');
+		var pos;
+		var paramname;
+		var paramval;
+		
+		for (var i in parameters) 
+		{
+			pos = parameters[i].indexOf('=');
+			if (pos > 0)
+			{
+				paramname = parameters[i].substring(0,pos);
+				paramval  = parameters[i].substring(pos+1);
+				queryString[paramname] = unescape(paramval.replace(/\+/g,' '));
+			}
+			else
+			{
+				queryString[parameters[i]] = "";
+			}
+		}
+		return queryString;
+	}
+
+
+	function cleanup()
+	{
+		while($(".tweet:visible").length > 200)
+		{
+			$(".tweet:visible:last").slideUp().remove();
+		}				
+	}
+
+
+	function proxy(opt)
+	{
+		$.ajax({
+			url: 		"/proxy.php?original_url=" + opt.url,
+			type: 		opt.type,
+			dataType: 	opt.dataType,
+			data: 		opt.data || {},
+			success: 	opt.success,
+			error: 		opt.error || function(XHR, textStatus, errorThrown){
+				throw(errorThrown);
+			}, 
+			complete: 	opt.complete || function(XHR, textStatus){
+				// This is called after success or error.  Nothing really to do, for now.
+			}, 
+		});				
+	}
+
+
+
+	function relative_time(parsed_date) {
+		var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
+		var delta = parseInt((relative_to.getTime() - parsed_date) / 1000);  
+		delta = delta + (relative_to.getTimezoneOffset() * 60);
+
+		if (delta < 60) {
+			return 'less than a minute ago';
+		} else if(delta < 120) {
+			return 'a minute ago';
+		} else if(delta < (45*60)) {
+			return (parseInt(delta / 60)).toString() + ' minutes ago';
+		} else if(delta < (90*60)) {
+			return 'an hour ago';
+		} else if(delta < (24*60*60)) {
+			return '' + (parseInt(delta / 3600)).toString() + ' hours ago';
+		} else if(delta < (48*60*60)) {
+			return '1 day ago';
+		} else {
+			return (parseInt(delta / 86400)).toString() + ' days ago';
+		}
+	}
+
+
+
+	function recalculate_timestamps()
+	{
+		$(".timestamp").each(function(){
+			$(this).html(relative_time($(this).attr('title')));
+		});
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function show_login_overlay()
 {
@@ -40,59 +206,48 @@ function show_login_overlay()
 
 function load_tweetgroups()
 {
+	
 	proxy({
-		url: "http://tweetgroups.net/api/search/groups?list=" + user_id,
+		url: "http://www.twitter.com/" + user_id + "/lists.json",
 		dataType: "json", 
 		success: function(response){
 			var group;
 			var html;
 			var username;
 			
-			$('#tweetgroups .inner').empty();
-			if (response.data.length > 0)
+			$('#twitter-lists .inner').empty();
+			if (response.lists.length > 0)
 			{
-				for (var i in response.data)
+				for (var i in response.lists)
 				{
-					group = response.data[i];
-					/*html = '<div id="groupid-'+group.group_id+'"> \
-						<span class="pseudolink arrow-right" onclick="toggle_group('+group.group_id+')"></span> \
-						<span class="pseudolink" onclick="group_search('+group.group_id+')">'+group.title+'</span> \
-						<ul class="group-list" style="display:none;"> \
-					';*/
-					//html =  '<div id="groupid-'+group.group_id+'">';
-					html = '<a href="#" onclick="group_search(' + group.group_id + '); return false;"><div id="group-title-' + group.group_id + '">' + group.title + '</div></a>';
-					html += '<ul id="group-list-' + group.group_id + '" class="group-list" style="display:none;">';
-					for (var i in group.users)
-					{
-						username = group.users[i];
-						html += '<li><a href="#query=from:' + username + '">' + username + '</a></li>';
-					}
-					html += '</ul>';
-					//html += '</div>';
+					list = response.lists[i];
+					html  = '<span class="pseudolink group_search" slug="' + list.slug + '"><div id="group-title-' + list.slug + '">' + list.name + '</div></span>';
+					html  += '<ul id="group-list-' + list.slug + '" class="group-list"></ul>';
 					
-
-					$('#tweetgroups .inner').append(html);
+					$('#twitter-lists .inner').append(html);
+					
+					proxy({
+						url: "http://www.twitter.com/" + user_id + "/" + list.slug + "/members.json",
+						dataType: "json", 
+						success: function(response){
+							var html = '';
+							for (var j in response.users)
+							{
+								screen_name = response.users[j].screen_name;
+								html += '<li><a href="#query=from:' + screen_name + '">' + screen_name + '</a></li>';
+							}	
+							slug = this.url.replace("/proxy.php?original_url=http://www.twitter.com/" + user_id + "/", "").replace("/members.json", "");
+							$('#group-list-' + slug).html(html);
+						}
+					});
 				}
 			}
 			else
 			{
-				$('#tweetgroups .inner').append("<div style='font-style:italic;color:#999999;'>None</div><ul></ul>");
+				$('#twitter-lists .inner').append("<div style='font-style:italic;color:#999999;'>None</div><ul></ul>");
 			}
 		}
 	});
-}
-
-function group_search(group_id)
-{
-	var query;
-	var delimeter;
-	toggle_group(group_id);
-	$("#group-list-"+group_id+" li a").each(function(){
-		query = query + delimeter + $(this).attr("href").replace("#query=from:", "");
-		delimeter = ",";
-	});
-	
-	window.location.hash = "#group=" + query;
 }
 
 function load_queries()
@@ -137,7 +292,7 @@ function load_saved_searches()
 			}
 			else
 			{
-				$("#saved-searches .inner").html("<div style='font-style:italic;color:#999999;'>Empty</div>");
+				$("#saved-searches .inner").html("<div style='font-style:italic;color:#999999;'>None</div>");
 			}
 		}
 	});
@@ -193,7 +348,9 @@ function reset_trends()
 			{	
 				google_trends[google_trends.length] = match[2];
 			}
+			
 			$("#google-trends").empty().html("<ol></ol>");
+			
 			for (var i in google_trends)
 			{
 				if (i < 20)
@@ -205,11 +362,18 @@ function reset_trends()
 	});
 }
 
-function proxy(opt)
+
+
+function group_search(slug)
 {
-	opt.url = "proxy.php?original_url="+opt.url;
-	//console.log(opt);
-	$.ajax(opt);				
+	var query = '';
+	var delimeter = '';
+	toggle_group(slug);
+	$("#group-list-"+slug+" li a").each(function(){
+		query = query + delimeter + $(this).attr("href").replace("#query=from:", "");
+		delimeter = ",";
+	});
+	window.location.hash = "#group=" + query;
 }
 
 function get_timeline(timeline, new_search)
@@ -218,7 +382,11 @@ function get_timeline(timeline, new_search)
 	var type;
 	var id;
 	var since_id = 1;
-
+	
+	// Show the loading message
+	loading_show();
+	
+	// Figure out what timeline to pull
 	switch(timeline)
 	{
 		case "friends":
@@ -255,7 +423,14 @@ function get_timeline(timeline, new_search)
 			url = 'http://www.twitter.com/direct_messages/sent.json';
 			type = "GET";
 			break;
+			
+		default:
+			throw("Unknown Timeline");
+			break;
 	}
+	
+	// Set the timer to refresh this timeline
+	current_refresh = setTimeout('get_timeline("'+timeline+'", false)', 60000);
 	
 	if (new_search)
 	{
@@ -275,20 +450,16 @@ function get_timeline(timeline, new_search)
 		});
 	}
 	
-	loading_show();
-	
-	current_refresh = setTimeout('get_timeline("'+timeline+'", false)', 60000);
-	
 	proxy({
+		dataType: "json",
 		type    : type,
 		url     : url,
 		data    : {
 			"count" : 20,
 			"since_id" : since_id
 		},
-		dataType: "json",
-		success : function(tweets){
-			
+		success : function(tweets, textStatus)
+		{
 			if (tweets.error)
 			{	
 				//alert("Twitter says: " + tweets.error);
@@ -297,11 +468,12 @@ function get_timeline(timeline, new_search)
 			else
 			{
 				loading_hide();
-				
+
 				tweets.reverse();
 				if (!new_search)
 				{
-					$("#tweets").prepend("<fieldset style='border-top:solid 1px #999999;'><legend align='right' style='color:#999999; padding-left:5px;' >"+tweets.length + ' new tweets at '+get_time()+'</legend> </fieldset>');
+					if (tweets.length > 0)
+						$("#tweets").prepend("<fieldset style='border-top:solid 1px #999999;'><legend align='right' style='color:#999999; padding-left:5px;' >"+tweets.length + ' new tweets at '+get_time()+'</legend> </fieldset>');
 				}
 				else
 				{
@@ -309,35 +481,36 @@ function get_timeline(timeline, new_search)
 				}
 
 				$.each(tweets, function(i, tweet) {
-					var values = tweet.created_at.split(" ");
+					var values; 
+					values = tweet.created_at.split(" ");
 					tweet.created_at = Date.parse( values[1] + " " + values[2] + ", " + values[5] + " " + values[3]);
-					
+
 					/*
 					if ($(tweet.source).html() !== null)
 					{
 						tweet.source = "<a href='"+$(tweet.source).attr("href")+"' target='_blank'>"+$(tweet.source).html()+"</a>";
 					}
 					*/
-					
+
 					if ($("#tweetid-"+tweet.id).length === 0)
 					{
 						var tw = new Tweet(tweet.id);
-						if (timeline === "dmin")
+						if (hash.timeline === "dmin")
 						{
 							tweet.user = tweet.sender;
 							tweet.source = '';
 						}
-						
-						if (timeline === "dmout")
+
+						if (hash.timeline === "dmout")
 						{
 							tweet.user = tweet.sender;
 							tweet.source = '';
-							
+
 							tweet.in_reply_to_user_id = tweet.recipient.id; 
 							tweet.in_reply_to_screen_name = tweet.recipient.screen_name;
 							tweet.in_reply_to_status_id	= 0;
 						}
-						
+
 						tw.text                    = tweet.text; 
 						tw.date_created            = tweet.created_at;
 						tw.from_user_id            = tweet.user.id;
@@ -349,7 +522,7 @@ function get_timeline(timeline, new_search)
 						tw.in_reply_to_user_id     = tweet.in_reply_to_user_id;
 						tw.in_reply_to_screen_name = tweet.in_reply_to_screen_name;
 						tw.favorited               = tweet.favorited;
-						
+
 						$("#tweets").prepend(tw.get_html());
 					}
 				});
@@ -364,120 +537,24 @@ function get_timeline(timeline, new_search)
 }
 
 
-function cleanup()
-{
-	while($(".tweet:visible").length > 200)
-	{
-		$(".tweet:visible:last").slideUp().remove();
-	}				
-}
-
-function get_querystring_object()
-{
-	var queryString = {};
-	var parameters = window.location.hash.substring(1).split('&');
-
-	for (var i=0; i<parameters.length; i+=1) {
-		var pos = parameters[i].indexOf('=');
-		if (pos > 0) {
-			var paramname = parameters[i].substring(0,pos);
-			var paramval = parameters[i].substring(pos+1);
-			queryString[paramname] = unescape(paramval.replace(/\+/g,' '));
-		} else {
-			queryString[parameters[i]] = "";
-		}
-	}
-	return queryString;
-}
-
-function check_state()
-{
-	if (window.location.hash !== _last_hash)
-	{
-		_last_hash = window.location.hash;
-		new_state();
-	}
-	else if (window.location.hash === "")
-	{
-		window.location.hash = "timeline=friends";
-	}
-	
-	return true;
-}
-
-function new_state()
-{   
-	clearTimeout(current_refresh);
-	//$("#loading").show();
-	var params = get_querystring_object();
-
-	if (params.timeline)
-	{
-		$(".group-list").slideUp(); // Since we definitely aren't viewing a group anymore
-		$("#save-query").hide();
-		get_timeline(params.timeline, true);
-	}
-	else if (params.query || params.trend)
-	{
-		var q = params.query || params.trend;
-		$("#save-query").show();
-		$("#saved-searches li a").each(function(){
-			if($(this).html() === q)
-			{	
-				$("#save-query").hide();
-			}
-		});
-		get_search(q, true, false, params.trend?true:false);
-	}
-	else if (params.group)
-	{
-		$("#save-query").hide();
-		get_search(params.group, true, true);
-	}
-	else if (params.logout)
-	{
-		var d = new Date();
-	    document.cookie = "PHPSESSID=0;path=/;expires=" + d.toGMTString() + ";" + ";";
-		window.location.href = "/oauth.php?logout";
-	}
-}
-
 function get_time()
 {
-	var a_p = "";
-	var d = new Date();
-
-	var curr_hour = d.getHours();
-
-	if (curr_hour < 12)
-	{
-	   a_p = "AM";
-	}
-	else
-	{
-	   a_p = "PM";
-	}
-	if (curr_hour === 0)
-	{
-	   curr_hour = 12;
-	}
-	if (curr_hour > 12)
-	{
-	   curr_hour = curr_hour - 12;
-	}
-
-	var curr_min = d.getMinutes();
-	if (curr_min < 10)
-	{
-		curr_min = "0" + curr_min.toString();
-	}
-	var curr_sec = d.getSeconds();
-	if (curr_sec < 10)
-	{
-		curr_sec = "0" + curr_sec.toString();
-	}	
-	return curr_hour + ":" + curr_min + ":" + curr_sec + " " + a_p;
+	var am_pm;
 	
+	var curr_hour;
+	var curr_min;
+	var curr_sec;
+	
+	curr_hour = new Date().getHours();
+	curr_min  = new Date().getMinutes();
+	curr_sec  = new Date().getSeconds();
+
+	am_pm 		= curr_hour < 12  	? "AM" : "PM";
+	curr_hour 	= am_pm === "PM" 	? curr_hour - 12 : curr_hour;
+	curr_min	= curr_min < 10   	? "0" + curr_min.toString() : curr_min;
+	curr_sec	= curr_sec < 10		? "0" + curr_sec.toString() : curr_sec;
+
+	return curr_hour + ":" + curr_min + ":" + curr_sec + " " + am_pm;
 }
 
 function get_search(query, new_search, group_search, trend)
@@ -625,7 +702,7 @@ function display_search_tweets(new_search)
 	}
 	else    
 	{   
-		$("#tweets").prepend("<fieldset style='border-top:solid 1px #999999;'><legend align='right' style='color:#999999; padding-left:5px;' >new tweets at "+get_time()+"</legend> </fieldset>");
+		//$("#tweets").prepend("<fieldset style='border-top:solid 1px #999999;'><legend align='right' style='color:#999999; padding-left:5px;' >new tweets at "+get_time()+"</legend> </fieldset>");
 	}
 	
 	search_numbers.sort();
@@ -664,6 +741,15 @@ function display_search_tweets(new_search)
 }
 
 
+
+
+
+
+
+
+
+
+
 function addslashes( str ) {
     return (str+'').replace(/([\\"'])/g, "\\$1").replace(/\0/g, "\\0");
 }
@@ -675,45 +761,13 @@ function decode_tinyurl()
 
 
 
-function relative_time(parsed_date) {
-   var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
-   var delta = parseInt((relative_to.getTime() - parsed_date) / 1000);  
-   delta = delta + (relative_to.getTimezoneOffset() * 60);
 
-   if (delta < 60) {
-	 return 'less than a minute ago';
-   } else if(delta < 120) {
-	 return 'a minute ago';
-   } else if(delta < (45*60)) {
-	 return (parseInt(delta / 60)).toString() + ' minutes ago';
-   } else if(delta < (90*60)) {
-	 return 'an hour ago';
-   } else if(delta < (24*60*60)) {
-	 return '' + (parseInt(delta / 3600)).toString() + ' hours ago';
-   } else if(delta < (48*60*60)) {
-	 return '1 day ago';
-   } else {
-	 return (parseInt(delta / 86400)).toString() + ' days ago';
-   }
- }
-
-
-
-function recalculate_timestamps()
+function toggle_group(slug)
 {
-	$(".timestamp").each(function(){
-		$(this).html(relative_time($(this).attr('title')));
-	});
-}
-
-
-
-function toggle_group(group_id)
-{
-	if ($('#group-list-'+group_id+':visible').length < 1)
+	if ($('#group-list-'+slug+':visible').length < 1)
 	{
 		$(".group-list").slideUp();
-		$('#group-list-'+group_id).slideToggle();
+		$('#group-list-'+slug).slideToggle();
 	}
 }
 
@@ -728,31 +782,6 @@ function textCounter(field) {
 	{
 		$("#character_count").html(field.value.length).css("color", "black");
 	}
-}
-
-function login(){
-	proxy({
-		type    : "POST",
-		url     : "http://www.twitter.com/account/verify_credentials.json",
-		data    : {
-			"username"	: $("#form_login :input[name=username]").val(),
-			"password"	: $("#form_login :input[name=password]").val()
-		},
-		dataType: "json",
-		success : function(response){
-			if(response && response.id)
-			{
-				window.location.reload();
-			}
-			else
-			{
-				$("#invalid_login").show();
-			}
-		}
-	});
-	
-	
-	return false;
 }
 
 function service_tinyurl()
@@ -865,7 +894,8 @@ function service_twitpic()
     return false; 
 }
 
-function isURL(s) {
+function isURL(s)
+{
 	var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 	return regexp.test(s);
 }
@@ -948,7 +978,7 @@ function loading_error()
 
 function loading_unable()
 {
-	$("#loading").append(" Try <span class=\"pseudolink\" onclick=\"window.location.href = window.location.href\">refreshing</span>");
+	$("#loading").append(" Try <span class='pseudolink' onclick='window.location.reload()'>refreshing</span>");
 }
 
 
@@ -980,12 +1010,20 @@ function favoriteHandler(id, action)
 
 function show_hidden_tweets()
 {
-	if ($(".tweet:hidden").length > 0)
+	var distance_from_top = getScrollOffset()[1];
+	//console.log(distance_from_top);
+	if ($(".tweet:hidden").length > 0 && distance_from_top < 150)
 	{
 		$(".tweet:hidden:last").slideDown();
 	}
 }
 
+function getScrollOffset() {
+	return [ 
+		window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+		window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+	];
+}
 
 $(document).ready(function() {
 	
@@ -1002,6 +1040,10 @@ $(document).ready(function() {
 	$("#navigation a div").live("click", function(){
 		$("#navigation .selected").removeClass("selected");
 		$(this).addClass("selected");
+	});
+	
+	$(".group_search").live("click", function(){
+		group_search($(this).attr("slug"));
 	});
 	
 });
