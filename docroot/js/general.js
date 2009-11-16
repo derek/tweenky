@@ -48,7 +48,15 @@
 			$(".group-list:visible").slideUp(); // Since we aren't viewing a group anymore
 			$("#save-query").hide();
 		
-			get_timeline(hash.timeline, true);
+			get_timeline("timeline", hash.timeline, true);
+		}
+		if (hash.list)
+		{
+			get_list_content(hash.list);
+			//$(".group-list:visible").slideUp(); // Since we aren't viewing a group anymore
+			$("#save-query").hide();
+		
+			get_timeline("list", hash.list, true);
 		}
 		else if (hash.query || hash.trend)
 		{
@@ -170,7 +178,33 @@
 
 
 
+function get_list_content(slug)
+{
+	if ($('#group-list-' + slug + ' li').length > 0)
+	{
+		toggle_group(slug);
+	}
+	else
+	{
+		$('#group-list-' + slug).html("<div align='center'><br /><br /><br /><img src='/image/ajaxsm.gif'></div>");
+		proxy({
+			url: "http://www.twitter.com/" + user_id + "/" + slug + "/members.json",
+			dataType: "json", 
+			success: function(response){
+				var html = '';
+				for (var j in response.users)
+				{
+					screen_name = response.users[j].screen_name;
+					html += '<li><a href="#query=from:' + screen_name + '">' + screen_name + '</a></li>';
+				}	
+				slug = this.url.replace("/proxy.php?original_url=http://www.twitter.com/" + user_id + "/", "").replace("/members.json", "");
+				$('#group-list-' + slug).html(html);
 
+				toggle_group(slug);
+			}
+		});		
+	}
+}
 
 
 
@@ -221,25 +255,10 @@ function load_tweetgroups()
 				for (var i in response.lists)
 				{
 					list = response.lists[i];
-					html  = '<span class="pseudolink group_search" slug="' + list.slug + '"><div id="group-title-' + list.slug + '">' + list.name + '</div></span>';
+					html  =  '<div><a href="#list=' + list.slug + '">' + list.name + '</a></div>';
 					html  += '<ul id="group-list-' + list.slug + '" class="group-list"></ul>';
 					
 					$('#twitter-lists .inner').append(html);
-					
-					proxy({
-						url: "http://www.twitter.com/" + user_id + "/" + list.slug + "/members.json",
-						dataType: "json", 
-						success: function(response){
-							var html = '';
-							for (var j in response.users)
-							{
-								screen_name = response.users[j].screen_name;
-								html += '<li><a href="#query=from:' + screen_name + '">' + screen_name + '</a></li>';
-							}	
-							slug = this.url.replace("/proxy.php?original_url=http://www.twitter.com/" + user_id + "/", "").replace("/members.json", "");
-							$('#group-list-' + slug).html(html);
-						}
-					});
 				}
 			}
 			else
@@ -364,19 +383,7 @@ function reset_trends()
 
 
 
-function group_search(slug)
-{
-	var query = '';
-	var delimeter = '';
-	toggle_group(slug);
-	$("#group-list-"+slug+" li a").each(function(){
-		query = query + delimeter + $(this).attr("href").replace("#query=from:", "");
-		delimeter = ",";
-	});
-	window.location.hash = "#group=" + query;
-}
-
-function get_timeline(timeline, new_search)
+function get_timeline(type, timeline, new_search)
 {
 	var url;
 	var type;
@@ -387,50 +394,58 @@ function get_timeline(timeline, new_search)
 	loading_show();
 	
 	// Figure out what timeline to pull
-	switch(timeline)
+	if (type === "timeline")
 	{
-		case "friends":
-			url = 'http://www.twitter.com/statuses/friends_timeline.json';
-			type = "GET";
-			break;
+		switch(timeline)
+		{
+			case "friends":
+				url = 'http://www.twitter.com/statuses/friends_timeline.json';
+				http_method = "GET";
+				break;
 
-		case "replies":
-			url = 'http://www.twitter.com/statuses/replies.json';
-			type = "GET";
-			break;
+			case "replies":
+				url = 'http://www.twitter.com/statuses/replies.json';
+				http_method = "GET";
+				break;
 
-		case "archive":
-			url = 'http://www.twitter.com/statuses/user_timeline.json';
-			type = "GET";
-			break;
+			case "archive":
+				url = 'http://www.twitter.com/statuses/user_timeline.json';
+				http_method = "GET";
+				break;
 
-		case "public":
-			url = 'http://www.twitter.com/statuses/public_timeline.json';
-			type = "GET";
-			break;
+			case "public":
+				url = 'http://www.twitter.com/statuses/public_timeline.json';
+				http_method = "GET";
+				break;
 
-		case "favorites":
-			url = 'http://www.twitter.com/favorites.json';
-			type = "GET";
-			break;
+			case "favorites":
+				url = 'http://www.twitter.com/favorites.json';
+				http_method = "GET";
+				break;
 
-		case "dmin":
-			url = 'http://www.twitter.com/direct_messages.json';
-			type = "GET";
-			break;
+			case "dmin":
+				url = 'http://www.twitter.com/direct_messages.json';
+				http_method = "GET";
+				break;
 			
-		case "dmout":
-			url = 'http://www.twitter.com/direct_messages/sent.json';
-			type = "GET";
-			break;
+			case "dmout":
+				url = 'http://www.twitter.com/direct_messages/sent.json';
+				http_method = "GET";
+				break;
 			
-		default:
-			throw("Unknown Timeline");
-			break;
+			default:
+				throw("Unknown Timeline");
+				break;
+		}
+	}
+	else if (type === "list")
+	{
+		url = 'http://api.twitter.com/1/derek/lists/' + timeline + '/statuses.json';
+		http_method = "GET";
 	}
 	
 	// Set the timer to refresh this timeline
-	current_refresh = setTimeout('get_timeline("'+timeline+'", false)', 60000);
+	current_refresh = setTimeout('get_timeline("'+type+'", "'+timeline+'", false)', 60000);
 	
 	if (new_search)
 	{
@@ -452,7 +467,7 @@ function get_timeline(timeline, new_search)
 	
 	proxy({
 		dataType: "json",
-		type    : type,
+		type    : http_method,
 		url     : url,
 		data    : {
 			"count" : 20,
@@ -767,7 +782,7 @@ function toggle_group(slug)
 	if ($('#group-list-'+slug+':visible').length < 1)
 	{
 		$(".group-list").slideUp();
-		$('#group-list-'+slug).slideToggle();
+		$('#group-list-'+slug).slideDown();
 	}
 }
 
@@ -1040,10 +1055,6 @@ $(document).ready(function() {
 	$("#navigation a div").live("click", function(){
 		$("#navigation .selected").removeClass("selected");
 		$(this).addClass("selected");
-	});
-	
-	$(".group_search").live("click", function(){
-		group_search($(this).attr("slug"));
 	});
 	
 });

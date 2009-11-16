@@ -10,8 +10,18 @@
 		header("Location: index.php");
 		die();
 	}
-
-	if (isset($_GET['login'])) {
+	
+	if (isset($_COOKIE['oauth_access_token']) && !isset($_SESSION['oauth_access_token']))
+	{
+		$_SESSION['oauth_access_token'] 		= $_COOKIE['oauth_access_token'];
+		$_SESSION['oauth_access_token_secret'] 	= $_COOKIE['oauth_access_token_secret'];
+		
+		header("Location: http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+		die();
+	}
+	
+	if (isset($_GET['login']))
+	{
 		$Twitter = new TwitterOAuth(TWITTER_OAUTH_CONSUMER_KEY, TWITTER_OAUTH_CONSUMER_SECRET);
 		$token = $Twitter->getRequestToken();
 
@@ -34,6 +44,7 @@
 		return $file . "?" . filemtime($_SERVER['DOCUMENT_ROOT'] . $file);
 	}
 	
+	//print_r($_COOKIES);die();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -172,7 +183,7 @@
 					<div class="inner">
 						<? if (isset($_SESSION['user_id'])) { ?>
 							<a href="#timeline=friends"><div>Home</div></a>
-							<a href="#timeline=replies"><div>Replies</div></a>
+							<a href="#timeline=replies"><div>Mentions</div></a>
 							<a href="#timeline=archive"><div>Sent</div></a>
 							<a href="#timeline=favorites"><div>Favorites</div></a>
 							<a href="#timeline=dmin"><div>DM - Received</div></a>
