@@ -13,8 +13,8 @@
 	$token 	 = $Twitter->getAccessToken();
 	$_SESSION['oauth_access_token'] 		= $token['oauth_token'];
 	$_SESSION['oauth_access_token_secret'] 	= $token['oauth_token_secret'];
-	setcookie("oauth_access_token", 		$_SESSION['oauth_access_token'], 		time()+60*60*24*30);
-	setcookie("oauth_access_token_secret", 	$_SESSION['oauth_access_token_secret'], time()+60*60*24*30);
+	//setcookie("oauth_access_token", 		$_SESSION['oauth_access_token'], 		time()+60*60*24*30);
+	//setcookie("oauth_access_token_secret", 	$_SESSION['oauth_access_token_secret'], time()+60*60*24*30);
 
 	// Get the user's info
 	$user_data = json_decode($Twitter->OAuthRequest("http://twitter.com/account/verify_credentials.json"), true);
