@@ -11,29 +11,32 @@
 		die();
 	}
 	
-	if (isset($_COOKIE['oauth_access_token']) && !isset($_SESSION['oauth_access_token']))
-	{
-		$_SESSION['oauth_access_token'] 		= $_COOKIE['oauth_access_token'];
-		$_SESSION['oauth_access_token_secret'] 	= $_COOKIE['oauth_access_token_secret'];
-		
-		header("Location: http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-		die();
-	}
-	
 	if (isset($_GET['login']))
 	{
-		$Twitter = new TwitterOAuth(TWITTER_OAUTH_CONSUMER_KEY, TWITTER_OAUTH_CONSUMER_SECRET);
-		$token = $Twitter->getRequestToken();
+		
+			/* Create TwitterOAuth object and get request token */
+			$connection = new TwitterOAuth(TWITTER_OAUTH_CONSUMER_KEY, TWITTER_OAUTH_CONSUMER_SECRET);
+		
+			/* Get request token */
+			$request_token = $connection->getRequestToken(TWITTER_OAUTH_CALLBACK);
 
-		/* Save tokens for later */
-		$_SESSION['oauth_request_token'] 		= $token['oauth_token'];
-		$_SESSION['oauth_request_token_secret'] = $token['oauth_token_secret'];
+			/* Save request token to session */
+			$_SESSION['oauth_token'] = $token = $request_token['oauth_token'];
+			$_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
 
-		/* Build the authorization URL */
-		$request_link = $Twitter->getAuthorizeURL($_SESSION['oauth_request_token']);
-	
-		header("Location: ".$request_link);
-		die();
+			/* If last connection fails don't display authorization link */
+			switch ($connection->http_code)
+			{
+			  case 200:
+			    /* Build authorize URL */
+			    $url = $connection->getAuthorizeURL($token);
+			    header('Location: ' . $url); 
+			    break;
+			  default:
+			    echo 'Could not connect to Twitter. Refresh the page or try again later.';
+				die();
+			    break;
+			}
 	}
 
 	function auto_version($file)
@@ -44,6 +47,7 @@
 		return $file . "?" . filemtime($_SERVER['DOCUMENT_ROOT'] . $file);
 	}
 	
+	//print_r($_SESSION);die();
 	//print_r($_COOKIES);die();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -63,8 +67,9 @@
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 		<script type="text/javascript" src="/js/general.js"></script>
 		<script type="text/javascript" src="/js/tweet.js"></script>
+		<script type="text/javascript" src="http://www.methvin.com/jquery/splitter/splitter.js"></script>
 		<script type="text/javascript">
-			var user_id = '<?= $_SESSION["user_id"]?>';		
+			var user_id = '<?= $_SESSION["access_token"]["user_id"]?>';		
 		</script>
 	</head>
 	
@@ -121,6 +126,53 @@
 			</div>
 			
 			<div id="wrapper">
+				<div id="navigation">
+
+					<div class="box" >
+						<div class="title">Twitter</div>
+						<div class="inner">
+							<? if (isset($_SESSION['access_token']['user_id'])) { ?>
+								<a href="#timeline=friends"><div>Home</div></a>
+								<a href="#timeline=replies"><div>Mentions</div></a>
+								<a href="#timeline=archive"><div>Sent</div></a>
+								<a href="#timeline=favorites"><div>Favorites</div></a>
+								<a href="#timeline=dmin"><div>DM - Received</div></a>
+								<a href="#timeline=dmout"><div>DM - Sent</div></a>
+							<? } else { ?>	
+								<a href="/?login"><div>Login</div></a>
+							<? } ?>
+						</div>
+					</div>
+
+					<? if (isset($_SESSION['access_token']['user_id'])) { ?>
+					<div id="twitter-lists" class="box">
+						<div class="title">Lists</div>
+						<div class="inner">
+							<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
+						</div>
+					</div>
+
+
+					<div id="saved-searches" class="box">
+						<div class="title">Saved Searches</div>
+						<div class="inner">
+							<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
+						</div>
+					</div>	
+					<? } ?>
+
+
+					<div id="twitter-trends" class="box">
+						<div class="title">Trends</div>
+						<div class="inner">
+							<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
+						</div>
+					</div>
+
+					<div style="font-size:10px; margin-top:60px;">
+						<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production</p>
+					</div>
+				</div>
 				<div id="content">
 					
 					<? if (isset($_SESSION['user_id'])) { ?>
@@ -176,53 +228,6 @@
 				</div>
 			</div>
 			
-			<div id="navigation">
-				
-				<div class="box" >
-					<div class="title">Twitter</div>
-					<div class="inner">
-						<? if (isset($_SESSION['user_id'])) { ?>
-							<a href="#timeline=friends"><div>Home</div></a>
-							<a href="#timeline=replies"><div>Mentions</div></a>
-							<a href="#timeline=archive"><div>Sent</div></a>
-							<a href="#timeline=favorites"><div>Favorites</div></a>
-							<a href="#timeline=dmin"><div>DM - Received</div></a>
-							<a href="#timeline=dmout"><div>DM - Sent</div></a>
-						<? } else { ?>	
-							<a href="/?login"><div>Login</div></a>
-						<? } ?>
-					</div>
-				</div>
-				
-				<? if (isset($_SESSION['user_id'])) { ?>
-				<div id="twitter-lists" class="box">
-					<div class="title">Lists</div>
-					<div class="inner">
-						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
-					</div>
-				</div>
-				
-			
-				<div id="saved-searches" class="box">
-					<div class="title">Saved Searches</div>
-					<div class="inner">
-						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
-					</div>
-				</div>	
-				<? } ?>
-				
-				
-				<div id="twitter-trends" class="box">
-					<div class="title">Trends</div>
-					<div class="inner">
-						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
-					</div>
-				</div>
-				
-				<div style="font-size:10px; margin-top:60px;">
-					<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production</p>
-				</div>
-			</div>
 			
 			<div id="footer"><p>&nbsp;</p></div>
 	

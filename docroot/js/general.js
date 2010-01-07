@@ -240,34 +240,51 @@ function show_login_overlay()
 
 function load_tweetgroups()
 {
+	lists = [];
 	
 	proxy({
-		url: "http://www.twitter.com/" + user_id + "/lists.json",
+		url: "http://api.twitter.com/1/" + user_id + "/lists.json",
 		dataType: "json", 
 		success: function(response){
-			var group;
-			var html;
-			var username;
 			
-			$('#twitter-lists .inner').empty();
-			if (response.lists.length > 0)
-			{
-				for (var i in response.lists)
-				{
-					list = response.lists[i];
-					html  =  '<div><a href="#list=' + list.slug + '">' + list.name + '</a></div>';
-					html  += '<ul id="group-list-' + list.slug + '" class="group-list"></ul>';
-					
-					$('#twitter-lists .inner').append(html);
+			for (i in response.lists)	
+				lists[lists.length] =response.lists[i];
+			
+			proxy({
+				url: "http://api.twitter.com/1/" + user_id + "/lists/subscriptions.json",
+				dataType: "json", 
+				success: function(response){
+					for (i in response.lists)	
+						lists[lists.length] =response.lists[i];
+					display_lists(lists);
 				}
-			}
-			else
-			{
-				$('#twitter-lists .inner').append("<div style='font-style:italic;color:#999999;'>None</div><ul></ul>");
-			}
+			});
 		}
 	});
 }
+
+function display_lists(lists)
+{
+	$('#twitter-lists .inner').empty();
+	//lists = sortObject(lists);
+	//console.log(lists);
+	if (lists.length > 0)
+	{
+		for (var i in lists)
+		{
+			list = lists[i];
+			html  =  '<div><a href="#list=' + list.uri + '">' + list.name + '</a></div>';
+			html  += '<ul id="group-list-' + list.uri + '" class="group-list"></ul>';
+			
+			$('#twitter-lists .inner').append(html);
+		}
+	}
+	else
+	{
+		$('#twitter-lists .inner').append("<div style='font-style:italic;color:#999999;'>None</div><ul></ul>");
+	}	
+}
+
 
 function load_queries()
 {
@@ -354,7 +371,7 @@ function reset_trends()
 			}
 		}
 	});
-	
+	/*
 	proxy({
 		url: "http://www.google.com/trends/hottrends/atom/hourly",
 		dataType: "text", 
@@ -378,7 +395,7 @@ function reset_trends()
 				}
 			}
 		}
-	});
+	});*/
 }
 
 
@@ -440,7 +457,9 @@ function get_timeline(type, timeline, new_search)
 	}
 	else if (type === "list")
 	{
-		url = 'http://api.twitter.com/1/derek/lists/' + timeline + '/statuses.json';
+		e = timeline.split("/");
+		url = 'http://api.twitter.com/1/' + e[1] + '/lists/' + e[2] + '/statuses.json';
+		//url = 'http://api.twitter.com/lists/' + timeline + '/statuses.json';
 		http_method = "GET";
 	}
 	
