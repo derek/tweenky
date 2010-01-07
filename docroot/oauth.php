@@ -65,6 +65,6 @@ if (200 == $connection->http_code) {
   header('Location: ./index.php');
 } else {
   /* Save HTTP status for error dialog on connnect page.*/
-  header('Location: ./clearsessions.php');
+  header('Location: ./?logout');
 }
 ?>

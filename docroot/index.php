@@ -67,7 +67,6 @@
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 		<script type="text/javascript" src="/js/general.js"></script>
 		<script type="text/javascript" src="/js/tweet.js"></script>
-		<script type="text/javascript" src="http://www.methvin.com/jquery/splitter/splitter.js"></script>
 		<script type="text/javascript">
 			var user_id = '<?= $_SESSION["access_token"]["user_id"]?>';		
 		</script>
@@ -107,8 +106,8 @@
 				<img alt="tweenky header" src="/images/tweenky_header_01.png" style="float:left;">
 				<div style="padding:5px;">
 					
-					<? if (isset($_SESSION['user_id'])) { ?>
-					<div style="float:right;">Logged in as @<?= $_SESSION['username'] ?>, <a href="#logout=true">Logout</a></div>
+					<? if (isset($_SESSION['access_token']['user_id'])) { ?>
+					<div style="float:right;">Logged in as @<?= $_SESSION['access_token']['screen_name'] ?>, <a href="#logout=true">Logout</a></div>
 					<? } ?>
 					
 					<div style="padding-top:10px;">
@@ -116,7 +115,7 @@
 						<div>
 							<input type="text" id="search_query" style="width:110px; font-size:13px; width:200px;">
 							<input type="submit" value="Search" onclick="window.location.hash='#query=' + $('#search_query').val();" style="font-size:13px;">
-							<? if (isset($_SESSION['user_id'])) { ?>
+							<? if (isset($_SESSION['access_token']['user_id'])) { ?>
 								<span class="pseudolink" onclick="save_query()" id="save-query" style="display:none;">Save this search</span>
 							<? } ?>
 						</div>
@@ -126,56 +125,9 @@
 			</div>
 			
 			<div id="wrapper">
-				<div id="navigation">
-
-					<div class="box" >
-						<div class="title">Twitter</div>
-						<div class="inner">
-							<? if (isset($_SESSION['access_token']['user_id'])) { ?>
-								<a href="#timeline=friends"><div>Home</div></a>
-								<a href="#timeline=replies"><div>Mentions</div></a>
-								<a href="#timeline=archive"><div>Sent</div></a>
-								<a href="#timeline=favorites"><div>Favorites</div></a>
-								<a href="#timeline=dmin"><div>DM - Received</div></a>
-								<a href="#timeline=dmout"><div>DM - Sent</div></a>
-							<? } else { ?>	
-								<a href="/?login"><div>Login</div></a>
-							<? } ?>
-						</div>
-					</div>
-
-					<? if (isset($_SESSION['access_token']['user_id'])) { ?>
-					<div id="twitter-lists" class="box">
-						<div class="title">Lists</div>
-						<div class="inner">
-							<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
-						</div>
-					</div>
-
-
-					<div id="saved-searches" class="box">
-						<div class="title">Saved Searches</div>
-						<div class="inner">
-							<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
-						</div>
-					</div>	
-					<? } ?>
-
-
-					<div id="twitter-trends" class="box">
-						<div class="title">Trends</div>
-						<div class="inner">
-							<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
-						</div>
-					</div>
-
-					<div style="font-size:10px; margin-top:60px;">
-						<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production</p>
-					</div>
-				</div>
 				<div id="content">
 					
-					<? if (isset($_SESSION['user_id'])) { ?>
+					<? if (isset($_SESSION['access_token']['user_id'])) { ?>
 					<div style="background-color:#D2DBED; padding:10px;">
 						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
 							<img alt="thought-bubble" src="/images/thought.png" height="25"> What are you doing?
@@ -228,6 +180,53 @@
 				</div>
 			</div>
 			
+			<div id="navigation">
+				
+				<div class="box" >
+					<div class="title">Twitter</div>
+					<div class="inner">
+						<? if (isset($_SESSION['access_token']['user_id'])) { ?>
+							<a href="#timeline=friends"><div>Home</div></a>
+							<a href="#timeline=replies"><div>Mentions</div></a>
+							<a href="#timeline=archive"><div>Sent</div></a>
+							<a href="#timeline=favorites"><div>Favorites</div></a>
+							<a href="#timeline=dmin"><div>DM - Received</div></a>
+							<a href="#timeline=dmout"><div>DM - Sent</div></a>
+						<? } else { ?>	
+							<a href="/?login"><div>Login</div></a>
+						<? } ?>
+					</div>
+				</div>
+				
+				<? if (isset($_SESSION['access_token']['user_id'])) { ?>
+				<div id="twitter-lists" class="box">
+					<div class="title">Lists</div>
+					<div class="inner">
+						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
+					</div>
+				</div>
+				
+			
+				<div id="saved-searches" class="box">
+					<div class="title">Saved Searches</div>
+					<div class="inner">
+						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
+					</div>
+				</div>	
+				<? } ?>
+				
+				
+				<div id="twitter-trends" class="box">
+					<div class="title">Trends</div>
+					<div class="inner">
+						<img src="http://ddev.tweenky.com/images/ajax.gif" alt="ajax loading">
+					</div>
+				</div>
+				
+				<div style="font-size:10px; margin-top:60px;">
+					<p>Tweenky is an <a href="http://www.twitter.com/derek" target="_blank">@Derek</a> Production</p>
+				</div>
+			</div>
 			
 			<div id="footer"><p>&nbsp;</p></div>
 	

@@ -25,22 +25,15 @@ function Tweet(tweet_id)
 							html += " | in reply to <a href='http://www.twitter.com/" + this.in_reply_to_screen_name + "/status/" + this.in_reply_to_status_id + "' target='_blank'>"+ this.in_reply_to_screen_name + "</a>";
 						}   
 
-						html += " | <span class='pseudolink' title='Reply to this tweet' onclick='compose_new_tweet(\"@" + this.from_screen_name + " \", " + this.id + ")'>Reply</span> | \
-								<span class='pseudolink' title='Direct message this user' onclick='compose_new_tweet(\"d " + this.from_screen_name + " \")'>Direct</span> | ";
+						html += " | <span class='pseudolink replyLink' title='Reply to this tweet'>Reply</span> | \
+								<span class='pseudolink dmLink' title='Direct message this user'>Direct</span> | ";
 
-						if   (this.favorited )	html += "<span class='pseudolink' title='Unfavorite this tweet' onclick='favoriteHandler(\"" + this.id + "\", \"destroy\")'>Unfavorite</span> | ";
-						else					html += "<span class='pseudolink' title='Favorite this tweet' onclick='favoriteHandler(\"" + this.id + "\", \"create\")'>Favorite</span> | ";
+						if   (this.favorited )	html += "<span class='pseudolink favoriteLink' title='Unfavorite this tweet'>Unfavorite</span> | ";
+						else					html += "<span class='pseudolink favoriteLink' title='Favorite this tweet'>Favorite</span> | ";
 
-						html += "<span class='pseudolink' title='Retweet this tweet' onclick='retweetHandler(\"" + this.id + "\")'>Retweet</span>";
+						html += "<span class='pseudolink retweetLink' title='Retweet this tweet'>Retweet</span>";
 
-				//html += "  | <span class='pseudolink' title='Via this tweet' onclick='retweet(\""+tweet.id+"\", true)'>Via</span> ";
-				/*html += "| <span class='pseudolink chirper' title='Chirp this Tweet!  Will send it over to TopChirp.com which is kinda like Digg, but for Twitter!' onclick='topchirp_upchirp("+tweet.id+")'>Chirp it</span> \
-						<span id='topchirp-box-"+tweet.id+"' style='display:none; background-color:white; position: relative; width:100px;height:50px; border:solid black; right:50px; top:38px; padding:20px;'>\
-							Tags <input type='text' value='' id='topchirp-tags-"+tweet.id+"' />\
-							<input type='button' value='Add' onclick='topchirp_save_tags("+tweet.id+")' />\
-							<input type='button' value='Cancel' onclick='$(\"#topchirp-box-"+tweet.id+"\").hide()' />\
-						</span>";
-				*/
+				html += "  | <span class='pseudolink viaLink' title='Via this tweet'>Via</span> ";
 				html += " \
 					</div> \
 				</div> \
@@ -71,15 +64,31 @@ function Tweet(tweet_id)
 		return text;
 	}
 	
-	this.favorite = function(action)
+	this.favoriteToggle = function()
 	{
+		that = this;
 		
+		text = $("#tweetid-" + that.id + " .favoriteLink").html();
+		if (text === "Favorite")
+			action = "create";
+		else
+			action = "destroy";
+			
 		proxy({
 			type    : "POST",
 			url     : "http://www.twitter.com/favorites/"+action+"/"+this.id+".json",
 			dataType:"json",
 			success : function(response){
-
+				console.log("#tweetid-" + that.id + " .favoriteLink");
+				if (action == "create")
+				{
+					$("#tweetid-" + that.id + " .favoriteLink").html("Unfavorite");
+				}
+				else
+				{
+					// This doesn't work for some reason
+					$("#tweetid-" + that.id + " .favoriteLink").html("Favorite");
+				}
 			}
 		});
 	}

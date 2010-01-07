@@ -14,6 +14,7 @@ div#header {
 
 
 div#navigation {
+	overflow:hidden;
 	float: left;
 	width: 143px;
 	font-size: 12px;
