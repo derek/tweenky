@@ -25,13 +25,13 @@ function Tweet(tweet_id)
 							html += " | in reply to <a href='http://www.twitter.com/" + this.in_reply_to_screen_name + "/status/" + this.in_reply_to_status_id + "' target='_blank'>"+ this.in_reply_to_screen_name + "</a>";
 						}   
 
-						html += " | <span class='pseudolink replyLink' title='Reply to this tweet'>Reply</span> | \
-								<span class='pseudolink dmLink' title='Direct message this user'>Direct</span> | ";
+						html += " | <span class='pseudolink replyLink' title='Reply to this tweet'>Reply</span>";
+						html += " | <span class='pseudolink dmLink' title='Direct message this user'>Direct</span>";
 
-						if   (this.favorited )	html += "<span class='pseudolink favoriteLink' title='Unfavorite this tweet'>Unfavorite</span> | ";
-						else					html += "<span class='pseudolink favoriteLink' title='Favorite this tweet'>Favorite</span> | ";
+						if   (this.favorited )	html += " | <span class='pseudolink favoriteLink' title='Unfavorite this tweet'>Unfavorite</span>";
+						else					html += " | <span class='pseudolink favoriteLink' title='Favorite this tweet'>Favorite</span>";
 
-						html += "<span class='pseudolink retweetLink' title='Retweet this tweet'>Retweet</span>";
+						html += " | <span class='pseudolink retweetLink' title='Retweet this tweet'>Retweet</span>";
 
 				html += "  | <span class='pseudolink viaLink' title='Via this tweet'>Via</span> ";
 				html += " \
