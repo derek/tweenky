@@ -87,25 +87,18 @@ div#footer p {
 }
 
 
-
-
-
-
-
-
-
 .small {
-font-size: 10px;
+	font-size: 10px;
 }
 
 a, .pseudolink {
-color: #4173AF;
-cursor: pointer;
-text-decoration: none;
+	color: #4173AF;
+	cursor: pointer;
+	text-decoration: none;
 }
 
 a:hover, .pseudolink:hover {
-text-decoration: underline;
+	text-decoration: underline;
 }
 
 
@@ -120,16 +113,11 @@ text-decoration: underline;
 	text-align:center;
 }
 
-.arrow-right:before { content:"\25B6 \0020"; }
-.arrow-down:before  { content:"\25BC \0020"; }
-
 #tweetgroups>ul{
 	list-style-type:none;
 	padding:0px 0px 0px 5px;
 	margin:0px;
 }
-
-
 
 .group-list{
 	display:none;
@@ -146,14 +134,14 @@ text-decoration: underline;
 
 /* the overlayed element */ 
 div.overlay { 
-    background-image:url(http://static.mycatholicvoice.com/v4/images/backgrounds/white.png);         
+    background-image:url("http://static.mycatholicvoice.com/v4/images/backgrounds/white.png");         
     display:none; 
     padding:30px; 
 } 
 
 /* default close button positioned on upper right corner */ 
 div.overlay div.close { 
-    background-image:url(http://static.mycatholicvoice.com/v4/images/icons/close.png); 
+    background-image:url("http://static.mycatholicvoice.com/v4/images/icons/close.png"); 
     position:absolute; 
     right:5px; 
     top:5px; 
@@ -166,7 +154,7 @@ div.overlay div.close {
 #login-overlay { 
     width:				400px; 
     height:				280px;
-    background-image:	url(http://static.mycatholicvoice.com/v4/images/backgrounds/apple.png); 
+    background-image:	url("http://static.mycatholicvoice.com/v4/images/backgrounds/apple.png"); 
     color:				#fff;
 	text-align: 		left;
 	vertical-align:		middle;
@@ -281,4 +269,14 @@ div.overlay div.close {
 #tweet{
 	clear:left; 
 	display:none
+}
+
+fieldset.updateTimstamp{
+	border-top:solid 1px #999999;
+}
+
+fieldset.updateTimstamp legend {
+	color:#999999; 
+	padding-left:5px;
+	font-size:10px;
 }

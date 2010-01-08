@@ -507,7 +507,7 @@ function get_timeline(type, timeline, new_search)
 				if (!new_search)
 				{
 					if (tweets.length > 0)
-						$("#tweets").prepend("<fieldset style='border-top:solid 1px #999999;'><legend align='right' style='color:#999999; padding-left:5px;' >"+tweets.length + ' new tweets at '+get_time()+'</legend> </fieldset>');
+						$("#tweets").prepend("<fieldset class='updateTimstamp'><legend align='right'>"+tweets.length + ' new tweets at '+get_time()+'</legend></fieldset>');
 				}
 				else
 				{
@@ -1053,6 +1053,68 @@ function getScrollOffset() {
 	];
 }
 
+function decodeBitly(url)
+{
+	proxy({
+		type    : "GET",
+		url     : "http://api.longurl.org/v2/expand?format=json&url=" + url + "",
+		dataType:"json",
+		success : function(response){
+			var longURL = response["long-url"];
+			$("a[href=" + url + "]").fadeOut(function(){
+				$(this).html(longURL).attr("href", longURL).fadeIn();
+			});
+		}
+	});
+	
+}
+
+function oc(a)
+{
+	var o = {};
+	for(var i=0;i<a.length;i++)
+	{
+		o[a[i]]='';
+	}
+	return o;
+}
+
+// This function creates a new anchor element and uses location
+// properties (inherent) to get the desired URL data. Some String
+// operations are used (to normalize results across browsers).
+ 
+function parseURL(url) {
+    var a =  document.createElement('a');
+    a.href = url;
+    return {
+        source: url,
+        protocol: a.protocol.replace(':',''),
+        host: a.hostname,
+        port: a.port,
+        query: a.search,
+        params: (function(){
+            var ret = {},
+                seg = a.search.replace(/^\?/,'').split('&'),
+                len = seg.length, i = 0, s;
+            for (;i<len;i++) {
+                if (!seg[i]) { continue; }
+                s = seg[i].split('=');
+                ret[s[0]] = s[1];
+            }
+            return ret;
+        })(),
+        file: (a.pathname.match(/\/([^\/?#]+)$/i) || [,''])[1],
+        hash: a.hash.replace('#',''),
+        path: a.pathname.replace(/^([^\/])/,'/$1'),
+        relative: (a.href.match(/tp:\/\/[^\/]+(.+)/) || [,''])[1],
+        segments: a.pathname.replace(/^\//,'').split('/')
+    };
+}
+
+
+
+
+
 $(document).ready(function() {
 	
 	setTimeout(load_tweetgroups, 750);
@@ -1091,11 +1153,18 @@ $(document).ready(function() {
 		var username = $("#tweetid-" + id + " .tweet-author").html();
 		compose_new_tweet("@" + username, id);
 	});
-	
+		
 	$(".dmLink").live("click", function(){
 		var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
 		var username = $("#tweetid-" + id + " .tweet-author").html();
 		compose_new_tweet("d " + username);
+	});
+	
+	$(".tweet a").live("mouseover", function(){
+		url = $(this).attr("href");
+		if(parseURL(url).host in oc(['bit.ly', 'is.gd', 'tinyurl.com', 'ff.im', 'tr.im']) ) {
+			decodeBitly(url);
+		}
 	});
 	
 });
