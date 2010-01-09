@@ -82,12 +82,15 @@ function Tweet(tweet_id)
 				console.log("#tweetid-" + that.id + " .favoriteLink");
 				if (action == "create")
 				{
-					$("#tweetid-" + that.id + " .favoriteLink").html("Unfavorite");
+					$("#tweetid-" + that.id + " .favoriteLink").fadeOut(function(){
+						$(this).html("Unfavorite").fadeIn();
+					});
 				}
 				else
 				{
-					// This doesn't work for some reason
-					$("#tweetid-" + that.id + " .favoriteLink").html("Favorite");
+					$("#tweetid-" + that.id + " .favoriteLink").fadeOut(function(){
+						$(this).html("Favorite").fadeIn();
+					});
 				}
 			}
 		});

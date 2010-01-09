@@ -60,6 +60,9 @@
 		}
 		else if (hash.query || hash.trend)
 		{
+			$("#navigation .selected").removeClass("selected"); // Since there are no navs to highlight
+			$(".group-list:visible").slideUp(); // Since we aren't viewing a group anymore
+			
 			var q = hash.query || hash.trend;
 			$("#save-query").show();
 			$("#saved-searches li a").each(function(){
@@ -314,7 +317,8 @@
 					for (var i in response)
 					{
 						search = response[i];
-						$("#saved-searches .inner").append('<a href="#query=' + search.query + '"><div>'+ search.name +'</div></a>');
+						var q = search.query.replace(/"/g, "%22");
+						$("#saved-searches .inner").append('<a href="#query=' + q + '"><div>'+ search.name +'</div></a>');
 					}
 				}
 				else
@@ -337,7 +341,7 @@
 				for (var i in response.trends)
 				{
 					q = response.trends[i].url.substr( response.trends[i].url.lastIndexOf("=") + 1, response.trends[i].url.length);
-					q = q.replace('"', "%22").replace(' ', "+"); 
+					q = q.replace(/%22/g, "").replace(/#/g, "%23").replace(' ', "+"); 
 				
 					$("#twitter-trends .inner").append('<a href="#trend='+q+'"><div>'+ response.trends[i].name +'</div></a>');
 				}
@@ -994,11 +998,10 @@
 			success : function(response){
 				var longURL = response["long-url"];
 				$("a[href=" + url + "]").fadeOut(function(){
-					$(this).html(longURL).attr("href", longURL).fadeIn();
+					$(this).html(longURL).fadeIn();
 				});
 			}
 		});
-	
 	}
 
 	// Object converter
@@ -1084,7 +1087,7 @@
 		$(".replyLink").live("click", function(){
 			var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
 			var username = $("#tweetid-" + id + " .tweet-author").html();
-			compose_new_tweet("@" + username, id);
+			compose_new_tweet("@" + username + " ", id);
 		});
 		
 		$(".dmLink").live("click", function(){
@@ -1095,7 +1098,7 @@
 	
 		$(".tweet a").live("mouseover", function(){
 			var url = $(this).attr("href");
-			if(parseURL(url).host in oc(['bit.ly', 'is.gd', 'tinyurl.com', 'ff.im', 'tr.im', 'post.ly', 'ping.fm']) ) {
+			if(parseURL(url).host in oc(['bit.ly', 'is.gd', 'tinyurl.com', 'ff.im', 'tr.im', 'post.ly', 'ping.fm']) && url == $(this).html() ) {
 				decodeShortUrl(url);
 			}
 		});

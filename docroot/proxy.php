@@ -47,10 +47,13 @@
 		}	
 	}	
 	$url = $_GET['original_url'];
+	$url = str_replace(' ', "+", $url);
 	$get = $_GET;
 	unset($get['original_url']);
 	if (!empty($get))
 		$url .= "&" . http_build_query($get);
+	//die($url);
+	
 	//die($url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER,	1);
 	curl_setopt($ch, CURLOPT_URL, 				$url);
