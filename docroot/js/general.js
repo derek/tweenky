@@ -1047,6 +1047,10 @@
 	    };
 	}
 	
+	function get_browser_language()
+	{
+		return (navigator.language) ? navigator.language : navigator.userLanguage;
+	}
 	
 	$(document).ready(function()
 	{
@@ -1095,11 +1099,25 @@
 			var username = $("#tweetid-" + id + " .tweet-author").html();
 			compose_new_tweet("d " + username);
 		});
-	
+			
 		$(".tweet a").live("mouseover", function(){
 			var url = $(this).attr("href");
 			if(parseURL(url).host in oc(['bit.ly', 'is.gd', 'tinyurl.com', 'ff.im', 'tr.im', 'post.ly', 'ping.fm']) && url == $(this).html() ) {
 				decodeShortUrl(url);
 			}
+		});
+	
+		$(".tweet .translateLink").live("click", function(){
+			var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
+			var tweet = $("#tweetid-" + id + " .tweet-text").html();
+			var lang = get_browser_language().split("-")[0];
+			
+			google.language.translate(tweet, "", lang, function(result) {
+				if (!result.error) {
+					$("#tweetid-" + id + " .tweet-text").fadeOut(function(){
+						$("#tweetid-" + id + " .tweet-text").html(result.translation).fadeIn();
+					});
+				}
+			});
 		});
 	});

@@ -34,6 +34,7 @@ function Tweet(tweet_id)
 						html += " | <span class='pseudolink retweetLink' title='Retweet this tweet'>Retweet</span>";
 
 				html += "  | <span class='pseudolink viaLink' title='Via this tweet'>Via</span> ";
+				html += "  | <span class='pseudolink translateLink' title='Translate this tweet'>Translate</span> ";
 				html += " \
 					</div> \
 				</div> \

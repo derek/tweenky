@@ -67,7 +67,10 @@
 		<script type="text/javascript" src="/js/jquery/jquery.form.js"></script>
 		<script type="text/javascript" src="/js/general.js"></script>
 		<script type="text/javascript" src="/js/tweet.js"></script>
+	    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+
 		<script type="text/javascript">
+	    	google.load("language", "1");
 			var user_id = '<?= $_SESSION["access_token"]["user_id"]?>';		
 		</script>
 	</head>

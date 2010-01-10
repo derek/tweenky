@@ -62,6 +62,7 @@ unset($_SESSION['oauth_token_secret']);
 
 /* If HTTP response is 200 continue otherwise send to connect page to retry */
 if (200 == $connection->http_code) {
+  //mail("drgath@gmail.com", "Tweenky login - ". $user_data['screen_name'], $_SERVER['REMOTE_ADDR']);
   /* The user has been verified and the access tokens can be saved for future use */
   $_SESSION['status'] = 'verified';
   header('Location: ./index.php');
