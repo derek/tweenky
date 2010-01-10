@@ -129,8 +129,8 @@
 					
 					<? if (isset($_SESSION['access_token']['user_id'])) { ?>
 					<div style="background-color:#D2DBED; padding:10px;">
-						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();" id="compose_tweet">
-							<img alt="thought-bubble" src="/images/thought.png" height="25"> What’s happening? <span onclick="$(this).hide();">[click to tweet]</span>
+						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();  $('#tweet_instructions').hide();" id="compose_tweet">
+							<img alt="thought-bubble" src="/images/thought.png" height="25"> What’s happening? <span id="tweet_instructions" style="font-size:12px;">[click to tweet]</span>
 						</h1>
 						<div style="display:none;" id="new_tweet_box">
 							<div style="width:500px; padding:10px; float:left;">
