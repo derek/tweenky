@@ -1,126 +1,232 @@
-html,body {
-	margin: 0;
-	padding: 0;
-	font-family:"lucida grande",tahoma,verdana,arial,sans-serif
-}
+/*********
+
+	A) Layout
+	
+****/
 
 div#header {
-	height: 55px;
-	width: 100%;
-	background: url("/images/tweenky_header_bg.png") repeat-x;
-	font-size:12px;
+background: url("/images/tweenky_header_bg.png") repeat-x;
+font-size: 12px;
+height: 55px;
+width: 100%;
 }
-
-
 
 div#navigation {
-	overflow:hidden;
-	float: left;
-	width: 143px;
-	font-size: 12px;
-	padding: 0px 0px 5px 5px;
-	border-right:3px solid #D2DBED;
-	background-color:#fdfdfd;
-}
-#navigation .box {
-	margin:6px 0px 0px 0px;
+background-color: #fdfdfd;
+border-right: 3px solid #D2DBED;
+float: left;
+font-size: 13px;
+overflow: hidden;
+padding: 0px 0px 5px 5px;
+width: 182px;
+
 }
 
-#navigation .box .title{
-	font-weight:bold;
-	padding:5px 0px 2px 0px;
-}
-#navigation .box .inner div{
-	border-bottom:solid 1px #D6D9DE;
-	padding:3px 0px 3px 6px;
+div#navigation .box {
+margin: 6px 0px 0px 0px;
 }
 
-#navigation .box .pseudolink{
-	text-decoration:none;
-}
-#navigation .box .inner a div.selected{
-	background-color:#D2DBED;
-	color:black;
-	font-weight:bold;
-}
-#navigation .box .inner a div:hover{
-	background-color:#D2DBED;
-	color:black;
+div#navigation .box .title {
+font-weight: bold;
+padding: 5px 0px 2px 0px;
 }
 
+div#navigation .box .inner div {
+border-bottom: solid 1px #D6D9DE;
+padding: 6px 0px 3px 6px;
+}
 
+div#navigation .box .pseudolink {
+text-decoration: none;
+}
 
+div#navigation .box .inner a div.selected {
+background-color: #D2DBED;
+color: black;
+font-weight: bold;
+}
 
-
-.bold{
-	font-weight:bold;
+div#navigation .box .inner a div:hover {
+background-color: #D2DBED;
+color: black;
 }
 
 
 div#wrapper {
-	float: right;
-	width: 100%;
-	margin-left: -160px
-}
-
-div#container {
-	/*background: url("/images/tweenky_navigation.png") repeat-y;*/
+float: right;
+margin-left: -190px;
+width: 100%;
 }
 
 div#content {
-	margin-left: 143px;
+margin-left: 190px;
 }
 
 div#content p {
-	line-height: 1.4;
+line-height: 1.4;
 }
 
 div#footer {
-	clear: both;
-	width: 100%;
-	color: #FFF
+clear: both;
+color: #FFF;
+width: 100%;
 }
 
 div#footer p {
-	margin: 0;
-	padding: 5px 10px
+margin: 0;
+padding: 5px 10px
 }
 
 
+#loading {
+background-color: yellow;
+font-size: 12px;
+left: 48%;
+padding: 5px;
+position: absolute;
+text-align: center;
+top: -2px;
+width: 200px;
+}
+
+
+
+
+
+/*************
+
+	B) General styles
+
+**********/
+
+html,body {
+margin: 0;
+padding: 0;
+font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+font-size:14px;
+}
+
+.bold {
+font-weight: bold;
+}
+
 .small {
-	font-size: 10px;
+font-size: 10px;
 }
 
 a, .pseudolink {
-	color: #4173AF;
-	cursor: pointer;
-	text-decoration: none;
+color: #4173AF;
+cursor: pointer;
+text-decoration: none;
 }
 
 a:hover, .pseudolink:hover {
-	text-decoration: underline;
+text-decoration: underline;
 }
 
 
-#loading{
-	font-size:12px; 
-	position:absolute;
-	top:-2px;
-	left:48%;
-	background-color:yellow; 
-	width:200px; 
-	padding:5px; 
-	text-align:center;
+#tweetgroups>ul {
+list-style-type: none;
+padding: 0px 0px 0px 5px;
+margin: 0px;
 }
 
-#tweetgroups>ul{
-	list-style-type:none;
-	padding:0px 0px 0px 5px;
-	margin:0px;
+
+
+
+
+/*************
+
+	C) Tweet
+	
+********/
+
+.tweet {
+display: none;
+	/*height:45px;*/
+font-size:13px;
+
+margin:10px;
 }
 
-.group-list{
+.tweet .tweet-image {
+float: left;
+width: 60px;
+height: 60px;
+}
+
+.tweet .tweet-body {
+position:relative;
+left:5px;
+top:3px;
+}
+
+.tweet .tweet-footer {
+	font-size:11px;
+	margin-left:15px;
+}
+
+
+
+
+/***************
+
+	D) Post Box
+	
+***********/
+
+#postBox{
+	background-color:#D2DBED; 
+	padding:10px;
+}
+
+#postBox h1{
+	text-align:left; 
+	font-size:20px; 
+	cursor:pointer
+}
+
+#postBox #new_tweet_box{
 	display:none;
+}
+
+#postBox #tweet_instructions{
+	font-size:12px;
+}
+
+#postBox #new_tweet_box_inner h1{
+text-align:left; 
+font-size:20px; 
+float:right; 
+padding-left:10px;
+}
+#postBox #new_tweet_box_inner{
+	width:500px; 
+	padding:10px; 
+	float:left;
+}
+
+#postBox #services{
+	float:left; 
+	margin:10px 0px 0px 20px;
+}
+
+#postBox textarea#status{
+	width:500px; 
+	height:120px; 
+	font-size:23px; 
+	font-family:arial;
+}
+
+
+/***************
+
+	D) Misc
+	
+**********/
+
+.group-list {
+display: none;
 }
 
 
@@ -133,80 +239,60 @@ a:hover, .pseudolink:hover {
 
 
 /* the overlayed element */ 
-div.overlay { 
-    background-image:url("http://static.mycatholicvoice.com/v4/images/backgrounds/white.png");         
-    display:none; 
-    padding:30px; 
-} 
+div.overlay {
+background-image: url("http://static.mycatholicvoice.com/v4/images/backgrounds/white.png");
+display: none;
+padding: 30px;
+}
 
 /* default close button positioned on upper right corner */ 
-div.overlay div.close { 
-    background-image:url("http://static.mycatholicvoice.com/v4/images/icons/close.png"); 
-    position:absolute; 
-    right:5px; 
-    top:5px; 
-    cursor:pointer; 
-    height:35px; 
-    width:35px; 
+div.overlay div.close {
+background-image: url("http://static.mycatholicvoice.com/v4/images/icons/close.png");
+position: absolute;
+right: 5px;
+top: 5px;
+cursor: pointer;
+height: 35px;
+width: 35px;
 }
 
 
-#login-overlay { 
-    width:				400px; 
-    height:				280px;
-    background-image:	url("http://static.mycatholicvoice.com/v4/images/backgrounds/apple.png"); 
-    color:				#fff;
-	text-align: 		left;
-	vertical-align:		middle;
+#login-overlay {
+width: 400px;
+height: 280px;
+background-image: url("http://static.mycatholicvoice.com/v4/images/backgrounds/apple.png");
+color: #fff;
+text-align: left;
+vertical-align: middle;
 }
 
 
-#login-overlay label{
-	float: left;
-	width: 130px;
-	font-weight: bold;
+#login-overlay label {
+float: left;
+width: 130px;
+font-weight: bold;
 }
 
 #login-overlay input,
-#login-overlay span{
-	width: 170px;
-	margin-bottom: 5px;
+#login-overlay span {
+width: 170px;
+margin-bottom: 5px;
 }
 
-#login-overlay #invalid_login{
-	color:#FF4F4F; 
-	font-weight:bold; 
-	font-size:14px; 
-	margin:0px 0px 0px 40px;
-	display:none;
+#login-overlay #invalid_login {
+color: #FF4F4F;
+font-weight: bold;
+font-size: 14px;
+margin: 0px 0px 0px 40px;
+display: none;
 }
 
-#login-overlay br{
-	clear: left;
+#login-overlay br {
+clear: left;
 }
 
 
 
-
-.tweet{
-	margin:		0px 0px 10px 10px;
-	display:	none;
-	padding:	8px 5px 8px 8px;
-	height:45px;
-	font-size:13px;
-}
-
-.tweet .tweet-image{
-	float:		left;
-	width:		65px; 
-	height:		60px; 
-}
-
-.tweet .tweet-body{
-}
-
-.tweet .tweet-footer{
-}
 
 
 #facebox {
@@ -216,67 +302,64 @@ div.overlay div.close {
 
 	/* standard decorations */
 	width:400px;
-	background-color:#fff;
-	border:10px solid #666;
+background-color: #fff;
+border: 10px solid #666;
 
 	/* for modern browsers use semi-transparent color on the border. nice! */
 	border:10px solid rgba(82, 82, 82, 0.698);
 
 	/* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
 	-moz-border-radius:8px;
-	-webkit-border-radius:8px;
+-webkit-border-radius: 8px;
 }
 
 #facebox div {
-	padding:10px;
-	border:1px solid #3B5998;
-	font-family:"lucida grande",tahoma,verdana,arial,sans-serif
+padding: 10px;
+border: 1px solid #3B5998;
+font-family: "lucida grande",tahoma,verdana,arial,sans-serif
 }
 
 #facebox h2 {
-	margin:-11px;
-	margin-bottom:0px;
-	color:#fff;
-	background-color:#6D84B4;
-	padding:5px 10px;
-	border:1px solid #3B5998;
-	font-size:20px;
+margin: -11px;
+margin-bottom: 0px;
+color: #fff;
+background-color: #6D84B4;
+padding: 5px 10px;
+border: 1px solid #3B5998;
+font-size: 20px;
 }
 
-#whatthetrend{
-	display:none;
-	background-color:blue;
-	color:#666;
+#whatthetrend {
+display: none;
+background-color: blue;
+color: #666;
 	/* standard decorations */
 	
 	background-color:#B7D6E8;
-	border:5px solid #666;
+border: 5px solid #666;
 
 	/* for modern browsers use semi-transparent color on the border. nice! */
 	border:5px solid rgba(82, 82, 82, 0.698);
 
 	/* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
 	-moz-border-radius:8px;
-	-webkit-border-radius:8px;
-	padding:5px;
-	margin:5px 50px 5px 50px;
+-webkit-border-radius: 8px;
+padding: 5px;
+margin: 5px 50px 5px 50px;
 }
 
-#whatthetrend .pseudolink{
-	font-size:10px;
+#whatthetrend .pseudolink {
+font-size: 10px;
 }
 
-#tweet{
-	clear:left; 
-	display:none
-}
 
-fieldset.updateTimstamp{
-	border-top:solid 1px #999999;
+
+fieldset.updateTimstamp {
+border-top: solid 1px #999999;
 }
 
 fieldset.updateTimstamp legend {
-	color:#999999; 
-	padding-left:5px;
-	font-size:10px;
+color: #999999;
+padding-left: 5px;
+font-size: 10px;
 }

@@ -131,53 +131,56 @@
 				<div id="content">
 					
 					<? if (isset($_SESSION['access_token']['user_id'])) { ?>
-					<div style="background-color:#D2DBED; padding:10px;">
-						<h1 style="text-align:left; font-size:20px; cursor:pointer" class="" onclick="$('#new_tweet_box').slideToggle();  $('#tweet_instructions').hide();" id="compose_tweet">
-							<img alt="thought-bubble" src="/images/thought.png" height="25"> What’s happening? <span id="tweet_instructions" style="font-size:12px;">[click to tweet]</span>
-						</h1>
-						<div style="display:none;" id="new_tweet_box">
-							<div style="width:500px; padding:10px; float:left;">
-								<form method="POST" onsubmit="send_new_tweet(); return false;" action="">
-									<div>
-										<input type="hidden" id="in_reply_to_id"  name="in_reply_to_id" value="">
-
-										<textarea id="status" style="width:500px; height:120px; font-size:23px; font-family:arial;" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" cols="20" rows="10"></textarea>
-										<h1 style="text-align:left; font-size:20px; float:right; padding-left:10px;" id="character_count">0</h1>
-										<input type="submit" value="Update" style="font-size:16px; float:right;">
-									</div>
-								</form>
+						<div id="postBox">
+							<h1 onclick="$('#new_tweet_box').slideToggle();  $('#tweet_instructions').hide();" id="compose_tweet">
+								<img alt="thought-bubble" src="/images/thought.png" height="25"> What’s happening? <span id="tweet_instructions">[click to tweet]</span>
+							</h1>
+							<div id="new_tweet_box">
+								<div style="new_tweet_box_inner">
+									<form method="POST" onsubmit="send_new_tweet(); return false;" action="">
+										<div>
+											<input type="hidden" id="in_reply_to_id"  name="in_reply_to_id" value="">
+											<textarea id="status" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" cols="20" rows="10"></textarea>
+											<h1 id="character_count">0</h1>
+											<input type="submit" value="Update" style="font-size:16px; float:right;">
+										</div>
+									</form>
+								</div>
+								
+								<div id="services">
+									<h3>URL Shorteners</h3>
+									<ul>
+										<li>
+											<span class="pseudolink" onclick="$('#tiny-info').toggle();">TinyURL</span>
+											<div id="tiny-info" style="display:none">
+												URL: <input type="text" id="url-to-tiny" value="http://"><input type="button" value="Shorten URL" onclick="service_tinyurl()">
+											</div>	
+										</li>
+									
+										<li>
+											<span class="pseudolink" onclick="$('#trim-info').toggle();">Tr.im</span>
+											<div id="trim-info" style="display:none">
+												URL: <input type="text" id="url-to-trim" value="http://"><input type="button" value="Shorten URL" onclick="service_trim()">
+											</div>	
+										</li>
+									
+										<li>
+											<span class="pseudolink" onclick="$('#bitly-info').toggle();">Bit.ly</span>
+											<div id="bitly-info" style="display:none">
+												URL: <input type="text" id="url-to-bitly" value="http://"><input type="button" value="Shorten URL" onclick="service_bitly()">
+											</div>	
+										</li>
+									</ul>
+								</div>
+								<div style="clear:both"></div>
 							</div>
-							<div style="float:left; margin:10px 0px 0px 20px;">
-								<h3>URL Shorteners</h3>
-
-								<ul>
-									<li>
-										<span class="pseudolink" onclick="$('#tiny-info').toggle();">TinyURL</span>
-										<div id="tiny-info" style="display:none">
-											URL: <input type="text" id="url-to-tiny" value="http://"><input type="button" value="Shorten URL" onclick="service_tinyurl()">
-										</div>	
-									</li>
-									<li>
-
-										<span class="pseudolink" onclick="$('#trim-info').toggle();">Tr.im</span>
-										<div id="trim-info" style="display:none">
-											URL: <input type="text" id="url-to-trim" value="http://"><input type="button" value="Shorten URL" onclick="service_trim()">
-										</div>	
-									</li>
-									<li>
-										<span class="pseudolink" onclick="$('#bitly-info').toggle();">Bit.ly</span>
-										<div id="bitly-info" style="display:none">
-
-											URL: <input type="text" id="url-to-bitly" value="http://"><input type="button" value="Shorten URL" onclick="service_bitly()">
-										</div>	
-									</li>
-																	</ul>
-							</div>
-							<div style="clear:both"></div>
 						</div>
-					</div>
 					<? } ?>
-					<div id="whatthetrend"><a href="http://www.whatthetrend.com" target="_blank">WhatTheTrend.com</a> says this trend is: <span id="trend-text"></span> <span class="pseudolink" onclick="$(this).parent().fadeOut();">hide</span></div>
+					
+					<div id="whatthetrend">
+						<a href="http://www.whatthetrend.com" target="_blank">WhatTheTrend.com</a> says this trend is: <span id="trend-text"></span> <span class="pseudolink" onclick="$(this).parent().fadeOut();">hide</span>
+					</div>
+					
 					<div id="tweets"></div>
 
 				</div>
@@ -189,7 +192,7 @@
 					<div class="title">Twitter</div>
 					<div class="inner">
 						<? if (isset($_SESSION['access_token']['user_id'])) { ?>
-							<a href="#timeline=friends"><div>Home</div></a>
+							<a href="#timeline=friends" id="homeLink"><div>Home</div></a>
 							<a href="#timeline=replies"><div>Mentions</div></a>
 							<a href="#timeline=archive"><div>Sent</div></a>
 							<a href="#timeline=favorites"><div>Favorites</div></a>

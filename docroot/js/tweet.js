@@ -4,21 +4,23 @@ function Tweet(tweet_id)
 	
 	this.get_html = function()
 	{
-		//user_link = "http://www.twitter.com/"+tweet.from_screen_name;
 		user_link = "http://www.twitter.com/"+this.from_screen_name;
 		external_url = user_link + "/statuses/" + this.id;
 
 		html = "\
 			<div class='tweet' id='tweetid-" + this.id + "'> \
-				<div><div id='reply-to-tweetid-" + this.id + "'></div></div> \
 				<div> \
-					<a  class='tweet-image fancybox' href='" + user_link + "' class='timestamp' target='_blank'> \
+					<a  class='tweet-image' href='" + user_link + "' class='timestamp' target='_blank'> \
 						<img src='" + this.from_profile_image_url + "' height='60' width='60'> \
 					</a> \
 				</div> \
 				<div class='tweet-body'> \
-					<p class='tweet-tweet'><a href='" + user_link + "' class='tweet-author' target='_blank'>" + this.from_screen_name + "</a>: <span class='tweet-text'>" + this.wrap() +"</span></p> \
-					<div class='tweet-footer'><a href='" + external_url + "' title='" + (this.date_created) + "' class='timestamp' target='_blank'>" + relative_time(this.date_created) + "</a> " + ((this.source != '') ? "from "+ this.source : "");
+					<p class='tweet-tweet'> \
+						<a href='" + user_link + "' class='tweet-author' target='_blank'>" + this.from_screen_name + "</a>: <span class='tweet-text'>" + this.wrap() +"</span> \
+					</p> \
+					<div class='tweet-footer'>";
+					
+						html +=	"<a href='" + external_url + "' title='" + (this.date_created) + "' class='timestamp' target='_blank'>" + relative_time(this.date_created) + "</a> " + ((this.source != '') ? "from "+ this.source : "");
 
 						if (this.in_reply_to_screen_name)
 						{
@@ -28,19 +30,21 @@ function Tweet(tweet_id)
 						html += " | <span class='pseudolink replyLink' title='Reply to this tweet'>Reply</span>";
 						html += " | <span class='pseudolink dmLink' title='Direct message this user'>Direct</span>";
 
-						if   (this.favorited )	html += " | <span class='pseudolink favoriteLink' title='Unfavorite this tweet'>Unfavorite</span>";
-						else					html += " | <span class='pseudolink favoriteLink' title='Favorite this tweet'>Favorite</span>";
+						if (this.favorited )	
+							html += " | <span class='pseudolink favoriteLink' title='Unfavorite this tweet'>Unfavorite</span>";
+						else					
+							html += " | <span class='pseudolink favoriteLink' title='Favorite this tweet'>Favorite</span>";
 
 						html += " | <span class='pseudolink retweetLink' title='Retweet this tweet'>Retweet</span>";
 
-				html += "  | <span class='pseudolink viaLink' title='Via this tweet'>Via</span> ";
-				html += "  | <span class='pseudolink translateLink' title='Translate this tweet'>Translate</span> ";
-				html += " \
-					</div> \
+						html += "  | <span class='pseudolink viaLink' title='Via this tweet'>Via</span> ";
+						html += "  | <span class='pseudolink translateLink' title='Translate this tweet'>Translate</span> ";
+				
+				html += "</div> \
 				</div> \
-				<div class='clear-fix'></div> \
-			</div> \
-		";
+				<div style='clear:both'></div> \
+			</div>";
+			
 		return html;                
 	}
 	

@@ -28,6 +28,7 @@
 		}
 		else if (window.location.hash === "")
 		{
+			$("#homeLink div").click();
 			window.location.hash = "timeline=friends";
 		}
 	
@@ -332,18 +333,23 @@
 	function reset_trends()
 	{
 		proxy({
-			url: "http://search.twitter.com/trends.json",
+			url: "http://search.twitter.com/trends/current.json",
 			dataType: "json", 
 			success: function(response){
-				var q;
-			
-				$("#twitter-trends .inner").html("");
-				for (var i in response.trends)
+				$("#twitter-trends .inner").empty();
+				for (var timestamp in response.trends)
 				{
-					q = response.trends[i].url.substr( response.trends[i].url.lastIndexOf("=") + 1, response.trends[i].url.length);
-					q = q.replace(/%22/g, "").replace(/#/g, "%23").replace(' ', "+"); 
-				
-					$("#twitter-trends .inner").append('<a href="#trend='+q+'"><div>'+ response.trends[i].name +'</div></a>');
+					for (var i in response.trends[timestamp])
+					{
+						var trend = response.trends[timestamp][i];
+						trend.query = trend.query.replace(/#/g, "%23");
+						//console.log(i);
+						//console.log(response.trends[i]);
+					//	var q = trend.url.substr( response.trends[i].url.lastIndexOf("=") + 1, response.trends[i].url.length);
+					//	q = q.replace(/%22/g, "").replace(/#/g, "%23").replace(' ', "+"); 
+
+						$("#twitter-trends .inner").append('<a href="#trend='+trend.query+'"><div>'+ trend.name +'</div></a>');	
+					}
 				}
 			}
 		});
