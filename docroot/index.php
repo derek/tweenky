@@ -49,6 +49,11 @@
 	
 	//print_r($_SESSION);die();
 	//print_r($_COOKIES);die();
+	
+	
+	if (isset($_SESSION['access_token']['screen_name']))
+		mail("drgath@gmail.com", "Tweenky Login - " . $_SESSION['access_token']['screen_name'], $_SERVER['REMOTE_ADDR']);
+	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
