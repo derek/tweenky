@@ -136,13 +136,13 @@
 								<img alt="thought-bubble" src="/images/thought.png" height="25"> What’s happening? <span id="tweet_instructions">[click to tweet]</span>
 							</h1>
 							<div id="new_tweet_box">
-								<div style="new_tweet_box_inner">
+								<div id="new_tweet_box_inner">
 									<form method="POST" onsubmit="send_new_tweet(); return false;" action="">
 										<div>
-											<input type="hidden" id="in_reply_to_id"  name="in_reply_to_id" value="">
+											<input type="hidden" id="in_reply_to_id"  name="in_reply_to_id" value=""></input>
 											<textarea id="status" onKeyDown="textCounter(this)" onKeyUp="textCounter(this)" cols="20" rows="10"></textarea>
 											<h1 id="character_count">0</h1>
-											<input type="submit" value="Update" style="font-size:16px; float:right;">
+											<input type="submit" value="Update" id="submitNewTweet">
 										</div>
 									</form>
 								</div>

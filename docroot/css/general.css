@@ -200,6 +200,12 @@ font-size:20px;
 float:right; 
 padding-left:10px;
 }
+
+#postBox #new_tweet_box_inner #submitNewTweet{
+	font-size:16px; 
+	float:right;
+}
+
 #postBox #new_tweet_box_inner{
 	width:500px; 
 	padding:10px; 

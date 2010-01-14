@@ -966,7 +966,7 @@
 			success : function(response){
 				if (via)
 				{
-					compose_new_tweet(response.text + " (via @"+response.user.screen_name+")");
+					compose_new_tweet(response.text + " /via @"+response.user.screen_name);
 				}
 				else
 				{	
@@ -1058,72 +1058,71 @@
 		return (navigator.language) ? navigator.language : navigator.userLanguage;
 	}
 	
-	$(document).ready(function()
-	{
-		// auto-load stuff
-		setTimeout(load_lists, 750);
-		setTimeout(load_saved_searches, 1000);
-		setTimeout(reset_trends, 2000);
 	
-		// Timers for continual updates
-		setInterval(check_state, 50);
-		setInterval(recalculate_timestamps, 60000 );
-		setInterval(show_hidden_tweets, 700);
-		setInterval(cleanup, 6000);
-		setInterval(reset_trends, 60000);
+	
+	// auto-load stuff
+	setTimeout(load_lists, 750);
+	setTimeout(load_saved_searches, 1000);
+	setTimeout(reset_trends, 2000);
+
+	// Timers for continual updates
+	setInterval(check_state, 50);
+	setInterval(recalculate_timestamps, 60000 );
+	setInterval(show_hidden_tweets, 700);
+	setInterval(cleanup, 6000);
+	setInterval(reset_trends, 60000);
+	
+	// Action handlers
+	$("#navigation a div").live("click", function(){
+		$("#navigation .selected").removeClass("selected");
+		$(this).addClass("selected");
+	});
+	
+	$(".favoriteLink").live("click", function(){
+		var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
+		var tweet = new Tweet(id);
+		tweet.favoriteToggle();
+	});
+
+	$(".retweetLink").live("click", function(){
+		var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
+		retweetHandler(id, false);
+	});
+
+	$(".viaLink").live("click", function(){
+		var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
+		retweetHandler(id, true);
+	});
+
+	$(".replyLink").live("click", function(){
+		var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
+		var username = $("#tweetid-" + id + " .tweet-author").html();
+		compose_new_tweet("@" + username + " ", id);
+	});
+	
+	$(".dmLink").live("click", function(){
+		var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
+		var username = $("#tweetid-" + id + " .tweet-author").html();
+		compose_new_tweet("d " + username);
+	});
 		
-		// Action handlers
-		$("#navigation a div").live("click", function(){
-			$("#navigation .selected").removeClass("selected");
-			$(this).addClass("selected");
-		});
+	$(".tweet a").live("mouseover", function(){
+		var url = $(this).attr("href");
+		if(parseURL(url).host in oc(['bit.ly', 'is.gd', 'tinyurl.com', 'ff.im', 'tr.im', 'post.ly', 'ping.fm']) && url == $(this).html() ) {
+			decodeShortUrl(url);
+		}
+	});
+
+	$(".tweet .translateLink").live("click", function(){
+		var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
+		var tweet = $("#tweetid-" + id + " .tweet-text").html();
+		var lang = get_browser_language().split("-")[0];
 		
-		$(".favoriteLink").live("click", function(){
-			var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
-			var tweet = new Tweet(id);
-			tweet.favoriteToggle();
-		});
-	
-		$(".retweetLink").live("click", function(){
-			var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
-			retweetHandler(id, false);
-		});
-	
-		$(".viaLink").live("click", function(){
-			var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
-			retweetHandler(id, true);
-		});
-	
-		$(".replyLink").live("click", function(){
-			var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
-			var username = $("#tweetid-" + id + " .tweet-author").html();
-			compose_new_tweet("@" + username + " ", id);
-		});
-		
-		$(".dmLink").live("click", function(){
-			var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
-			var username = $("#tweetid-" + id + " .tweet-author").html();
-			compose_new_tweet("d " + username);
-		});
-			
-		$(".tweet a").live("mouseover", function(){
-			var url = $(this).attr("href");
-			if(parseURL(url).host in oc(['bit.ly', 'is.gd', 'tinyurl.com', 'ff.im', 'tr.im', 'post.ly', 'ping.fm']) && url == $(this).html() ) {
-				decodeShortUrl(url);
+		google.language.translate(tweet, "", lang, function(result) {
+			if (!result.error) {
+				$("#tweetid-" + id + " .tweet-text").fadeOut(function(){
+					$("#tweetid-" + id + " .tweet-text").html(result.translation).fadeIn();
+				});
 			}
-		});
-	
-		$(".tweet .translateLink").live("click", function(){
-			var id = $(this).parents(".tweet").get(0).id.replace("tweetid-", "");
-			var tweet = $("#tweetid-" + id + " .tweet-text").html();
-			var lang = get_browser_language().split("-")[0];
-			
-			google.language.translate(tweet, "", lang, function(result) {
-				if (!result.error) {
-					$("#tweetid-" + id + " .tweet-text").fadeOut(function(){
-						$("#tweetid-" + id + " .tweet-text").html(result.translation).fadeIn();
-					});
-				}
-			});
 		});
 	});
