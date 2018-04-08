@@ -1,0 +1,52 @@
+8
+
+dir
+304
+http://svn.assembla.com/svn/twitter_thingy/trunk/scripts/tests
+http://svn.assembla.com/svn/twitter_thingy
+
+
+
+2008-07-14T03:14:47.959825Z
+36
+drgath
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e0e46c49-be69-4f5a-ad62-21024a331aea
+
+regex.php
+file
+
+
+
+
+2008-07-23T04:14:56.000000Z
+af91ed1e9c6fcaeb9334041af3821172
+2008-07-14T03:14:47.959825Z
+36
+drgath
+
+signup_test.php
+file
+
+
+
+
+2008-07-23T04:14:56.000000Z
+661fa39d4ab24b936cf6809d0599ee4a
+2008-07-14T03:14:47.959825Z
+36
+drgath
+

@@ -1,0 +1,378 @@
+/************************
+	
+	SITE: www.tweenky.com
+	
+	
+	CONTENTS:
+	
+		SECTION 1: 	GENERAL TAG/CLASS STYLES
+		
+		SECTION 2: 	LAYOUT
+			a) IDs
+			b) Classes
+			
+		SECTION 3: 	LEFT COLUMN
+			a) Favorites
+			b) Folders
+			c) Hot Topics
+
+		SECTION 4: 	CONTENT COLUMN
+			a) Beta Info
+			b) Tweet List
+
+
+
+	COLORS:
+	
+		Twitter aqua: 	#9AE4E8
+		Twitter apple: 	#E0FF92
+		Baby Blue: 		#C3D9FF
+		Pink:			#FFBFBF
+		Light Green:	#B5EDBC
+
+*************************/
+
+
+	/**
+		SECTION 1: GENERAL TAG/CLASS STYLES
+	**/
+	body{
+		font-family:	lucida grande, arial, sans-serif;
+		color:			#333333;
+		text-align:		center;
+		background:		#FFFFFF;
+		margin:			0px;
+		padding:		0px;
+	}
+
+
+	a, .pseudolink 		{ color: #0000CC; cursor: pointer; text-decoration: underline;}
+	a img				{ border:none; }
+	b					{ font-size: 110%; }
+
+	.bold				{ font-weight:bold; }
+	.clear-fix			{ clear:both; }
+	.hidden				{ display:none; }
+
+	.right-arrow:before	{ content:"\25B6 \0020"; }
+	.down-arrow:before	{ content:"\25BC \0020"; }
+	.checkmark:before	{ content:"\2714 \00A0"; }
+
+
+
+
+
+
+
+
+
+	/**
+		SECTION 2: LAYOUT
+	**/
+	
+
+		#topsection{
+			width:980px;
+		}
+
+		#topsection a{
+		}
+		
+		
+		#maincontainer{
+			width:		1000px;
+			margin:		10px auto 10px auto;
+			padding:	0px;
+			text-align:	left;
+		}
+
+		#leftcolumn{
+			float: 		left;
+			width: 		200px;
+			padding:	0px 0px 0px 10px;
+		}
+
+		#contentwrapper{
+			float:		right;
+			width: 		780px;
+			margin: 	0px 0px 0px 10px;
+		}
+
+		#footer{
+			clear: 		both;
+			width:		100%;
+			background: #C3D9FF;
+			background: #ffffff;
+			text-align: right;
+			color: 		#000000;
+			font-size:	12px;
+		}
+
+		/* CLASSES */
+
+		.section{
+			margin:		0px 0px 10px 0px;
+
+		}
+		
+		.section, .section .footer {
+			padding:	3px;
+			background: #C3D9FF;
+		}
+		
+		.section .footer {
+			font-weight:bold;
+		}
+		
+		.section .title.right-arrow,
+		.section .title.down-arrow{
+			cursor: 	pointer;
+		}
+		.section .title.right-arrow,
+		.section .title.down-arrow,
+		.section .header,
+		.section .title{
+			margin:		3px;
+			font-size:	13px;
+			font-weight:bold;
+		}
+
+		.innertube{
+			padding:	5px;
+			background:	white;
+		}
+		
+
+
+
+
+
+
+
+
+
+
+	/**
+		SECTION 3: LEFT COLUMN
+	**/
+
+	#leftcolumn .section
+	{
+	}
+
+	
+	#leftcolumn .section ol,
+	#leftcolumn .section ul{
+			list-style:	none;
+			padding:	0px;
+			margin: 	0px 0px 0px 10px;
+	}
+
+	#leftcolumn .section .footer{
+		font-size:		10px;
+		text-align:		right;
+	}
+
+
+	
+		/*	FOLDERS */
+		#folders li ul li{
+			margin:		0px 10px 0px 13px;
+		}
+		#folders ol .folder img{
+			position:	relative;
+			top:		4px;
+		}
+		#folders ol .folder-content{
+			list-style:	none;
+			/*display:none;*/
+		}
+	
+	
+	
+		/*	HOT TOPICS */
+		#hot-topics li{
+		}
+
+
+
+
+		.query-selected{
+			font-weight:bold;
+		}
+
+		.query{
+			margin:		5px 0px 0px 0px;
+		}
+		.query, .small{
+			font-size:	12px;
+		}
+
+
+
+		#query-list{
+			margin:		0px 10px 0px 0px;
+			overflow:	hidden;
+		}
+		
+		#query-detail, #query-detail .footer{
+			background: #C3D9FF;
+		}
+		
+		#query-detail-toolbar{
+			padding:	5px;
+			font-size:	13px;
+		}
+
+		#query-list{
+			margin:		0px 0px 0px 0px; 
+			padding:	0px 0px 0px 0px;;
+		}
+
+
+
+
+
+
+
+
+
+
+
+	/**
+		SECTION 4: CONTENT COLUMN
+	**/
+		
+		#contentwrapper .section{
+		
+		}
+
+		#leftcolumn .section .innertube{
+		}
+		
+		/*	BETA INFO */
+		#beta-info{
+			background: 	#FFBFBF;
+		}
+	
+		/*	UPDATE STATUS */
+		#update-status{
+			background: 	#EAEFBD;
+		}
+		
+		/*	SETTINGS MENU */
+		#settings{
+			background: 	#FAD163;
+		}
+		
+		#settings .innertube{
+			background: 	#FFF7D7;
+			
+		}
+		
+		/*	TWITTER DOWN */
+		#twitter-down{
+			background: 	#FFBFBF;
+		}
+
+		#update-status textarea{
+			font-family:	lucida grande, arial, sans-serif;
+			font-size:		22px;
+		}
+		
+		.toolbar{
+			margin:			5px 5px 2px 5px;
+		}
+		
+		.toolbar li{
+			display:		inline;
+			font-size:		12px;
+			padding:		3px 10px 3px 10px;
+		}
+		
+		.toolbar ul .selected{
+			background-color:#FFF7D7;
+		}
+
+
+		#profile-info{
+			background:#F7F7F7;
+		}
+		
+		#profile-info .profile-info-image{
+			float:	left;
+			padding:0px 10px 0px 0px;
+		}
+		#profile-info .profile-info-stats{
+			float:	left; 
+			width:	450px;
+		}
+
+		#profile-info .profile-info-actions{
+			float:	right; 
+			width:	150px;
+			padding:10px;
+		}
+
+		#profile-info .profile-info-actions button{
+			margin:5px;
+		}
+
+
+
+
+		/* TWEETS */
+		
+		.tweet{
+			padding:		8px 5px 8px 8px; 
+			border-bottom:	dashed 1px #999999;
+		}
+
+		.tweet .tweet-image{
+			float:		left;
+			width:		55px; 
+			height:		50px; 
+		}
+
+		.tweet .tweet-body{
+			color:		#000000; 
+			font-size:	13px;
+			margin:		0px;
+			float:		right; 
+			width:		92%;
+		}
+
+		.tweet .tweet-footer{
+			color:		#999999; 
+			font-size:	11px; 
+			margin:		13px 0px 0px 0px;
+		}
+		
+		.tweet-unread{
+			background-color:#FFF7DF;
+		}
+
+		
+		
+		.translation-box{
+		}
+		.translation-box .gBranding{
+			text-align:	right;
+		}
+
+		#content-settings .innertube ul{
+			margin:		10px 10px 10px 20px;
+			list-style:	none;
+		}
+
+		#content-settings .innertube ul li{
+			margin-bottom:	10px;
+		}
+
+		#content-settings .settings-menu .title{
+			font-weight:	bold;
+		}
+
+		#content-settings .toolbar a{
+			font-weight:	bold;
+		}

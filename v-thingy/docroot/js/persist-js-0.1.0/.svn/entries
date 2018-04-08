@@ -1,0 +1,134 @@
+8
+
+dir
+304
+http://svn.assembla.com/svn/twitter_thingy/trunk/docroot/js/persist-js-0.1.0
+http://svn.assembla.com/svn/twitter_thingy
+
+
+
+2008-10-21T17:57:19.595220Z
+304
+drgath
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e0e46c49-be69-4f5a-ad62-21024a331aea
+
+test
+dir
+
+.hgignore
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+82969660a3c4f7c1e02b73ace70443a8
+2008-10-21T17:57:19.595220Z
+304
+drgath
+
+.hg_archival.txt
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+4f91938c317046f426d67701fd25dcda
+2008-10-21T17:57:19.595220Z
+304
+drgath
+
+persist.js
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+7f612616f2b4a170042edb51f906c9d4
+2008-10-21T17:57:19.595220Z
+304
+drgath
+
+TODO
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+f7883d906a1ceab84e18f0201d77c333
+2008-10-21T17:57:19.595220Z
+304
+drgath
+
+persist-min.js
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+1ed8337bd22efad3bd98fc77ec448f4d
+2008-10-21T17:57:19.595220Z
+304
+drgath
+
+extras
+dir
+
+persist.swf
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+e2af9af00307e3f25d1cd77106e55a13
+2008-10-21T17:57:19.595220Z
+304
+drgath
+has-props
+
+COPYING
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+5f0d72e3b1bcdb76664628e6fa757587
+2008-10-21T17:57:19.595220Z
+304
+drgath
+
+flash
+dir
+
+README
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+ca724268793dc9e0940a37eab0edbddd
+2008-10-21T17:57:19.595220Z
+304
+drgath
+

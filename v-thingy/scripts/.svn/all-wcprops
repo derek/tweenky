@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/twitter_thingy/!svn/ver/284/trunk/scripts
+END
+xmpp_listener.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/twitter_thingy/!svn/ver/244/trunk/scripts/xmpp_listener.php
+END
+clear_db.php
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/twitter_thingy/!svn/ver/171/trunk/scripts/clear_db.php
+END
+db.sql
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/twitter_thingy/!svn/ver/204/trunk/scripts/db.sql
+END
+irc_bot.php
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/twitter_thingy/!svn/ver/280/trunk/scripts/irc_bot.php
+END
+send_notifications.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/twitter_thingy/!svn/ver/278/trunk/scripts/send_notifications.php
+END
+feed_reader.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/twitter_thingy/!svn/ver/266/trunk/scripts/feed_reader.php
+END
+update_applications.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/twitter_thingy/!svn/ver/284/trunk/scripts/update_applications.php
+END

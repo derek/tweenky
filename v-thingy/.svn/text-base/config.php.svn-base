@@ -1,0 +1,161 @@
+<?  
+	if (isset($_SERVER['SHELL']))
+	{
+		if (strstr(__FILE__, "/home/derek/tweenky2/trunk/"))
+		{
+			define("ENVIRONMENT", "ddev");
+		}
+		else if (strstr(__FILE__, "/home/derek/beta.tweenky.com/"))
+		{
+			define("ENVIRONMENT", "beta");
+		}
+		else if (strstr(__FILE__, "/home/derek/v3.tweenky.com/"))
+		{
+			define("ENVIRONMENT", "v3");
+		}
+	} 
+	else
+	{
+		if ($_SERVER['HTTP_HOST'] == "ddev.tweenky.com")
+		{
+			define("ENVIRONMENT", "ddev");
+		}
+		elseif ($_SERVER['HTTP_HOST'] == "beta.tweenky.com")
+		{
+			define("ENVIRONMENT", "beta");
+		}
+		elseif ($_SERVER['HTTP_HOST'] == "v3.tweenky.com")
+		{
+			define("ENVIRONMENT", "v3");
+		}
+	}
+
+	switch(ENVIRONMENT)
+	{
+		case "ddev":
+			define('DB_DATABASE', 'tweenky-dev');
+			break;
+		
+		case "beta":
+			define('DB_DATABASE', 'tweenky-prod');
+			break;
+		
+		case "v3":
+			define('DB_DATABASE', 'tweenky-sparkle');
+			break;
+		
+		default:
+			die("Invalid Tweenky profile");
+			break;
+	}
+
+	require_once("lib/twitter.php");
+	require_once("lib/identica.php");
+	require_once('lib/magpierss-0.72/rss_fetch.inc');
+	require_once('lib/xmpphp/XMPPHP/XMPP.php');
+	require_once("lib/adodb5/adodb.inc.php");
+	include_once('lib/simplepie.inc.php');
+	require_once('lib/sqs.client.php');
+	require_once('lib/simple_openid/class.openid.v3.php');
+
+	require_once("models/user.php");
+	require_once("models/subscription.php");
+	require_once("models/query.php");
+	require_once("models/folder.php");	
+	require_once("models/tweet.php");	
+	require_once("models/notification.php");	
+	require_once("models/profile.php");
+	
+	require_once("models/utility.php");
+	require_once("models/convert.php");
+	require_once("models/session.php");
+
+	define('AWS_ACCESS_KEY_ID',		'064YCC57H9GEQZTAY6G2');
+	define('AWS_SECRET_ACCESS_KEY',	'W+Zhyt5gieqVO8mWFjWe8IDYv+kiWgkiBPDUmn0b');
+		
+	define("IS_TWITTER_DOWN", FALSE);
+	define("TWITTER_MAX_CONNECT_SECONDS", 5);
+	define("TWITTER_MAX_WAIT_SECONDS", 5);
+	
+	define("IDENTICA_INTERVAL", 30);
+	define("SUMMIZE_INTERVAL", 30);
+	
+	define("SESSION_LIFETIME", 60*60*24*7);
+	
+	# General constants
+	define("BASE_URL", "http://".$_SERVER['HTTP_HOST']."/");
+	
+	# Magpie constants
+	define('MAGPIE_USER_AGENT', "www.tweenky.com - drgath@gmail.com");
+	define('MAGPIE_CACHE_AGE', 0);
+	define('MAGPIE_CACHE_ON', false);
+	define('MAGPIE_INPUT_ENCODING', 'UTF-8');
+	define('MAGPIE_OUTPUT_ENCODING', 'UTF-8');
+	
+	# Database constants 
+	define('DB_HOST', 		'localhost');
+	define('DB_USER', 		'root');
+	define('DB_PASSWORD', 	'ca558');
+	
+	$GLOBALS['DB'] = new Adodb();
+
+	session_cache_expire(600);
+	$Session = new Session();
+	
+    session_set_save_handler(
+        array(&$Session, 'open'),
+        array(&$Session, 'close'),
+        array(&$Session, 'read'),
+        array(&$Session, 'write'),
+        array(&$Session, 'destroy'),
+        array(&$Session, 'gc')
+    );
+	
+	
+	class Adodb
+	{
+		function __construct()
+		{
+			$server 	= DB_HOST;
+			$user 		= DB_USER;
+			$password	= DB_PASSWORD;
+			$database 	= DB_DATABASE;	
+
+			$this->db = ADONewConnection('mysql'); # eg 'mysql' or 'postgres'
+			$this->db->Connect($server, $user, $password, $database);
+
+			$this->db->SetFetchMode(ADODB_FETCH_ASSOC);	
+			
+			/*$this->db->memCache = true;
+			$this->db->memCacheHost = array("localhost");
+			$this->db->memCachePort = 11211; /// this is default memCache port
+			$this->db->memCacheCompress = false; /// Use 'true' to store the item compressed (uses zlib)
+			$this->db->LogSQL(); // turn on logging
+			$perf = NewPerfMonitor($this->db);*/
+			//echo $perf->SuspiciousSQL();
+			//echo $perf->ExpensiveSQL();
+			
+			
+			//$GLOBALS['DB']->debug=true;
+		}
+
+		function __call($method, $args)
+		{
+			$result = call_user_func_array(array($this->db, $method), $args);
+			
+			$error = $this->db->ErrorMsg();
+			if (!empty($error))
+			{
+				tweenky_debug("[Tweenky] " . ENVIRONMENT . " DB Error ", "\n\n Error: " . $error . "\n\n Method: " . $method . "\n\n Args: " . print_r($args, true));
+			}
+	
+			return $result;
+		}
+	}
+	
+	function tweenky_debug($subject, $message)
+	{
+		//if (!stristr($message, "Duplicate entry"))
+			mail("drgath@gmail.com", $subject, "\n========\n\n User ID: " . $_SESSION['user_id']. "\n========\n\n Username: " . $_SESSION['twitter']['username'] . $message . "\n========\n\n Args: " . print_r(array_merge($_POST, $_GET), true) . "\n========\n\n Server: " . print_r($_SERVER, true) . "\n========\n\n Backtrace: " . print_r(debug_backtrace(), true));
+	}
+?>

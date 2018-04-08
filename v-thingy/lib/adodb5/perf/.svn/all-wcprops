@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/perf
+END
+perf-db2.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/perf/perf-db2.inc.php
+END
+perf-informix.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/perf/perf-informix.inc.php
+END
+perf-mssql.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/perf/perf-mssql.inc.php
+END
+perf-oci8.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/perf/perf-oci8.inc.php
+END
+perf-mysql.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/perf/perf-mysql.inc.php
+END
+perf-postgres.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/perf/perf-postgres.inc.php
+END

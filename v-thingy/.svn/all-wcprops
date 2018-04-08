@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/twitter_thingy/!svn/ver/304/trunk
+END
+.htaccess
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/twitter_thingy/!svn/ver/22/trunk/.htaccess
+END
+config.php
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/twitter_thingy/!svn/ver/303/trunk/config.php
+END

@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict
+END
+datadict-firebird.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-firebird.inc.php
+END
+datadict-postgres.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-postgres.inc.php
+END
+datadict-sybase.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-sybase.inc.php
+END
+datadict-db2.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-db2.inc.php
+END
+datadict-sapdb.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-sapdb.inc.php
+END
+datadict-informix.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-informix.inc.php
+END
+datadict-generic.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-generic.inc.php
+END
+datadict-mssql.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-mssql.inc.php
+END
+datadict-access.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-access.inc.php
+END
+datadict-oci8.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-oci8.inc.php
+END
+datadict-postgres.inc.php.bak
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-postgres.inc.php.bak
+END
+datadict-ibase.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-ibase.inc.php
+END
+datadict-mysql.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/datadict/datadict-mysql.inc.php
+END

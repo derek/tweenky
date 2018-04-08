@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/twitter_thingy/!svn/ver/121/trunk/lib/xmpphp/XMPPHP
+END
+XMLObj.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/twitter_thingy/!svn/ver/88/trunk/lib/xmpphp/XMPPHP/XMLObj.php
+END
+XMLStream.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/twitter_thingy/!svn/ver/121/trunk/lib/xmpphp/XMPPHP/XMLStream.php
+END
+Exception.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/twitter_thingy/!svn/ver/88/trunk/lib/xmpphp/XMPPHP/Exception.php
+END
+Log.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/twitter_thingy/!svn/ver/88/trunk/lib/xmpphp/XMPPHP/Log.php
+END
+XMPP_Old.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/twitter_thingy/!svn/ver/88/trunk/lib/xmpphp/XMPPHP/XMPP_Old.php
+END
+XMPP.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/twitter_thingy/!svn/ver/88/trunk/lib/xmpphp/XMPPHP/XMPP.php
+END

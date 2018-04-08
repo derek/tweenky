@@ -1,0 +1,10 @@
+<p>Thank you for participating in the Tweenky beta test!  Please know that this is still very much a beta product and all features & functions may not work at the moment.  But you can really help us out by informing us of any bugs you come across, usability concerns, or features requests.  Please visit our feedback forum at <a href="http://feedback.tweenky.com" target="_blank">Feedback.Tweenky.com</a>.  You should also follow <a href="http://twitter.com/tweenky" target="_blank">@Tweenky</a> for the latest updates with the service.  If you need to send us an email, send it to <a href="mailto:feedback@tweenky.com">feedback@tweenky.com</a>.</p>
+<br />
+<p class="small">Current known bugs: 
+	<ul style="margin:0px 0px 0px 30px;">
+		<li class="small">False positive when sending DM to someone that doesn't exist or isn't following you.  Issue believed to be on Twitter's end.  Bug report has been filed with Twitter.</li>
+		<li class="small">Tweets received from people who have their updates protected appear like <a href="http://www.grabup.com/uploads/b5f16660d2aad56b0f70fd714e67e86a.png" target="_blank">this</a>.</li>
+		<li class="small">Sometimes after hitting "retweet" the arrow in the "Post new tweet" box gets confused.</li>
+		<li class="small">Tweenky currently does not support receiving direct-messages or favoriting tweets.  Possibly coming soon.  In the meantime, I suggest having DMs sent to you via email/SMS (can be set up in your setting at Twitter.com).  To favorite, click the "x minutes ago" link in the tweet box which will take you to that tweet on twitter.com.</li>
+	</ul>
+</p>

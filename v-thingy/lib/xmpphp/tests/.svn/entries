@@ -1,0 +1,44 @@
+8
+
+dir
+304
+http://svn.assembla.com/svn/twitter_thingy/trunk/lib/xmpphp/tests
+http://svn.assembla.com/svn/twitter_thingy
+
+
+
+2008-07-18T07:41:46.334490Z
+88
+drgath
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e0e46c49-be69-4f5a-ad62-21024a331aea
+
+AllTests.php
+file
+
+
+
+
+2008-07-23T04:14:54.000000Z
+a4aace7a03c59a5d009d29a16ce48c01
+2008-07-18T07:41:46.334490Z
+88
+drgath
+has-props
+
+XMPPHP
+dir
+

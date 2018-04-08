@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/twitter_thingy/!svn/ver/121/trunk/lib/xmpphp
+END
+sendmessage_example.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/twitter_thingy/!svn/ver/88/trunk/lib/xmpphp/sendmessage_example.php
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/twitter_thingy/!svn/ver/88/trunk/lib/xmpphp/LICENSE
+END
+cli_longrun_example.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/twitter_thingy/!svn/ver/88/trunk/lib/xmpphp/cli_longrun_example.php
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/twitter_thingy/!svn/ver/88/trunk/lib/xmpphp/README
+END
+webclient_example.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/twitter_thingy/!svn/ver/88/trunk/lib/xmpphp/webclient_example.php
+END

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/twitter_thingy/!svn/ver/304/trunk/docroot/js/persist-js-0.1.0
+END
+.hgignore
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/twitter_thingy/!svn/ver/304/trunk/docroot/js/persist-js-0.1.0/.hgignore
+END
+.hg_archival.txt
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/twitter_thingy/!svn/ver/304/trunk/docroot/js/persist-js-0.1.0/.hg_archival.txt
+END
+persist.js
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/twitter_thingy/!svn/ver/304/trunk/docroot/js/persist-js-0.1.0/persist.js
+END
+TODO
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/twitter_thingy/!svn/ver/304/trunk/docroot/js/persist-js-0.1.0/TODO
+END
+persist-min.js
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/twitter_thingy/!svn/ver/304/trunk/docroot/js/persist-js-0.1.0/persist-min.js
+END
+persist.swf
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/twitter_thingy/!svn/ver/304/trunk/docroot/js/persist-js-0.1.0/persist.swf
+END
+COPYING
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/twitter_thingy/!svn/ver/304/trunk/docroot/js/persist-js-0.1.0/COPYING
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/twitter_thingy/!svn/ver/304/trunk/docroot/js/persist-js-0.1.0/README
+END

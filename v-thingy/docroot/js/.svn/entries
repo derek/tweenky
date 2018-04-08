@@ -1,0 +1,94 @@
+8
+
+dir
+304
+http://svn.assembla.com/svn/twitter_thingy/trunk/docroot/js
+http://svn.assembla.com/svn/twitter_thingy
+
+
+
+2008-10-21T17:57:19.595220Z
+304
+drgath
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e0e46c49-be69-4f5a-ad62-21024a331aea
+
+jquery
+dir
+
+tweenky.js
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+5f7a72ee2330ede9d649722b7b307a61
+2008-10-21T17:56:11.162579Z
+303
+drgath
+
+app.summize.js
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+246d1783aa83bf097cda479f66957876
+2008-10-05T18:06:53.329678Z
+287
+drgath
+
+mini.js
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+1fd54c21335ca17ef6b6f1322c38ab78
+2008-08-27T02:20:59.563687Z
+262
+drgath
+
+app.twitter.js
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+1ae3aa0bc613a8a2ffb89b59dcce772f
+2008-10-21T17:56:11.162579Z
+303
+drgath
+
+helpers.js
+file
+
+
+
+
+2008-10-24T04:19:15.000000Z
+99830ea7ff954e0bac901b14571f0fd2
+2008-10-13T03:50:54.867201Z
+299
+drgath
+
+persist-js-0.1.0
+dir
+

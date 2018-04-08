@@ -1,0 +1,94 @@
+8
+
+dir
+304
+http://svn.assembla.com/svn/twitter_thingy/trunk/lib/xmpphp
+http://svn.assembla.com/svn/twitter_thingy
+
+
+
+2008-07-20T21:20:29.218783Z
+121
+drgath
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+e0e46c49-be69-4f5a-ad62-21024a331aea
+
+sendmessage_example.php
+file
+
+
+
+
+2008-07-23T04:14:54.000000Z
+496d50cbe04fbd8a94a84111046fa542
+2008-07-18T07:41:46.334490Z
+88
+drgath
+
+tests
+dir
+
+LICENSE
+file
+
+
+
+
+2008-07-23T04:14:54.000000Z
+ad28d617b56e42736a76c4130b23c253
+2008-07-18T07:41:46.334490Z
+88
+drgath
+
+XMPPHP
+dir
+
+cli_longrun_example.php
+file
+
+
+
+
+2008-07-23T04:14:54.000000Z
+30cb1e47bc72595386ca890d2916a23a
+2008-07-18T07:41:46.334490Z
+88
+drgath
+
+README
+file
+
+
+
+
+2008-07-23T04:14:54.000000Z
+a2a2ea3f368806b39b5353ddd8f660fd
+2008-07-18T07:41:46.334490Z
+88
+drgath
+
+webclient_example.php
+file
+
+
+
+
+2008-07-23T04:14:54.000000Z
+96cd9312f5937d4c6f921dcb763b1c4d
+2008-07-18T07:41:46.334490Z
+88
+drgath
+

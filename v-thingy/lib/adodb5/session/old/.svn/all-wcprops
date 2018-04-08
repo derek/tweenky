@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/old
+END
+crypt.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/old/crypt.inc.php
+END
+adodb-session.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/old/adodb-session.php
+END
+adodb-cryptsession.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/old/adodb-cryptsession.php
+END
+adodb-session-clob.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/old/adodb-session-clob.php
+END

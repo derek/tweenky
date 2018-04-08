@@ -1,0 +1,125 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session
+END
+adodb-sessions.oracle.sql
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-sessions.oracle.sql
+END
+adodb-session-clob2.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-session-clob2.php
+END
+adodb-sessions.mysql.sql
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-sessions.mysql.sql
+END
+adodb-session.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-session.php
+END
+session_schema2.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/session_schema2.xml
+END
+adodb-cryptsession2.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-cryptsession2.php
+END
+adodb-encrypt-mcrypt.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-encrypt-mcrypt.php
+END
+adodb-session-clob.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-session-clob.php
+END
+adodb-sessions.oracle.clob.sql
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-sessions.oracle.clob.sql
+END
+adodb-session2.php.bak
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-session2.php.bak
+END
+crypt.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/crypt.inc.php
+END
+adodb-compress-gzip.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-compress-gzip.php
+END
+session_schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/session_schema.xml
+END
+adodb-cryptsession.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-cryptsession.php
+END
+adodb-sess.txt
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-sess.txt
+END
+adodb-session2.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-session2.php
+END
+adodb-encrypt-secret.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-encrypt-secret.php
+END
+adodb-encrypt-md5.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-encrypt-md5.php
+END
+adodb-encrypt-sha1.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-encrypt-sha1.php
+END
+adodb-compress-bzip2.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/session/adodb-compress-bzip2.php
+END

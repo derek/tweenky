@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72
+END
+rss_utils.inc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/rss_utils.inc
+END
+rss_cache.inc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/rss_cache.inc
+END
+AUTHORS
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/AUTHORS
+END
+INSTALL
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/INSTALL
+END
+cookbook
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/cookbook
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/ChangeLog
+END
+TROUBLESHOOTING
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/TROUBLESHOOTING
+END
+CHANGES
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/CHANGES
+END
+rss_fetch.inc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/rss_fetch.inc
+END
+rss_parse.inc
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/rss_parse.inc
+END
+NEWS
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/NEWS
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/twitter_thingy/!svn/ver/1/trunk/lib/magpierss-0.72/README
+END

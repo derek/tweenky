@@ -1,0 +1,191 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5
+END
+adodb-php4.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-php4.inc.php
+END
+docs-adodb.htm.bak
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/docs-adodb.htm.bak
+END
+toexport.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/toexport.inc.php
+END
+adodb-xmlschema.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-xmlschema.inc.php
+END
+adodb-csvlib.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-csvlib.inc.php
+END
+xmlschema.dtd
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/xmlschema.dtd
+END
+adodb-active-record.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-active-record.inc.php
+END
+adodb-pear.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-pear.inc.php
+END
+server.php
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/server.php
+END
+adodb-time.inc.php.bak
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-time.inc.php.bak
+END
+license.txt
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/license.txt
+END
+adodb.inc.php.bak
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb.inc.php.bak
+END
+adodb-time.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-time.inc.php
+END
+tohtml.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/tohtml.inc.php
+END
+adodb.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb.inc.php
+END
+adodb-memcache.lib.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-memcache.lib.inc.php
+END
+adodb-datadict.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-datadict.inc.php
+END
+adodb-exceptions.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-exceptions.inc.php
+END
+rsfilter.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/rsfilter.inc.php
+END
+adodb-xmlschema03.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-xmlschema03.inc.php
+END
+adodb-errorhandler.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-errorhandler.inc.php
+END
+xmlschema03.dtd
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/xmlschema03.dtd
+END
+adodb-iterator.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-iterator.inc.php
+END
+adodb-error.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-error.inc.php
+END
+adodb-perf.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-perf.inc.php
+END
+adodb-pager.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-pager.inc.php
+END
+adodb-errorpear.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-errorpear.inc.php
+END
+adodb-lib.inc.php.bak
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-lib.inc.php.bak
+END
+pivottable.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/pivottable.inc.php
+END
+readme.txt
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/readme.txt
+END
+adodb-lib.inc.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/twitter_thingy/!svn/ver/95/trunk/lib/adodb5/adodb-lib.inc.php
+END
